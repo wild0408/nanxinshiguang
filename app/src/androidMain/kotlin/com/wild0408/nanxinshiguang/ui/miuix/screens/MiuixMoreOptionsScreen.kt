@@ -39,6 +39,7 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBeha
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
 import com.wild0408.nanxinshiguang.ui.settings.SettingsViewModel
+import com.wild0408.nanxinshiguang.ui.settings.additional.DynamicAppIconHeader
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -135,7 +136,15 @@ internal fun MiuixMoreOptionsScreen(
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 item {
-                    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                    Column(
+                        Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        DynamicAppIconHeader(
+                            isDeveloperModeEnabled = state.appSettings.developerModeEnabled,
+                            onTriggerDeveloperMode = { viewModel.onDeveloperModeChanged(true) },
+                            modifier = Modifier.padding(bottom = 12.dp),
+                        )
                         Text(stringResource(Res.string.app_name), style = MiuixTheme.textStyles.title1, fontWeight = FontWeight.Bold)
                         Text(stringResource(Res.string.label_version_prefix, version), color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
                     }

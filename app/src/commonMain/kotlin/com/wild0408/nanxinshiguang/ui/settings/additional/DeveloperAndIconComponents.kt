@@ -42,7 +42,7 @@ import nanxinshiguang.generated.resources.ic_launcher_foreground
 import nanxinshiguang.generated.resources.item_developer_options
 
 // 图标背景颜色定义
-private val NormalIconBgColor = Color(0xFF73CAF8)
+private val NormalIconBgColor = Color(0xFF27C7B7)
 private val DeveloperIconBgColor = Color(0xFFBD0000)
 
 /**
