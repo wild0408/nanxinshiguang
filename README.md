@@ -80,6 +80,8 @@
 app/build/outputs/apk/
 ```
 
+Debug APK 由本机 Android 调试密钥签名。Release 不复用调试密钥，构建时必须通过 `NANXINSHIGUANG_KEYSTORE_FILE`、`NANXINSHIGUANG_KEYSTORE_PASSWORD`、`NANXINSHIGUANG_KEY_ALIAS` 和 `NANXINSHIGUANG_KEY_PASSWORD` 提供专版签名信息。GitHub Actions 使用 `Release-Signing` 环境中的 `KEYSTORE_BASE64`、`KEYSTORE_PASSWORD`、`KEY_ALIAS`、`KEY_PASSWORD` Secrets；密钥与密码不得提交到仓库，发布前请将密钥和密码分别妥善备份。
+
 应用模块测试：
 
 ```powershell

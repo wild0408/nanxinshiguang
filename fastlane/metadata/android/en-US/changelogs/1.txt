@@ -1,0 +1,5 @@
+First release of Nanxin Shiguang 1.0.0.
+
+- NUIST schedule import, grades, and academic overview.
+- Timetable management, reminders, and home screen widgets.
+- Portal account linking and dorm electricity information.

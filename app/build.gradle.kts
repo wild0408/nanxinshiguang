@@ -13,16 +13,25 @@ plugins {
     alias(libs.plugins.aboutLibraries)
 }
 
+val releaseStoreFile = providers.environmentVariable("NANXINSHIGUANG_KEYSTORE_FILE").orNull
+val releaseStorePassword = providers.environmentVariable("NANXINSHIGUANG_KEYSTORE_PASSWORD").orNull
+val releaseKeyAlias = providers.environmentVariable("NANXINSHIGUANG_KEY_ALIAS").orNull
+val releaseKeyPassword = providers.environmentVariable("NANXINSHIGUANG_KEY_PASSWORD").orNull
+val hasReleaseSigning = listOf(
+    releaseStoreFile,
+    releaseStorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword
+).all { !it.isNullOrBlank() }
+
 kotlin {
     androidTarget()
+    jvmToolchain(21)
 
     sourceSets {
         commonMain {
             kotlin.srcDir("src/commonMain/kotlin")
-            // Wire 生成代码按 Android build type 输出；将 debug/release 目录加入
-            // 共享源集，避免单模块后生成源码未被 Kotlin 编译器发现。
-            kotlin.srcDir(layout.buildDirectory.dir("generated/source/wire/debug"))
-            kotlin.srcDir(layout.buildDirectory.dir("generated/source/wire/release"))
+            kotlin.srcDir(layout.buildDirectory.dir("generated/source/wire/shared"))
             dependencies {
                 implementation(libs.compose.runtime)
                 implementation(libs.compose.foundation)
@@ -87,12 +96,23 @@ android {
 
     sourceSets["main"].manifest.srcFile("src/main/AndroidManifest.xml")
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("nanxinshiguangRelease") {
+                storeFile = file(requireNotNull(releaseStoreFile))
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
     defaultConfig {
         applicationId = "com.wild0408.nanxinshiguang"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 35
-        versionName = "2.0.1"
+        versionCode = 1
+        versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -100,11 +120,15 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("nanxinshiguangRelease")
+            } else {
+                signingConfig = signingConfigs.getByName("debug")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -131,6 +155,17 @@ android {
         generateLocaleConfig = true
         localeFilters += listOf("zh", "zh-rCN", "zh-rTW", "en")
     }
+}
+
+// Only one Wire generation task writes the common source directory for both Android variants.
+tasks.matching {
+    it.name == "compileReleaseKotlinAndroid" || it.name == "kspReleaseKotlinAndroid"
+}.configureEach {
+    dependsOn(tasks.named("generateDebugProtos"))
+}
+
+tasks.matching { it.name == "generateReleaseProtos" }.configureEach {
+    enabled = false
 }
 
 compose.resources {
@@ -211,6 +246,7 @@ wire {
         srcDir("src/commonMain/proto")
     }
     kotlin {
+        out = layout.buildDirectory.dir("generated/source/wire/shared").get().asFile.absolutePath
         escapeKotlinKeywords = true
         enumMode = "enum_class"
         rpcRole = "none"
