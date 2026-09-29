@@ -28,7 +28,7 @@
 
 应用只保留 `app` 模块。源码暂沿用 Kotlin Multiplatform 的源集组织，但只配置 Android target；包名、applicationId 和 Compose 资源包名已统一为南信拾光专版标识。
 
-本专版使用新的 applicationId `com.wild0408.nanxinshiguang`，与旧版安装包视为不同应用。项目仓库：[wild0408/nanxinshiguang](https://github.com/wild0408/nanxinshiguang)。
+本项目仓库：[wild0408/nanxinshiguang](https://github.com/wild0408/nanxinshiguang)。
 
 ## 主要功能
 
@@ -125,8 +125,6 @@ C6:23:57:85:44:DF:D6:12:2E:8C:37:1E:D4:55:5A:CF:90:41:1A:FD:C0:4B:92:67:CC:D7:91
 本项目是拾光课程表的派生项目。上游项目及本项目的主要代码使用 Apache License 2.0，许可证文本见 [`LICENSE`](LICENSE)。
 
 - 上游主仓库：[XingHeYuZhuan/shiguangschedule](https://github.com/XingHeYuZhuan/shiguangschedule)
-- 上游教务适配仓库：[XingHeYuZhuan/shiguang_warehouse](https://github.com/XingHeYuZhuan/shiguang_warehouse)
-- 上游适配说明：[项目 Wiki](https://github.com/XingHeYuZhuan/shiguangschedule/wiki)
 
 重新分发本项目或其衍生版本时，请保留 Apache-2.0 许可证、原作者版权和归属声明，并在修改文件中说明修改内容。项目中使用的第三方依赖许可证可在应用内“开源许可证”页面查看。
 
