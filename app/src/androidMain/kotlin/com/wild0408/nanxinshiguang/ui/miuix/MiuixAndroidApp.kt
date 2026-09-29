@@ -47,6 +47,10 @@ import nanxinshiguang.generated.resources.view_agenda_filled_24px
 import nanxinshiguang.generated.resources.view_week_filled_24px
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.MutableStateFlow
+
 /**
  * Android-only Miuix entry point. Material/Common navigation is intentionally
  * not part of this tree; Android can evolve independently from other targets.
@@ -55,6 +59,7 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 fun MiuixAndroidApp(
     settings: AppSettingsModel,
     settingsViewModel: SettingsViewModel,
+    targetDestinationFlow: MutableStateFlow<Destination?>? = null,
 ) {
     ShiguangMiuixTheme(settings = settings.copy(uiStyle = AppUiStyle.MIUIX)) {
         MiuixRootNavigation(
@@ -63,6 +68,7 @@ fun MiuixAndroidApp(
                 StartScreen.COURSE_SCHEDULE -> Destination.CourseSchedule
             },
             settingsViewModel = settingsViewModel,
+            targetDestinationFlow = targetDestinationFlow,
         )
     }
 }
@@ -71,6 +77,7 @@ fun MiuixAndroidApp(
 private fun MiuixRootNavigation(
     startDestination: Destination,
     settingsViewModel: SettingsViewModel,
+    targetDestinationFlow: MutableStateFlow<Destination?>? = null,
 ) {
     var selectedMain by remember { mutableStateOf(startDestination) }
     val backStack = rememberNavBackStack(
@@ -86,6 +93,15 @@ private fun MiuixRootNavigation(
             }
         } else if (backStack.lastOrNull() != destination) {
             backStack.add(destination)
+        }
+    }
+
+    val pendingDestination by targetDestinationFlow?.collectAsStateWithLifecycle() ?: remember { mutableStateOf(null) }
+
+    LaunchedEffect(pendingDestination) {
+        pendingDestination?.let { dest ->
+            navigate(dest)
+            targetDestinationFlow?.value = null
         }
     }
 

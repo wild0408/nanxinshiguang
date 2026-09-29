@@ -14,4 +14,7 @@
     <color name="widget_text_hint">#808B96</color> # 提示文字颜色：用于无课提示、底部的统计页脚
     <color name="widget_divider">#EAECEE</color> # 分割线颜色：用于垂直分割线和课程间的水平线
     <color name="widget_course_fallback">#F2F4F4</color> # 课程指示条兜底色：数据异常时的默认灰色
+    <color name="electricity_status_normal">#2E7D32</color>
+    <color name="electricity_status_warning">#E65100</color>
+    <color name="electricity_status_danger">#C62828</color>
 </resources>

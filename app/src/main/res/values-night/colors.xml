@@ -7,4 +7,7 @@
     <color name="widget_text_hint">#8E8E93</color> # 提示文字：深灰色，起到弱化作用
     <color name="widget_divider">#2C2C2E</color> # 深色分割线：比背景略亮的灰色
     <color name="widget_course_fallback">#3A3A3C</color> # 深色模式下的课程指示条兜底色
+    <color name="electricity_status_normal">#81C784</color>
+    <color name="electricity_status_warning">#FFB74D</color>
+    <color name="electricity_status_danger">#E57373</color>
 </resources>

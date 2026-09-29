@@ -58,8 +58,14 @@ import com.wild0408.nanxinshiguang.ui.portal.MaterialPortalAccountScreen
 import com.wild0408.nanxinshiguang.ui.portal.PortalBindScreen
 import org.koin.compose.viewmodel.koinViewModel
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import kotlinx.coroutines.flow.MutableStateFlow
+
 @Composable
-fun App() {
+fun App(
+    targetDestinationFlow: MutableStateFlow<Destination?>? = null
+) {
     val viewModel: SettingsViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsState()
 
@@ -71,7 +77,10 @@ fun App() {
                     StartScreen.TODAY_SCHEDULE -> Destination.TodaySchedule
                 }
             }
-            AppNavigation(startDestination = startDest)
+            AppNavigation(
+                startDestination = startDest,
+                targetDestinationFlow = targetDestinationFlow
+            )
         }
     } else {
         Surface(modifier = Modifier.fillMaxSize()) {}
@@ -79,11 +88,16 @@ fun App() {
 }
 
 @Composable
-fun AppNavigation(startDestination: Destination) {
+fun AppNavigation(
+    startDestination: Destination,
+    targetDestinationFlow: MutableStateFlow<Destination?>? = null
+) {
     val backStack = rememberNavBackStack(
         configuration = navSavedStateConfig,
         startDestination
     )
+
+    val pendingDestination by targetDestinationFlow?.collectAsState() ?: remember { mutableStateOf(null) }
 
     val currentDestination = backStack.lastOrNull() as? Destination ?: startDestination
 
@@ -101,6 +115,13 @@ fun AppNavigation(startDestination: Destination) {
                     backStack.add(dest)
                 }
             }
+        }
+    }
+
+    LaunchedEffect(pendingDestination) {
+        pendingDestination?.let { dest ->
+            onNavigate(dest)
+            targetDestinationFlow?.value = null
         }
     }
 

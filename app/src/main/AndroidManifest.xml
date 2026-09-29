@@ -100,6 +100,31 @@
                 android:resource="@xml/nanxinshiguang_list_vertical_widget" />
         </receiver>
 
+        <receiver
+            android:name=".widget.electricity.ElectricityWidgetProvider$Compact"
+            android:exported="false"
+            android:label="@string/widget_name_electricity_compact">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/nanxinshiguang_electricity_compact_widget" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.electricity.ElectricityWidgetProvider$Detailed"
+            android:exported="false"
+            android:label="@string/widget_name_electricity_detailed">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.wild0408.nanxinshiguang.ACTION_REFRESH_ELECTRICITY_WIDGET" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/nanxinshiguang_electricity_detailed_widget" />
+        </receiver>
+
 
 
         <provider

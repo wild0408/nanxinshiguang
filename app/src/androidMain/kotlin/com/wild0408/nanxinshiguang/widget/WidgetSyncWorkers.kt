@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.wild0408.nanxinshiguang.data.sync.WidgetDataSynchronizer
+import com.wild0408.nanxinshiguang.widget.electricity.ElectricityWidgetUpdateHelper
 import org.koin.android.annotation.KoinWorker
 
 /**
@@ -19,6 +20,7 @@ class WidgetUiUpdateWorker(
     override suspend fun doWork(): Result {
         Log.d("WidgetSync", "WidgetUiUpdateWorker 开始执行")
         updateAllWidgets(applicationContext)
+        ElectricityWidgetUpdateHelper.updateWidgets(applicationContext)
         return Result.success()
     }
 }
