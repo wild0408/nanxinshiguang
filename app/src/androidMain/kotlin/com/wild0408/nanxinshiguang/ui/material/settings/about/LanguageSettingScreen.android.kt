@@ -1,4 +1,4 @@
-package com.wild0408.nanxinshiguang.ui.settings.additional
+package com.wild0408.nanxinshiguang.ui.material.settings.about
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat

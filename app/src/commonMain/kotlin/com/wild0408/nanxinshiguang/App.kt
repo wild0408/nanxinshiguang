@@ -31,7 +31,7 @@ import com.wild0408.nanxinshiguang.ui.material.schoolselection.list.SchoolSelect
 import com.wild0408.nanxinshiguang.ui.material.schoolselection.web.WebViewScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.main.SettingsScreen
 import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
-import com.wild0408.nanxinshiguang.ui.settings.additional.LanguageSettingScreen
+import com.wild0408.nanxinshiguang.ui.material.settings.about.LanguageSettingScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.main.MoreOptionsScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.about.OpenSourceLicensesScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.backup.BackupScreen

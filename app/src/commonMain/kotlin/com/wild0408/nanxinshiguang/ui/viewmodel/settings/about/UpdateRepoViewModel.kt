@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.wild0408.nanxinshiguang.data.model.RepoType
 import com.wild0408.nanxinshiguang.data.model.RepositoryInfo
 import com.wild0408.nanxinshiguang.data.repository.AppSettingsRepository
-import com.wild0408.nanxinshiguang.data.repository.GitRepositoryImpl
+import com.wild0408.nanxinshiguang.data.repository.GitRepository
 import com.wild0408.nanxinshiguang.data.repository.SchoolRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import nanxinshiguang.generated.resources.Res
 
 @KoinViewModel
 open class UpdateRepoViewModel(
-    private val gitRepository: GitRepositoryImpl,
+    private val gitRepository: GitRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val schoolRepository: SchoolRepository
 ) : ViewModel() {
