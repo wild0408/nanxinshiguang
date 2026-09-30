@@ -48,7 +48,7 @@ import com.wild0408.nanxinshiguang.ui.material.settings.style.ThemeSettingsScree
 import com.wild0408.nanxinshiguang.ui.material.settings.time.ComboScheduleEditScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.time.SingleScheduleEditScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.time.TimeScheduleManagementScreen
-import com.wild0408.nanxinshiguang.ui.material.settings.about.UpdateRepoScreen
+
 import com.wild0408.nanxinshiguang.ui.theme.ShiguangScheduleTheme
 import com.wild0408.nanxinshiguang.ui.material.today.TodayScheduleScreen
 import com.wild0408.nanxinshiguang.ui.material.service.electricity.ElectricityCenterScreen
@@ -256,7 +256,6 @@ fun ScreenContent(
         Destination.NotificationSettings -> NotificationSettingsScreen(onBack)
         Destination.MoreOptions -> MoreOptionsScreen(onNavigate, onBack)
         Destination.OpenSourceLicenses -> OpenSourceLicensesScreen(onBack)
-        Destination.UpdateRepo -> UpdateRepoScreen(onBack)
         Destination.QuickActions -> QuickActionsScreen(onNavigate, onBack)
         Destination.TweakSchedule -> TweakScheduleScreen(onBack)
         Destination.CourseManagementList -> CourseNameListScreen(onNavigate, onBack)

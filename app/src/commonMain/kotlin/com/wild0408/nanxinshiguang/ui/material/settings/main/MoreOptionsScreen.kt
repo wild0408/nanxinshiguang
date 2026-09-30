@@ -54,7 +54,7 @@ import nanxinshiguang.generated.resources.item_github_repo
 import nanxinshiguang.generated.resources.item_language_settings
 import nanxinshiguang.generated.resources.item_open_source_licenses
 import nanxinshiguang.generated.resources.item_start_screen_settings
-import nanxinshiguang.generated.resources.item_update_repo
+
 import nanxinshiguang.generated.resources.label_version_prefix
 import nanxinshiguang.generated.resources.language_24px
 import nanxinshiguang.generated.resources.list_alt_24px
@@ -213,14 +213,7 @@ fun MoreOptionsScreen(
                     SettingListItem(
                         icon = vectorResource(Res.drawable.list_alt_24px),
                         title = stringResource(Res.string.item_open_source_licenses),
-                        onClick = { onNavigate(Destination.OpenSourceLicenses) }
-                    )
-
-                    // 更新适配仓库
-                    SettingListItem(
-                        icon = vectorResource(Res.drawable.update_24px),
-                        title = stringResource(Res.string.item_update_repo),
-                        onClick = { onNavigate(Destination.UpdateRepo) },
+                        onClick = { onNavigate(Destination.OpenSourceLicenses) },
                         showDivider = false
                     )
 

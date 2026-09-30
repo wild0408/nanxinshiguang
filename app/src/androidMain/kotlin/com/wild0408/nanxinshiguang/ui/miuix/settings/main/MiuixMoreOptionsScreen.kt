@@ -166,7 +166,6 @@ internal fun MiuixMoreOptionsScreen(
                         MoreRow(Res.drawable.home_24px, stringResource(Res.string.item_start_screen_settings), stringResource(state.appSettings.startScreen.labelRes)) { showStartScreen = true }
                         MoreRow(Res.drawable.code_24px, stringResource(Res.string.item_github_repo)) { uriHandler.openUri(SHIGUANG_REPOSITORY_URL) }
                         MoreRow(Res.drawable.list_alt_24px, stringResource(Res.string.item_open_source_licenses)) { onNavigate(Destination.OpenSourceLicenses) }
-                        MoreRow(Res.drawable.update_24px, stringResource(Res.string.item_update_repo)) { onNavigate(Destination.UpdateRepo) }
                     }
                 }
             }

@@ -13,7 +13,7 @@ import com.wild0408.nanxinshiguang.ui.miuix.settings.about.MiuixLanguageSettings
 import com.wild0408.nanxinshiguang.ui.miuix.settings.style.MiuixThemeSettingsScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.main.MiuixMoreOptionsScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.about.MiuixOpenSourceLicensesScreen
-import com.wild0408.nanxinshiguang.ui.miuix.settings.about.MiuixUpdateRepoScreen
+
 import com.wild0408.nanxinshiguang.ui.miuix.settings.backup.MiuixBackupScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.course.MiuixManageCourseTablesScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.style.MiuixStyleSettingsScreen
@@ -59,7 +59,7 @@ internal fun MiuixSecondaryScreenHost(
         Destination.ThemeSettings -> MiuixThemeSettingsScreen(onBack)
         Destination.MoreOptions -> MiuixMoreOptionsScreen(onNavigate, onBack)
         Destination.OpenSourceLicenses -> MiuixOpenSourceLicensesScreen(onBack)
-        Destination.UpdateRepo -> MiuixUpdateRepoScreen(onBack)
+
         Destination.BackupAndRestore -> MiuixBackupScreen(onBack)
         Destination.ManageCourseTables -> MiuixManageCourseTablesScreen(onBack)
         Destination.StyleSettings -> MiuixStyleSettingsScreen(onBack)

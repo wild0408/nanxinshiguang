@@ -204,7 +204,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.cbor)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.kgit)
     implementation(libs.okio)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
