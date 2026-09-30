@@ -26,10 +26,10 @@ import com.wild0408.nanxinshiguang.navSavedStateConfig
 import com.wild0408.nanxinshiguang.data.model.AppSettingsModel
 import com.wild0408.nanxinshiguang.data.model.AppUiStyle
 import com.wild0408.nanxinshiguang.data.model.StartScreen
-import com.wild0408.nanxinshiguang.ui.miuix.screens.MiuixServiceScreen
-import com.wild0408.nanxinshiguang.ui.miuix.screens.MiuixTodayScheduleScreen
-import com.wild0408.nanxinshiguang.ui.miuix.screens.MiuixWeeklyScheduleScreen
-import com.wild0408.nanxinshiguang.ui.miuix.screens.MiuixSettingsScreen
+import com.wild0408.nanxinshiguang.ui.miuix.service.MiuixServiceScreen
+import com.wild0408.nanxinshiguang.ui.miuix.schedule.MiuixTodayScheduleScreen
+import com.wild0408.nanxinshiguang.ui.miuix.schedule.MiuixWeeklyScheduleScreen
+import com.wild0408.nanxinshiguang.ui.miuix.settings.main.MiuixSettingsScreen
 import com.wild0408.nanxinshiguang.ui.miuix.theme.ShiguangMiuixTheme
 import com.wild0408.nanxinshiguang.ui.components.LocalNavigationHostEnabled
 import com.wild0408.nanxinshiguang.ui.components.LocalNavigationHostPadding
