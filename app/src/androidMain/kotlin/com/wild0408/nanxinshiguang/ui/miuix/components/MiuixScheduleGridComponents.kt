@@ -44,6 +44,19 @@ import com.wild0408.nanxinshiguang.ui.theme.LocalIsDarkTheme
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import top.yukonga.miuix.kmp.basic.Icon
+import org.jetbrains.compose.resources.vectorResource
+import nanxinshiguang.generated.resources.Res
+import nanxinshiguang.generated.resources.add_24px
 import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
@@ -198,6 +211,57 @@ fun MiuixCourseBlock(
                     },
             )
         }
+    }
+}
+
+/** 空白时段加号占位卡片组件 */
+@Composable
+fun MiuixPlaceholderBlock(
+    style: ScheduleGridStyleComposed,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    onLongPress: ((Rect) -> Unit)? = null,
+) {
+    val shape = RoundedCornerShape(style.courseBlockCornerRadius)
+    val outerPadding = if (style.courseBlockOuterPadding < 2.dp) 2.dp else style.courseBlockOuterPadding
+    val primaryColor = MiuixTheme.colorScheme.primary
+    var blockBounds by remember { mutableStateOf(Rect.Zero) }
+
+    Box(
+        modifier = modifier
+            .padding(outerPadding)
+            .fillMaxSize()
+            .clip(shape)
+            .background(primaryColor.copy(alpha = 0.12f))
+            .drawBehind {
+                drawOutline(
+                    outline = shape.createOutline(size, layoutDirection, this),
+                    color = primaryColor.copy(alpha = 0.6f),
+                    style = androidx.compose.ui.graphics.drawscope.Stroke(
+                        width = 1.5.dp.toPx(),
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(16f, 10f)),
+                    ),
+                )
+            }
+            .onGloballyPositioned { blockBounds = it.boundsInRoot() }
+            .pointerInput(blockBounds) {
+                detectTapGestures(
+                    onTap = { onClick() },
+                    onLongPress = {
+                        if (onLongPress != null) {
+                            onLongPress(blockBounds)
+                        }
+                    },
+                )
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = vectorResource(Res.drawable.add_24px),
+            contentDescription = "添加课程",
+            tint = primaryColor,
+            modifier = Modifier.size(24.dp),
+        )
     }
 }
 

@@ -21,6 +21,7 @@ import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.wild0408.nanxinshiguang.Destination
 import com.wild0408.nanxinshiguang.isMainScreen
+import com.wild0408.nanxinshiguang.mainDestinationRank
 import com.wild0408.nanxinshiguang.navSavedStateConfig
 import com.wild0408.nanxinshiguang.data.model.AppSettingsModel
 import com.wild0408.nanxinshiguang.data.model.AppUiStyle
@@ -226,10 +227,6 @@ private fun MiuixMainShell(
     }
 }
 
-private fun mainDestinationRank(destination: Destination): Int = when (destination) {
-    Destination.TodaySchedule -> 0
-    Destination.CourseSchedule -> 1
-    Destination.Service -> 2
-    Destination.Settings -> 3
-    else -> 1
+private fun mainDestinationRank(destination: Destination): Int = destination.mainDestinationRank.let {
+    if (it != -1) it else 1
 }

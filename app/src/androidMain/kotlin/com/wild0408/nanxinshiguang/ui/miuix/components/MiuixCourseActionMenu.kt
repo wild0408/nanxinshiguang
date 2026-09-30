@@ -107,12 +107,12 @@ fun MiuixCourseActionMenu(
                     shape = { ContinuousRoundedRectangle(0.dp) },
                     effects = {
                         vibrancy()
-                        blur(18.dp.toPx() * progress)
+                        blur(18.dp.toPx())
                     },
                     highlight = null,
                     shadow = null,
                     onDrawSurface = {
-                        drawRect(focusSurfaceColor.copy(alpha = focusSurfaceColor.alpha * progress))
+                        drawRect(focusSurfaceColor)
                     },
                 )
                 .clickable(onClick = onDismiss),
@@ -132,7 +132,12 @@ fun MiuixCourseActionMenu(
                         with(density) { focusRect.width.toDp() },
                         with(density) { focusRect.height.toDp() },
                     )
-                    .graphicsLayer { alpha = progress }
+                    .graphicsLayer {
+                        val scale = 1f + 0.04f * progress
+                        scaleX = scale
+                        scaleY = scale
+                        alpha = if (progress > 0.05f) 1f else progress * 20f
+                    }
                     .zIndex(1f),
             ) {
                 focusContent()

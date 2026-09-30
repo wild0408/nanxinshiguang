@@ -1,6 +1,5 @@
 package com.wild0408.nanxinshiguang.ui.miuix.hyper.navigation
 
-import androidx.activity.BackEventCompat
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
@@ -55,13 +54,7 @@ fun <T : Any> HyperSecondaryNavigationHost(
         modifier = modifier,
         transitionSpec = { hyperSecondaryForwardTransform(defaultDirection) },
         popTransitionSpec = { hyperSecondaryPopTransform(defaultDirection) },
-        predictivePopTransitionSpec = { swipeEdge ->
-            val gestureDirection = when (swipeEdge) {
-                BackEventCompat.EDGE_RIGHT -> -1
-                else -> 1
-            }
-            hyperSecondaryPopTransform(gestureDirection)
-        },
+        predictivePopTransitionSpec = { hyperSecondaryPopTransform(defaultDirection) },
     )
 }
 

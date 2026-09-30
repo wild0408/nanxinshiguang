@@ -56,6 +56,16 @@ import kotlinx.coroutines.delay
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 import top.yukonga.miuix.kmp.basic.Text
 
+data class SchedulePlaceholderSlot(
+    val day: Int,
+    val section: Float,
+    val duration: Float = 1f,
+)
+
+private fun mapDayToDisplayIndex(day: Int, firstDayOfWeek: Int): Int {
+    return (day - firstDayOfWeek + 7) % 7
+}
+
 private class MiuixGridState(val scrollState: ScrollState) {
     var expandedItem by mutableStateOf<ISingleSchedulable?>(null)
     var activeMoveIntent by mutableStateOf<CourseMoveIntent?>(null)
@@ -91,11 +101,14 @@ fun MiuixScheduleGrid(
     scrollState: ScrollState = rememberScrollState(),
     viewportHeightPx: Float,
     editingBlock: MergedCourseBlock?,
+    placeholderSlot: SchedulePlaceholderSlot? = null,
     onEditingChanged: (Boolean) -> Unit,
     onCourseClick: (MergedCourseBlock) -> Unit,
     onCourseLongPress: (MergedCourseBlock, Rect) -> Unit,
     onBlankTap: (day: Int, section: Int) -> Unit,
     onBlankLongPress: (day: Int, section: Int, anchor: Rect) -> Unit,
+    onPlaceholderClick: ((day: Int, section: Float) -> Unit)? = null,
+    onPlaceholderLongPress: ((day: Int, section: Float, anchor: Rect) -> Unit)? = null,
     onTimeSlotClick: () -> Unit,
     onCourseMoved: (MergedCourseBlock, Int, Float, Float) -> Unit,
     onCourseTimeAdjusted: (MergedCourseBlock, Float, Float) -> Unit,
@@ -335,6 +348,17 @@ fun MiuixScheduleGrid(
                             }
                         }
                     }
+                    if (placeholderSlot != null) {
+                        MiuixPlaceholderBlock(
+                            style = gridStyle,
+                            onClick = {
+                                onPlaceholderClick?.invoke(placeholderSlot.day, placeholderSlot.section)
+                            },
+                            onLongPress = { anchor ->
+                                onPlaceholderLongPress?.invoke(placeholderSlot.day, placeholderSlot.section, anchor)
+                            },
+                        )
+                    }
                 },
                 modifier = Modifier
                     .fillMaxHeight()
@@ -356,10 +380,15 @@ fun MiuixScheduleGrid(
                             onLongPress = { offset ->
                                 if (gridState.expandedItem == null) {
                                     val dayCount = displayDays.size.coerceAtLeast(1)
-                                    val dayIndex = (offset.x / (size.width / dayCount)).toInt().coerceIn(0, dayCount - 1)
+                                    val cellWidth = size.width / dayCount
+                                    val dayIndex = (offset.x / cellWidth).toInt().coerceIn(0, dayCount - 1)
                                     val sectionIndex = (offset.y / sectionHeightPx).toInt().coerceIn(0, maxSections - 1)
-                                    val rootOffset = gridBounds.topLeft + offset
-                                    val anchor = Rect(rootOffset.x - 1f, rootOffset.y - 1f, rootOffset.x + 1f, rootOffset.y + 1f)
+                                    val durationSections = if (is24Hour) 2f else 1f
+                                    val cellLeft = gridBounds.left + dayIndex * cellWidth
+                                    val cellTop = gridBounds.top + sectionIndex * sectionHeightPx
+                                    val cellRight = cellLeft + cellWidth
+                                    val cellBottom = cellTop + durationSections * sectionHeightPx
+                                    val anchor = Rect(cellLeft, cellTop, cellRight, cellBottom)
                                     onBlankLongPress(mapDisplayIndexToDay(dayIndex, viewState.firstDayOfWeek), if (is24Hour) sectionIndex else sectionIndex + 1, anchor)
                                 }
                             },
@@ -369,7 +398,7 @@ fun MiuixScheduleGrid(
                 val dayCount = displayDays.size.coerceAtLeast(1)
                 val cellWidth = constraints.maxWidth / dayCount
                 val minGapPx = if (is24Hour) 0 else with(density) { 30.dp.roundToPx() }
-                val placeables = measurables.mapIndexed { index, measurable ->
+                val coursePlaceables = measurables.take(items.size).mapIndexed { index, measurable ->
                     val item = items[index]
                     val expanded = gridState.expandedItem?.parentBlock == item.parentBlock
                     val originalHeight = ((item.endSection - item.startSection) * sectionHeightPx).roundToInt().coerceAtLeast(1)
@@ -380,8 +409,15 @@ fun MiuixScheduleGrid(
                     }
                     measurable.measure(Constraints.fixed((cellWidth / if (expanded) 1 else item.subColumnCount.coerceAtLeast(1)).coerceAtLeast(1), height))
                 }
+
+                val pSlot = placeholderSlot
+                val placeholderPlaceable = if (pSlot != null && measurables.size > items.size) {
+                    val pHeight = (pSlot.duration * sectionHeightPx).roundToInt().coerceAtLeast(1)
+                    measurables.last().measure(Constraints.fixed(cellWidth, pHeight))
+                } else null
+
                 layout(constraints.maxWidth, constraints.maxHeight) {
-                    placeables.forEachIndexed { index, placeable ->
+                    coursePlaceables.forEachIndexed { index, placeable ->
                         val item = items[index]
                         val expanded = gridState.expandedItem?.parentBlock == item.parentBlock
                         val moving = gridState.activeMoveIntent?.parentBlock == item.parentBlock
@@ -396,6 +432,16 @@ fun MiuixScheduleGrid(
                             y = (originalY + gridState.topHandleDragOffsetY).roundToInt()
                         }
                         placeable.placeRelative(x, y)
+                    }
+
+                    if (pSlot != null && placeholderPlaceable != null) {
+                        val dayIndex = mapDayToDisplayIndex(pSlot.day, viewState.firstDayOfWeek)
+                        if (dayIndex in 0 until dayCount) {
+                            val startSection = if (is24Hour) pSlot.section else pSlot.section - 1f
+                            val px = dayIndex * cellWidth
+                            val py = (startSection * sectionHeightPx).roundToInt()
+                            placeholderPlaceable.placeRelative(px, py)
+                        }
                     }
                 }
             }

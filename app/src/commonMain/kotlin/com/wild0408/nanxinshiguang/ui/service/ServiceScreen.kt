@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wild0408.nanxinshiguang.Destination
-import com.wild0408.nanxinshiguang.ui.components.AdaptiveNavigationScaffold
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import nanxinshiguang.generated.resources.Res
@@ -39,57 +38,51 @@ fun ServiceScreen(
     onNavigate: (Destination) -> Unit,
     onBack: () -> Unit
 ) {
-    AdaptiveNavigationScaffold(
-        currentDestination = Destination.Service,
-        onTabSelected = onNavigate
-    ) { navigationPadding ->
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    title = { Text(stringResource(Res.string.nav_service)) }
-                )
-            }
-        ) { contentPadding ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(navigationPadding)
-                    .padding(contentPadding)
-                    .padding(horizontal = 16.dp)
-            ) {
-                item {
-                    Card(
-                        onClick = { onNavigate(Destination.GradeCenter) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
-                        )
-                    ) {
-                        RowContent(
-                            icon = Res.drawable.list_alt_24px,
-                            title = stringResource(Res.string.item_grade_center),
-                            description = stringResource(Res.string.desc_grade_center)
-                        )
-                    }
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(stringResource(Res.string.nav_service)) }
+            )
+        }
+    ) { contentPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(horizontal = 16.dp)
+        ) {
+            item {
+                Card(
+                    onClick = { onNavigate(Destination.GradeCenter) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    RowContent(
+                        icon = Res.drawable.list_alt_24px,
+                        title = stringResource(Res.string.item_grade_center),
+                        description = stringResource(Res.string.desc_grade_center)
+                    )
                 }
-                item {
-                    Card(
-                        onClick = { onNavigate(Destination.ElectricityCenter) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
-                        )
-                    ) {
-                        RowContent(
-                            icon = Res.drawable.electricity_24px,
-                            title = stringResource(Res.string.item_electricity),
-                            description = stringResource(Res.string.desc_electricity)
-                        )
-                    }
+            }
+            item {
+                Card(
+                    onClick = { onNavigate(Destination.ElectricityCenter) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    RowContent(
+                        icon = Res.drawable.electricity_24px,
+                        title = stringResource(Res.string.item_electricity),
+                        description = stringResource(Res.string.desc_electricity)
+                    )
                 }
             }
         }

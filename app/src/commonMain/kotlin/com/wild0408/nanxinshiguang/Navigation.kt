@@ -14,6 +14,7 @@ import kotlin.reflect.KClass
  */
 object ShiguangNavMetadata {
     object IsMainScreenKey : NavMetadataKey<Boolean>
+    object DestinationKey : NavMetadataKey<Destination>
 }
 
 /**
@@ -97,6 +98,15 @@ sealed interface Destination : NavKey {
 
 val Destination.isMainScreen: Boolean
     get() = this is Destination.MainDestination
+
+val Destination.mainDestinationRank: Int
+    get() = when (this) {
+        Destination.TodaySchedule -> 0
+        Destination.CourseSchedule -> 1
+        Destination.Service -> 2
+        Destination.Settings -> 3
+        else -> -1
+    }
 
 /**
  * 配置并生成包含所有 Destination 派生类的 SerializersModule

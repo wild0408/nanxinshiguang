@@ -21,6 +21,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.metadata
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.scene.Scene
 import androidx.navigation3.ui.NavDisplay
 import com.wild0408.nanxinshiguang.data.model.StartScreen
 import com.wild0408.nanxinshiguang.ui.components.AdaptiveNavigationScaffold
@@ -146,16 +147,61 @@ fun AppNavigation(
             onBack = onBack,
             modifier = Modifier.fillMaxSize(),
             transitionSpec = {
-                slideInHorizontally(initialOffsetX = { it }, animationSpec = animSpec) togetherWith
-                        slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeOut()
+                val initialDest = initialState.findDestination()
+                val targetDest = targetState.findDestination()
+                val initialRank = initialDest?.mainDestinationRank ?: -1
+                val targetRank = targetDest?.mainDestinationRank ?: -1
+
+                if (initialRank != -1 && targetRank != -1) {
+                    if (targetRank < initialRank) {
+                        slideInHorizontally(initialOffsetX = { -it }, animationSpec = animSpec) togetherWith
+                                slideOutHorizontally(targetOffsetX = { it / 3 }, animationSpec = animSpec) + fadeOut()
+                    } else {
+                        slideInHorizontally(initialOffsetX = { it }, animationSpec = animSpec) togetherWith
+                                slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeOut()
+                    }
+                } else {
+                    slideInHorizontally(initialOffsetX = { it }, animationSpec = animSpec) togetherWith
+                            slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeOut()
+                }
             },
             popTransitionSpec = {
-                slideInHorizontally(initialOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeIn() togetherWith
-                        slideOutHorizontally(targetOffsetX = { it }, animationSpec = animSpec)
+                val initialDest = initialState.findDestination()
+                val targetDest = targetState.findDestination()
+                val initialRank = initialDest?.mainDestinationRank ?: -1
+                val targetRank = targetDest?.mainDestinationRank ?: -1
+
+                if (initialRank != -1 && targetRank != -1) {
+                    if (targetRank < initialRank) {
+                        slideInHorizontally(initialOffsetX = { -it }, animationSpec = animSpec) togetherWith
+                                slideOutHorizontally(targetOffsetX = { it / 3 }, animationSpec = animSpec) + fadeOut()
+                    } else {
+                        slideInHorizontally(initialOffsetX = { it }, animationSpec = animSpec) togetherWith
+                                slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeOut()
+                    }
+                } else {
+                    slideInHorizontally(initialOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeIn() togetherWith
+                            slideOutHorizontally(targetOffsetX = { it }, animationSpec = animSpec)
+                }
             },
             predictivePopTransitionSpec = {
-                slideInHorizontally(initialOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeIn() togetherWith
-                        slideOutHorizontally(targetOffsetX = { it }, animationSpec = animSpec)
+                val initialDest = initialState.findDestination()
+                val targetDest = targetState.findDestination()
+                val initialRank = initialDest?.mainDestinationRank ?: -1
+                val targetRank = targetDest?.mainDestinationRank ?: -1
+
+                if (initialRank != -1 && targetRank != -1) {
+                    if (targetRank < initialRank) {
+                        slideInHorizontally(initialOffsetX = { -it }, animationSpec = animSpec) togetherWith
+                                slideOutHorizontally(targetOffsetX = { it / 3 }, animationSpec = animSpec) + fadeOut()
+                    } else {
+                        slideInHorizontally(initialOffsetX = { it }, animationSpec = animSpec) togetherWith
+                                slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeOut()
+                    }
+                } else {
+                    slideInHorizontally(initialOffsetX = { -it / 3 }, animationSpec = animSpec) + fadeIn() togetherWith
+                            slideOutHorizontally(targetOffsetX = { it }, animationSpec = animSpec)
+                }
             },
             entryDecorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
@@ -168,6 +214,7 @@ fun AppNavigation(
                 key = key,
                 metadata = metadata {
                     put(ShiguangNavMetadata.IsMainScreenKey, destination.isMainScreen)
+                    put(ShiguangNavMetadata.DestinationKey, destination)
                 }
             ) {
                 Surface(modifier = Modifier.fillMaxSize()) {
@@ -258,4 +305,8 @@ fun ScreenContent(
             targetDest.courseName, onBack, onNavigate
         )
     }
+}
+
+private fun Scene<*>.findDestination(): Destination? {
+    return metadata[ShiguangNavMetadata.DestinationKey.toString()] as? Destination
 }

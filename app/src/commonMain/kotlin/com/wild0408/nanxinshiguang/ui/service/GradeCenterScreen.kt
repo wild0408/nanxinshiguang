@@ -56,7 +56,6 @@ import com.wild0408.nanxinshiguang.data.model.AcademicSummary
 import com.wild0408.nanxinshiguang.data.model.updatedAtText
 import com.wild0408.nanxinshiguang.data.repository.GradeImportStore
 import com.wild0408.nanxinshiguang.data.repository.GradeRepository
-import com.wild0408.nanxinshiguang.ui.components.AdaptiveNavigationScaffold
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -151,70 +150,64 @@ fun GradeCenterScreen(
         }
     }
     val snackbarHostState = remember { SnackbarHostState() }
-    AdaptiveNavigationScaffold(
-        currentDestination = Destination.GradeCenter,
-        onTabSelected = onNavigate,
-        showNavigation = false
-    ) { navigationPadding ->
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(
-                            stringResource(
-                                if (details) Res.string.title_grade_details
-                                else Res.string.title_grade_center,
-                            )
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        stringResource(
+                            if (details) Res.string.title_grade_details
+                            else Res.string.title_grade_center,
                         )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(
-                                imageVector = vectorResource(Res.drawable.arrow_back_24px),
-                                contentDescription = stringResource(Res.string.a11y_back)
-                            )
-                        }
-                    },
-                    actions = {
-                        if (details) {
-                            IconButton(
-                                onClick = gradeSyncViewModel::refresh,
-                                enabled = !gradeSyncState.loading,
-                            ) {
-                                if (gradeSyncState.loading) {
-                                    CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-                                } else {
-                                    Icon(
-                                        imageVector = vectorResource(Res.drawable.refresh_24px),
-                                        contentDescription = stringResource(Res.string.action_refresh_grades),
-                                    )
-                                }
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = vectorResource(Res.drawable.arrow_back_24px),
+                            contentDescription = stringResource(Res.string.a11y_back)
+                        )
+                    }
+                },
+                actions = {
+                    if (details) {
+                        IconButton(
+                            onClick = gradeSyncViewModel::refresh,
+                            enabled = !gradeSyncState.loading,
+                        ) {
+                            if (gradeSyncState.loading) {
+                                CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                            } else {
+                                Icon(
+                                    imageVector = vectorResource(Res.drawable.refresh_24px),
+                                    contentDescription = stringResource(Res.string.action_refresh_grades),
+                                )
                             }
                         }
-                    },
-                )
-            },
-            snackbarHost = { SnackbarHost(snackbarHostState) }
-        ) { contentPadding ->
-            when {
-                effectiveUiState.isLoading -> LoadingContent(
-                    Modifier.padding(navigationPadding).padding(contentPadding)
-                )
-                else -> GradeContent(
-                    uiState = if (details) effectiveUiState.forSemester(selectedSemester) else effectiveUiState,
-                    academicState = academicState,
-                    onRefreshAcademic = academicViewModel::refresh,
-                    onBindPortal = { onNavigate(Destination.PortalAccount) },
-                    gradeSyncState = gradeSyncState,
-                    onRefreshGrades = gradeSyncViewModel::refresh,
-                    showDetails = details,
-                    onOpenDetails = { onNavigate(Destination.GradeDetails) },
-                    semesterMenuExpanded = semesterMenuExpanded,
-                    onSemesterMenuChange = { semesterMenuExpanded = it },
-                    onSemesterSelected = { selectedSemester = it },
-                    modifier = Modifier.padding(navigationPadding).padding(contentPadding)
-                )
-            }
+                    }
+                },
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { contentPadding ->
+        when {
+            effectiveUiState.isLoading -> LoadingContent(
+                Modifier.padding(contentPadding)
+            )
+            else -> GradeContent(
+                uiState = if (details) effectiveUiState.forSemester(selectedSemester) else effectiveUiState,
+                academicState = academicState,
+                onRefreshAcademic = academicViewModel::refresh,
+                onBindPortal = { onNavigate(Destination.PortalAccount) },
+                gradeSyncState = gradeSyncState,
+                onRefreshGrades = gradeSyncViewModel::refresh,
+                showDetails = details,
+                onOpenDetails = { onNavigate(Destination.GradeDetails) },
+                semesterMenuExpanded = semesterMenuExpanded,
+                onSemesterMenuChange = { semesterMenuExpanded = it },
+                onSemesterSelected = { selectedSemester = it },
+                modifier = Modifier.padding(contentPadding)
+            )
         }
     }
 }

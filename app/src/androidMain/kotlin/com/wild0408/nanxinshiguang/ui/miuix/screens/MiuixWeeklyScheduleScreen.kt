@@ -67,6 +67,8 @@ import com.wild0408.nanxinshiguang.data.model.schedule_style.ScheduleModeProto
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixCourseBlock
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixCourseAction
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixCourseActionMenu
+import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixPlaceholderBlock
+import com.wild0408.nanxinshiguang.ui.miuix.components.SchedulePlaceholderSlot
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixCourseTablePickerDialog
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixScheduleGrid
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixTimeColumn
@@ -181,6 +183,7 @@ fun MiuixWeeklyScheduleScreen(
     var actionMenuFocusRect by remember { mutableStateOf<Rect?>(null) }
     var actionMenuFocusCourse by remember { mutableStateOf<CourseWithWeeks?>(null) }
     var actionMenuActions by remember { mutableStateOf<List<MiuixCourseAction>>(emptyList()) }
+    var placeholderSlot by remember { mutableStateOf<SchedulePlaceholderSlot?>(null) }
     val style = remember(uiState.style) {
         with(ScheduleGridStyleComposed) { uiState.style.toComposedStyle() }
     }
@@ -237,6 +240,7 @@ fun MiuixWeeklyScheduleScreen(
         actionMenuFocusRect = null
         actionMenuFocusCourse = null
         actionMenuActions = emptyList()
+        placeholderSlot = null
     }
 
     fun showToast(message: String) = ToastManager.show(message)
@@ -288,39 +292,65 @@ fun MiuixWeeklyScheduleScreen(
     }
 
     fun handleBlankTap(day: Int, section: Int) {
-        if (floatingCourse == null) {
+        if (floatingCourse != null) {
+            val targetWeek = uiState.weekIndexInPager ?: uiState.currentWeekNumber
+            if (targetWeek == null || targetWeek !in 1..uiState.totalWeeks) {
+                viewModel.exitFloatingMode()
+                showToast(toastOutsideSemesterAdjust)
+                return
+            }
+            val start = section.toFloat()
+            val end = if (style.scheduleMode == ScheduleModeProto.TIME_24H_MODE) {
+                (start + floatingDuration).coerceAtMost(24f)
+            } else {
+                (start + floatingDuration - 1f).coerceAtMost(uiState.timeSlots.size.toFloat())
+            }
+            viewModel.updateCourseTimeByFloatingGesture(targetWeek, day, start, end) {
+                showToast(toastCourseAdjustSaved)
+            }
+            return
+        }
+
+        val current = placeholderSlot
+        if (current != null && current.day == day && current.section == section.toFloat()) {
+            placeholderSlot = null
             addCourseAt(day, section)
-            return
-        }
-        val targetWeek = uiState.weekIndexInPager ?: uiState.currentWeekNumber
-        if (targetWeek == null || targetWeek !in 1..uiState.totalWeeks) {
-            viewModel.exitFloatingMode()
-            showToast(toastOutsideSemesterAdjust)
-            return
-        }
-        val start = section.toFloat()
-        val end = if (style.scheduleMode == ScheduleModeProto.TIME_24H_MODE) {
-            (start + floatingDuration).coerceAtMost(24f)
         } else {
-            (start + floatingDuration - 1f).coerceAtMost(uiState.timeSlots.size.toFloat())
-        }
-        viewModel.updateCourseTimeByFloatingGesture(targetWeek, day, start, end) {
-            showToast(toastCourseAdjustSaved)
+            placeholderSlot = SchedulePlaceholderSlot(
+                day = day,
+                section = section.toFloat(),
+                duration = if (style.scheduleMode == ScheduleModeProto.TIME_24H_MODE) 2f else 1f
+            )
         }
     }
 
     fun showBlankMenu(day: Int, section: Int, anchor: Rect) {
         if (floatingCourse != null) return
+        val slot = SchedulePlaceholderSlot(
+            day = day,
+            section = section.toFloat(),
+            duration = if (style.scheduleMode == ScheduleModeProto.TIME_24H_MODE) 2f else 1f
+        )
+        placeholderSlot = slot
         actionMenuAnchor = anchor
-        actionMenuFocusRect = null
+        actionMenuFocusRect = anchor
         actionMenuFocusCourse = null
         actionMenuActions = listOf(
-            MiuixCourseAction("add", actionNewCourse, addActionIcon) { addCourseAt(day, section); dismissCourseMenu() },
-            MiuixCourseAction("paste", actionPasteCourse, pasteActionIcon, copiedCourse != null) { pasteCourseAt(copiedCourse, day, section.toFloat()); dismissCourseMenu() },
+            MiuixCourseAction("add", actionNewCourse, addActionIcon) {
+                placeholderSlot = null
+                addCourseAt(day, section)
+                dismissCourseMenu()
+            },
+            MiuixCourseAction("paste", actionPasteCourse, pasteActionIcon, copiedCourse != null) {
+                placeholderSlot = null
+                pasteCourseAt(copiedCourse, day, section.toFloat())
+                dismissCourseMenu()
+            },
         )
     }
 
     fun showCourseMenu(block: MergedCourseBlock, anchor: Rect) {
+        placeholderSlot = null
         val source = block.courses.firstOrNull()
         val targetSection = if (style.scheduleMode == ScheduleModeProto.TIME_24H_MODE) block.startSection else block.startSection + 1f
         actionMenuAnchor = anchor
@@ -506,11 +536,19 @@ fun MiuixWeeklyScheduleScreen(
                             scrollState = scrollState,
                             viewportHeightPx = viewportHeightPx.toFloat(),
                             editingBlock = editingBlock,
+                            placeholderSlot = placeholderSlot,
                             onEditingChanged = { if (!it) editingBlock = null },
-                            onCourseClick = { selectedBlock = it },
+                            onCourseClick = { placeholderSlot = null; selectedBlock = it },
                             onCourseLongPress = ::showCourseMenu,
                             onBlankTap = ::handleBlankTap,
                             onBlankLongPress = ::showBlankMenu,
+                            onPlaceholderClick = { day, section ->
+                                placeholderSlot = null
+                                addCourseAt(day, section.toInt())
+                            },
+                            onPlaceholderLongPress = { day, section, anchor ->
+                                showBlankMenu(day, section.toInt(), anchor)
+                            },
                             onTimeSlotClick = { onNavigate(Destination.TimeScheduleManagement) },
                             onCourseMoved = { block, day, start, end ->
                                 val currentWeek = uiState.weekIndexInPager ?: uiState.currentWeekNumber
@@ -597,10 +635,10 @@ fun MiuixWeeklyScheduleScreen(
                 backdrop = backdrop,
                 actions = actionMenuActions,
                 focusRect = actionMenuFocusRect,
-                focusContent = actionMenuFocusCourse?.let { course ->
+                focusContent = if (actionMenuFocusCourse != null) {
                     {
                         MiuixCourseBlock(
-                            courseWrapper = course,
+                            courseWrapper = actionMenuFocusCourse!!,
                             isVisualDemoted = false,
                             style = style,
                             timeSlots = uiState.timeSlots,
@@ -608,7 +646,14 @@ fun MiuixWeeklyScheduleScreen(
                             isFloating = false,
                         )
                     }
-                },
+                } else if (placeholderSlot != null) {
+                    {
+                        MiuixPlaceholderBlock(
+                            style = style,
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+                } else null,
                 onDismiss = ::dismissCourseMenu,
             )
         }
