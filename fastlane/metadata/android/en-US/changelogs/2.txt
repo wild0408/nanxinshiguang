@@ -1,0 +1,5 @@
+Nanxin Shiguang 1.0.1 update.
+
+- Added home screen electricity bill widget.
+- Fixed Material theme page transition animations.
+- Fixed MIUiX theme predictive back animation.
