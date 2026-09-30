@@ -67,3 +67,4 @@
 -keep class androidx.sqlite.** { *; }
 -keep class com.wild0408.nanxinshiguang.data.db.** { *; }
 -keep class com.wild0408.nanxinshiguang.data.model.** { *; }
+-keep class com.wild0408.nanxinshiguang.ui.viewmodel.** { *; }
