@@ -32,15 +32,7 @@ class DataStoreModule {
         )
     }
 
-    @Single
-    @Named("SchoolHistory")
-    fun provideSchoolHistoryDataStore(
-        @Named("FilesDir") filesDir: Path
-    ): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.createWithPath(
-            produceFile = { filesDir / "datastore" / "school_history.preferences_pb" }
-        )
-    }
+
 
     @Single
     @Named("AppSettings")

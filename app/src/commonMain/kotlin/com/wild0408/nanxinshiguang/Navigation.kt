@@ -35,7 +35,6 @@ sealed interface Destination : NavKey {
     // --- 二级功能页面 ---
     @Serializable data object TimeScheduleManagement : Destination
     @Serializable data object ManageCourseTables : Destination
-    @Serializable data object SchoolSelectionListScreen : Destination
     @Serializable data object CourseTableConversion : Destination
     @Serializable data object NotificationSettings : Destination
     @Serializable data object MoreOptions : Destination
@@ -55,14 +54,7 @@ sealed interface Destination : NavKey {
     @Serializable data object PortalAccount : Destination
     @Serializable data object PortalBind : Destination
 
-    // --- 动态传参页面 ---
-    @Serializable
-    data class AdapterSelection(
-        val schoolId: String,
-        val schoolName: String,
-        val categoryNumber: Int,
-        val resourceFolder: String
-    ) : Destination
+
 
     @Serializable
     data class WebView(
@@ -122,7 +114,6 @@ val navSerializersModule = SerializersModule {
         // 普通功能页面
         subclass(Destination.TimeScheduleManagement::class)
         subclass(Destination.ManageCourseTables::class)
-        subclass(Destination.SchoolSelectionListScreen::class)
         subclass(Destination.CourseTableConversion::class)
         subclass(Destination.NotificationSettings::class)
         subclass(Destination.MoreOptions::class)
@@ -142,8 +133,7 @@ val navSerializersModule = SerializersModule {
         subclass(Destination.PortalAccount::class)
         subclass(Destination.PortalBind::class)
 
-        // 带参数据类
-        subclass(Destination.AdapterSelection::class)
+
         subclass(Destination.WebView::class)
         subclass(Destination.AddEditCourse::class)
         subclass(Destination.CourseManagementDetail::class)

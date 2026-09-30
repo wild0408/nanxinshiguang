@@ -6,7 +6,6 @@ import com.wild0408.nanxinshiguang.data.model.RepoType
 import com.wild0408.nanxinshiguang.data.model.RepositoryInfo
 import com.wild0408.nanxinshiguang.data.repository.AppSettingsRepository
 import com.wild0408.nanxinshiguang.data.repository.GitRepository
-import com.wild0408.nanxinshiguang.data.repository.SchoolRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,8 +19,7 @@ import nanxinshiguang.generated.resources.Res
 @KoinViewModel
 open class UpdateRepoViewModel(
     private val gitRepository: GitRepository,
-    private val appSettingsRepository: AppSettingsRepository,
-    private val schoolRepository: SchoolRepository
+    private val appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
     // UI状态，包含可供选择的仓库列表、当前选择的仓库和日志
@@ -184,7 +182,7 @@ open class UpdateRepoViewModel(
                 }
             }
 
-            schoolRepository.refresh()
+
 
             _uiState.update { it.copy(isUpdating = false) }
         }

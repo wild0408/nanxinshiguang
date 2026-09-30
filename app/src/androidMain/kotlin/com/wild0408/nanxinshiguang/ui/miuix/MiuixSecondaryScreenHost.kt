@@ -21,8 +21,7 @@ import com.wild0408.nanxinshiguang.ui.miuix.settings.course.MiuixCourseNameListS
 import com.wild0408.nanxinshiguang.ui.miuix.settings.course.MiuixCourseInstanceListScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.course.MiuixAddEditCourseScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.time.MiuixTimeScheduleManagementScreen
-import com.wild0408.nanxinshiguang.ui.miuix.schoolselection.MiuixSchoolSelectionListScreen
-import com.wild0408.nanxinshiguang.ui.miuix.schoolselection.MiuixAdapterSelectionScreen
+
 import com.wild0408.nanxinshiguang.ui.miuix.settings.time.MiuixComboScheduleEditScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.time.MiuixSingleScheduleEditScreen
 import com.wild0408.nanxinshiguang.ui.miuix.schoolselection.MiuixWebViewScreen
@@ -36,18 +35,7 @@ internal fun MiuixSecondaryScreenHost(
     onBack: () -> Unit,
 ) {
     when (destination) {
-        Destination.SchoolSelectionListScreen -> MiuixSchoolSelectionListScreen(
-            onNavigate = onNavigate,
-            onBack = onBack,
-        )
-        is Destination.AdapterSelection -> MiuixAdapterSelectionScreen(
-            onNavigate = onNavigate,
-            onBack = onBack,
-            schoolId = destination.schoolId,
-            schoolName = destination.schoolName,
-            categoryNumber = destination.categoryNumber,
-            resourceFolder = destination.resourceFolder,
-        )
+
         Destination.TimeScheduleManagement -> MiuixTimeScheduleManagementScreen(
             onBack = onBack,
             onEditSingleSchedule = { tableId, isPublic, copyFromId ->

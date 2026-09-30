@@ -26,8 +26,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.wild0408.nanxinshiguang.data.model.StartScreen
 import com.wild0408.nanxinshiguang.ui.components.AdaptiveNavigationScaffold
 import com.wild0408.nanxinshiguang.ui.material.schedule.WeeklyScheduleScreen
-import com.wild0408.nanxinshiguang.ui.material.schoolselection.list.AdapterSelectionScreen
-import com.wild0408.nanxinshiguang.ui.material.schoolselection.list.SchoolSelectionListScreen
+
 import com.wild0408.nanxinshiguang.ui.material.schoolselection.web.WebViewScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.main.SettingsScreen
 import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
@@ -252,7 +251,7 @@ fun ScreenContent(
         Destination.PortalAccount -> MaterialPortalAccountScreen(onNavigate, onBack)
         Destination.PortalBind -> PortalBindScreen(onBack = onBack, onCompleted = onBack)
         Destination.ManageCourseTables -> ManageCourseTablesScreen(onBack)
-        Destination.SchoolSelectionListScreen -> SchoolSelectionListScreen(onNavigate, onBack)
+
         Destination.CourseTableConversion -> CourseTableConversionScreen(onNavigate, onBack)
         Destination.NotificationSettings -> NotificationSettingsScreen(onBack)
         Destination.MoreOptions -> MoreOptionsScreen(onNavigate, onBack)
@@ -292,9 +291,7 @@ fun ScreenContent(
             onBack = onBack
         )
 
-        is Destination.AdapterSelection -> AdapterSelectionScreen(
-            onNavigate, onBack, targetDest.schoolId, targetDest.schoolName, targetDest.categoryNumber, targetDest.resourceFolder
-        )
+
         is Destination.WebView -> WebViewScreen(
             onNavigate, onBack, targetDest.initialUrl, targetDest.assetJsPath
         )
