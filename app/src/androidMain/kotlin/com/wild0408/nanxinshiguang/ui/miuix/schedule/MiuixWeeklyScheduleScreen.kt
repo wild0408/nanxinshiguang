@@ -87,9 +87,9 @@ import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleUiState
 import com.wild0408.nanxinshiguang.ui.schedule.PasteResult
 import com.wild0408.nanxinshiguang.navigation.AddEditCourseChannel
 import com.wild0408.nanxinshiguang.navigation.PresetCourseData
-import com.wild0408.nanxinshiguang.ui.schedule.components.FloatingCourseBar
-import com.wild0408.nanxinshiguang.ui.schedule.components.ScheduleGridStyleComposed
-import com.wild0408.nanxinshiguang.ui.schedule.components.rearrangeDays
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.FloatingCourseBar
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.rearrangeDays
 import com.wild0408.nanxinshiguang.ui.components.ToastManager
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch

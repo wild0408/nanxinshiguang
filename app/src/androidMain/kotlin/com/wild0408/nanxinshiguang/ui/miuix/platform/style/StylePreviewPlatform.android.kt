@@ -1,4 +1,4 @@
-package com.wild0408.nanxinshiguang.ui.settings.style
+package com.wild0408.nanxinshiguang.ui.material.settings.style
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -28,7 +28,7 @@ import coil3.compose.AsyncImage
 import com.wild0408.nanxinshiguang.data.model.schedule_style.ScheduleModeProto
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixScheduleGrid
 import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleUiState
-import com.wild0408.nanxinshiguang.ui.schedule.components.ScheduleGridStyleComposed
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.TimeZone

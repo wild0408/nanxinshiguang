@@ -40,7 +40,7 @@ import com.wild0408.nanxinshiguang.data.model.summarizeGradeRecords
 import com.wild0408.nanxinshiguang.data.model.isPassed
 import com.wild0408.nanxinshiguang.data.repository.GradeImportStore
 import com.wild0408.nanxinshiguang.data.repository.GradeRepository
-import com.wild0408.nanxinshiguang.ui.service.GradeCenterUiState
+import com.wild0408.nanxinshiguang.ui.material.service.grade.GradeCenterUiState
 import com.wild0408.nanxinshiguang.ui.service.AcademicSummaryViewModel
 import com.wild0408.nanxinshiguang.ui.service.GradeSyncUiState
 import com.wild0408.nanxinshiguang.ui.service.GradeSyncViewModel

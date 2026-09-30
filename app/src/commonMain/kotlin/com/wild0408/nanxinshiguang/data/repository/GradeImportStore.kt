@@ -4,7 +4,7 @@ import com.wild0408.nanxinshiguang.data.model.GradeRecord
 import com.wild0408.nanxinshiguang.data.model.latestGradeSemester
 import com.wild0408.nanxinshiguang.data.model.orderedGradeSemesters
 import com.wild0408.nanxinshiguang.data.model.summarizeGradeRecords
-import com.wild0408.nanxinshiguang.ui.service.GradeCenterUiState
+import com.wild0408.nanxinshiguang.ui.material.service.grade.GradeCenterUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

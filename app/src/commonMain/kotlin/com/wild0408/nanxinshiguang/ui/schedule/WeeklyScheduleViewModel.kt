@@ -12,7 +12,8 @@ import com.wild0408.nanxinshiguang.data.repository.AppSettingsRepository
 import com.wild0408.nanxinshiguang.data.repository.CourseTableRepository
 import com.wild0408.nanxinshiguang.data.repository.StyleSettingsRepository
 import com.wild0408.nanxinshiguang.data.repository.TimeScheduleRepository
-import com.wild0408.nanxinshiguang.ui.schedule.components.ScheduleGridStyleComposed.Companion.toComposedStyle
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed.Companion.toComposedStyle
 import com.wild0408.nanxinshiguang.data.model.schedule_style.ScheduleModeProto
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -39,7 +39,7 @@ import com.wild0408.nanxinshiguang.data.db.main.CourseWithWeeks
 import com.wild0408.nanxinshiguang.data.db.main.TimeSlot
 import com.wild0408.nanxinshiguang.data.model.schedule_style.BorderTypeProto
 import com.wild0408.nanxinshiguang.data.model.schedule_style.ScheduleModeProto
-import com.wild0408.nanxinshiguang.ui.schedule.components.ScheduleGridStyleComposed
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed
 import com.wild0408.nanxinshiguang.ui.theme.LocalIsDarkTheme
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime

@@ -1,5 +1,7 @@
 package com.wild0408.nanxinshiguang.ui.miuix.settings.style
 
+import com.wild0408.nanxinshiguang.ui.material.settings.style.ColorPreviewBox
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,9 +34,9 @@ import com.wild0408.nanxinshiguang.tool.rememberFileManager
 import com.wild0408.nanxinshiguang.ui.components.AdvancedColorPicker
 import com.wild0408.nanxinshiguang.ui.components.ColorPickerConfig
 import com.wild0408.nanxinshiguang.ui.components.ImageCropper
-import com.wild0408.nanxinshiguang.ui.settings.style.ColorPreviewBox
-import com.wild0408.nanxinshiguang.ui.settings.style.MiuixStylePreview
-import com.wild0408.nanxinshiguang.ui.settings.style.MiuixStyleSettingsScaffold
+import com.wild0408.nanxinshiguang.ui.material.settings.style.ColorPreviewBox
+import com.wild0408.nanxinshiguang.ui.material.settings.style.MiuixStylePreview
+import com.wild0408.nanxinshiguang.ui.material.settings.style.MiuixStyleSettingsScaffold
 import com.wild0408.nanxinshiguang.ui.settings.style.StyleSettingsViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource

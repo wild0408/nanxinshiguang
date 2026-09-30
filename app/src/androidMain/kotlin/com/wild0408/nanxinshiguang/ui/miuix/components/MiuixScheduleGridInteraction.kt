@@ -45,11 +45,11 @@ import androidx.compose.ui.zIndex
 import com.wild0408.nanxinshiguang.data.model.schedule_style.ScheduleModeProto
 import com.wild0408.nanxinshiguang.ui.schedule.MergedCourseBlock
 import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleUiState
-import com.wild0408.nanxinshiguang.ui.schedule.components.CourseMoveIntent
-import com.wild0408.nanxinshiguang.ui.schedule.components.ISingleSchedulable
-import com.wild0408.nanxinshiguang.ui.schedule.components.ScheduleGridStyleComposed
-import com.wild0408.nanxinshiguang.ui.schedule.components.calculateSingleSchedulables
-import com.wild0408.nanxinshiguang.ui.schedule.components.mapDisplayIndexToDay
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.CourseMoveIntent
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.ISingleSchedulable
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.calculateSingleSchedulables
+import com.wild0408.nanxinshiguang.ui.material.schedule.components.mapDisplayIndexToDay
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
