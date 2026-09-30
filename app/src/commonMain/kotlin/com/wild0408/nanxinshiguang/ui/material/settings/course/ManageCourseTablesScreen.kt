@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.course
 
-import com.wild0408.nanxinshiguang.ui.settings.coursetables.ManageCourseTablesViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.course.ManageCourseTablesViewModel
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable

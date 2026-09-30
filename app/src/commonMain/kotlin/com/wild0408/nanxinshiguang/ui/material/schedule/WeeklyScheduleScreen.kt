@@ -1,8 +1,8 @@
 package com.wild0408.nanxinshiguang.ui.material.schedule
 
-import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleViewModel
-import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleUiState
-import com.wild0408.nanxinshiguang.ui.schedule.MergedCourseBlock
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.WeeklyScheduleViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.WeeklyScheduleUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.MergedCourseBlock
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable

@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.wild0408.nanxinshiguang.data.model.AcademicSummary
 import com.wild0408.nanxinshiguang.data.model.updatedAtText
-import com.wild0408.nanxinshiguang.ui.service.AcademicSummaryUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.AcademicSummaryUiState
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import nanxinshiguang.generated.resources.Res

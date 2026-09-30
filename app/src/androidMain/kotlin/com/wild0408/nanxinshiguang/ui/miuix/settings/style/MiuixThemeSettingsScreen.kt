@@ -39,7 +39,7 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.HyperLiquidTopBarButton
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBehavior
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
-import com.wild0408.nanxinshiguang.ui.settings.SettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
 import com.wild0408.nanxinshiguang.ui.theme.LocalIsDarkTheme
 import com.wild0408.nanxinshiguang.ui.theme.supportsDynamicColor
 import org.jetbrains.compose.resources.stringResource

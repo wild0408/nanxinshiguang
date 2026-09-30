@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wild0408.nanxinshiguang.data.model.AppUiStyle
 import com.wild0408.nanxinshiguang.ui.miuix.MiuixAndroidApp
-import com.wild0408.nanxinshiguang.ui.settings.SettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.compose.viewmodel.koinViewModel
 

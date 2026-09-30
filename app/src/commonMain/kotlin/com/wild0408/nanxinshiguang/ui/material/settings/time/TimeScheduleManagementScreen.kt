@@ -1,8 +1,8 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.time
 
-import com.wild0408.nanxinshiguang.ui.settings.time.TimeScheduleManagementViewModel
-import com.wild0408.nanxinshiguang.ui.settings.time.TimeScheduleItemUiModel
-import com.wild0408.nanxinshiguang.ui.settings.time.ScheduleType
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.TimeScheduleManagementViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.TimeScheduleItemUiModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.ScheduleType
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

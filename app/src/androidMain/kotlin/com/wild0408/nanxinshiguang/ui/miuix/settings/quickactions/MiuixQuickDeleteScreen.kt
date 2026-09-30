@@ -39,8 +39,8 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.wild0408.nanxinshiguang.ui.settings.quickactions.delete.AffectedCourseItem
-import com.wild0408.nanxinshiguang.ui.settings.quickactions.delete.QuickDeleteViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.quickactions.AffectedCourseItem
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.quickactions.QuickDeleteViewModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime

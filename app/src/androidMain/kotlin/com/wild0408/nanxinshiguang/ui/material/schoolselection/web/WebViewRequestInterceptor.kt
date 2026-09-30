@@ -1,4 +1,4 @@
-package com.wild0408.nanxinshiguang.ui.schoolselection.web
+package com.wild0408.nanxinshiguang.ui.material.schoolselection.web
 
 import android.util.Log
 import android.webkit.CookieManager

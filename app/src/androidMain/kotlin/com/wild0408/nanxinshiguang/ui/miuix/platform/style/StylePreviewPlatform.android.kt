@@ -27,7 +27,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.wild0408.nanxinshiguang.data.model.schedule_style.ScheduleModeProto
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixScheduleGrid
-import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.WeeklyScheduleUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.MergedCourseBlock
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek

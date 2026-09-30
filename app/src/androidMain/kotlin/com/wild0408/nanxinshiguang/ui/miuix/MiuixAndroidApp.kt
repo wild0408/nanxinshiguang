@@ -33,7 +33,7 @@ import com.wild0408.nanxinshiguang.ui.miuix.settings.main.MiuixSettingsScreen
 import com.wild0408.nanxinshiguang.ui.miuix.theme.ShiguangMiuixTheme
 import com.wild0408.nanxinshiguang.ui.components.LocalNavigationHostEnabled
 import com.wild0408.nanxinshiguang.ui.components.LocalNavigationHostPadding
-import com.wild0408.nanxinshiguang.ui.settings.SettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource

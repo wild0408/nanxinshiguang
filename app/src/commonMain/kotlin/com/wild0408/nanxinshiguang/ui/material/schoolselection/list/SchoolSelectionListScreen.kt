@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.schoolselection.list
 
-import com.wild0408.nanxinshiguang.ui.schoolselection.list.SchoolSelectionViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.schoolselection.SchoolSelectionViewModel
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

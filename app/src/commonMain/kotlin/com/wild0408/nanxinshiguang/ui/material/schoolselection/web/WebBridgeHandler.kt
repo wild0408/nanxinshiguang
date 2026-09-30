@@ -1,4 +1,4 @@
-package com.wild0408.nanxinshiguang.ui.schoolselection.web
+package com.wild0408.nanxinshiguang.ui.material.schoolselection.web
 
 import com.wild0408.nanxinshiguang.data.model.CourseImportExport
 import com.wild0408.nanxinshiguang.data.parser.parseGradeRecords

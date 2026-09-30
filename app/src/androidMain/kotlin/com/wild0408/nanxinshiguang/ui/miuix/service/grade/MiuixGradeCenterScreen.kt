@@ -41,9 +41,9 @@ import com.wild0408.nanxinshiguang.data.model.isPassed
 import com.wild0408.nanxinshiguang.data.repository.GradeImportStore
 import com.wild0408.nanxinshiguang.data.repository.GradeRepository
 import com.wild0408.nanxinshiguang.ui.material.service.grade.GradeCenterUiState
-import com.wild0408.nanxinshiguang.ui.service.AcademicSummaryViewModel
-import com.wild0408.nanxinshiguang.ui.service.GradeSyncUiState
-import com.wild0408.nanxinshiguang.ui.service.GradeSyncViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.AcademicSummaryViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.GradeSyncUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.GradeSyncViewModel
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.HyperLiquidTopBarButton
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.SharedScrollBehavior
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBehavior
@@ -200,7 +200,7 @@ fun MiuixGradeCenterScreen(
 @Composable
 private fun GradeContent(
     uiState: GradeCenterUiState,
-    academicState: com.wild0408.nanxinshiguang.ui.service.AcademicSummaryUiState,
+    academicState: com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.AcademicSummaryUiState,
     onRefreshAcademic: () -> Unit,
     onBindPortal: () -> Unit,
     gradeSyncState: GradeSyncUiState,

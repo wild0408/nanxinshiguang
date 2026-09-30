@@ -1,4 +1,4 @@
-package com.wild0408.nanxinshiguang.ui.settings.notification
+package com.wild0408.nanxinshiguang.ui.material.settings.notification
 
 import android.Manifest
 import android.app.AlarmManager

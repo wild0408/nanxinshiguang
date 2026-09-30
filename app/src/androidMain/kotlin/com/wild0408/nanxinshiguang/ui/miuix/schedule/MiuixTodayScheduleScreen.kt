@@ -31,10 +31,10 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.SharedScrollBehavior
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBehavior
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
-import com.wild0408.nanxinshiguang.ui.today.CourseDisplayModel
-import com.wild0408.nanxinshiguang.ui.today.TodayScheduleViewModel
-import com.wild0408.nanxinshiguang.ui.today.TodayStatus
-import com.wild0408.nanxinshiguang.ui.today.TodayUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.CourseDisplayModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayScheduleViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayStatus
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayUiState
 import com.wild0408.nanxinshiguang.ui.theme.LocalIsDarkTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.resources.stringResource

@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.about
 
-import com.wild0408.nanxinshiguang.ui.settings.update.UpdateRepoViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.about.UpdateRepoViewModel
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column

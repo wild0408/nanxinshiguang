@@ -2,7 +2,7 @@ package com.wild0408.nanxinshiguang.ui.miuix.schoolselection
 
 import androidx.compose.runtime.Composable
 import com.wild0408.nanxinshiguang.Destination
-import com.wild0408.nanxinshiguang.ui.schoolselection.web.WebViewScreen
+import com.wild0408.nanxinshiguang.ui.material.schoolselection.web.WebViewScreen
 
 /**
  * WebView is intentionally kept visually unchanged. The Android Miuix host

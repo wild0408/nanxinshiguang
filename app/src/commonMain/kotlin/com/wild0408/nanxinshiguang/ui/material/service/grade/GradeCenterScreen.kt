@@ -1,8 +1,8 @@
 package com.wild0408.nanxinshiguang.ui.material.service.grade
-import com.wild0408.nanxinshiguang.ui.service.AcademicSummaryViewModel
-import com.wild0408.nanxinshiguang.ui.service.AcademicSummaryUiState
-import com.wild0408.nanxinshiguang.ui.service.GradeSyncViewModel
-import com.wild0408.nanxinshiguang.ui.service.GradeSyncUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.AcademicSummaryViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.AcademicSummaryUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.GradeSyncViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.grade.GradeSyncUiState
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

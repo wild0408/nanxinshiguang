@@ -27,8 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.wild0408.nanxinshiguang.Destination
 import com.wild0408.nanxinshiguang.ui.components.LocalNavigationHostPadding
-import com.wild0408.nanxinshiguang.ui.settings.SettingsViewModel
-import com.wild0408.nanxinshiguang.ui.portal.PortalAccountViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.portal.PortalAccountViewModel
 import com.wild0408.nanxinshiguang.data.repository.PortalBindingState
 import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixDatePickerDialog
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBehavior

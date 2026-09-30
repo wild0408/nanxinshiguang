@@ -1,6 +1,6 @@
-package com.wild0408.nanxinshiguang.ui.settings.notification
+package com.wild0408.nanxinshiguang.ui.material.settings.notification
 
-import com.wild0408.nanxinshiguang.ui.material.settings.notification.SettingItemRow
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.notification.NotificationSettingsUiState
 
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement

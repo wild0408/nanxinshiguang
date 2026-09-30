@@ -1,8 +1,8 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.backup
 
-import com.wild0408.nanxinshiguang.ui.settings.backup.BackupViewModel
-import com.wild0408.nanxinshiguang.ui.settings.backup.BackupUiState
-import com.wild0408.nanxinshiguang.ui.settings.backup.TestResult
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.backup.BackupViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.backup.BackupUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.backup.TestResult
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

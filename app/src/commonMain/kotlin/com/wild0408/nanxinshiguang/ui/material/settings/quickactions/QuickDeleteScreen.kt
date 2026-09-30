@@ -1,8 +1,8 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.quickactions
 
-import com.wild0408.nanxinshiguang.ui.settings.quickactions.delete.QuickDeleteViewModel
-import com.wild0408.nanxinshiguang.ui.settings.quickactions.delete.QuickDeleteUiState
-import com.wild0408.nanxinshiguang.ui.settings.quickactions.delete.UiTextRes
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.quickactions.QuickDeleteViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.quickactions.QuickDeleteUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.quickactions.UiTextRes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement

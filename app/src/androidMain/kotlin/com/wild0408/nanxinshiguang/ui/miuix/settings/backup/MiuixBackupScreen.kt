@@ -34,9 +34,9 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBeha
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
 import com.wild0408.nanxinshiguang.ui.material.settings.backup.BackupTarget
-import com.wild0408.nanxinshiguang.ui.settings.backup.BackupUiState
-import com.wild0408.nanxinshiguang.ui.settings.backup.BackupViewModel
-import com.wild0408.nanxinshiguang.ui.settings.backup.TestResult
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.backup.BackupViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.backup.BackupUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.backup.TestResult
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number

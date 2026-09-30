@@ -1,9 +1,9 @@
 package com.wild0408.nanxinshiguang.ui.material.today
 
-import com.wild0408.nanxinshiguang.ui.today.TodayScheduleViewModel
-import com.wild0408.nanxinshiguang.ui.today.TodayUiState
-import com.wild0408.nanxinshiguang.ui.today.TodayStatus
-import com.wild0408.nanxinshiguang.ui.today.CourseDisplayModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayScheduleViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayStatus
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.CourseDisplayModel
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

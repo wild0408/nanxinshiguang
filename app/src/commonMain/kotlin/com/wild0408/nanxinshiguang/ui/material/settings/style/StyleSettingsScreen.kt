@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.style
 
-import com.wild0408.nanxinshiguang.ui.settings.style.StyleSettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.style.StyleSettingsViewModel
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll

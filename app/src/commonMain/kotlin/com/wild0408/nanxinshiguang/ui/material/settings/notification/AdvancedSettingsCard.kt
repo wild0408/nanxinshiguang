@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.notification
 
-import com.wild0408.nanxinshiguang.ui.settings.notification.NotificationSettingsUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.notification.NotificationSettingsUiState
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

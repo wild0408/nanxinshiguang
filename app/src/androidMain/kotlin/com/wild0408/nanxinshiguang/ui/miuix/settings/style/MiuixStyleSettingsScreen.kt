@@ -37,7 +37,7 @@ import com.wild0408.nanxinshiguang.ui.components.ImageCropper
 import com.wild0408.nanxinshiguang.ui.material.settings.style.ColorPreviewBox
 import com.wild0408.nanxinshiguang.ui.material.settings.style.MiuixStylePreview
 import com.wild0408.nanxinshiguang.ui.material.settings.style.MiuixStyleSettingsScaffold
-import com.wild0408.nanxinshiguang.ui.settings.style.StyleSettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.style.StyleSettingsViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel

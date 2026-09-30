@@ -43,8 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.wild0408.nanxinshiguang.data.model.schedule_style.ScheduleModeProto
-import com.wild0408.nanxinshiguang.ui.schedule.MergedCourseBlock
-import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.MergedCourseBlock
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.WeeklyScheduleUiState
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.CourseMoveIntent
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.ISingleSchedulable
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed

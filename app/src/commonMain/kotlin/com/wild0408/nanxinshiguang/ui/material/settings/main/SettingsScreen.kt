@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.main
 
-import com.wild0408.nanxinshiguang.ui.settings.SettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.wild0408.nanxinshiguang.Destination
 import com.wild0408.nanxinshiguang.data.repository.PortalBindingState
-import com.wild0408.nanxinshiguang.ui.portal.PortalAccountViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.portal.PortalAccountViewModel
 import com.wild0408.nanxinshiguang.ui.components.DatePickerModal
 import com.wild0408.nanxinshiguang.ui.components.NativeNumberPicker
 import kotlinx.datetime.DayOfWeek

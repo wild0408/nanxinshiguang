@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.portal
 
-import com.wild0408.nanxinshiguang.ui.portal.PortalAccountViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.portal.PortalAccountViewModel
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

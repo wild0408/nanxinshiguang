@@ -38,7 +38,7 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
 import com.wild0408.nanxinshiguang.ui.components.LocalNavigationHostPadding
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.wild0408.nanxinshiguang.ui.settings.quickactions.tweaks.TweakScheduleViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.quickactions.TweakScheduleViewModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number

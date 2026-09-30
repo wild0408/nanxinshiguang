@@ -29,9 +29,9 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.HyperLiquidTopBarButton
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBehavior
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
-import com.wild0408.nanxinshiguang.ui.settings.time.ScheduleType
-import com.wild0408.nanxinshiguang.ui.settings.time.TimeScheduleItemUiModel
-import com.wild0408.nanxinshiguang.ui.settings.time.TimeScheduleManagementViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.ScheduleType
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.TimeScheduleItemUiModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.TimeScheduleManagementViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel

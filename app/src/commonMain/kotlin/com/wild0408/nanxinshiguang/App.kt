@@ -28,9 +28,9 @@ import com.wild0408.nanxinshiguang.ui.components.AdaptiveNavigationScaffold
 import com.wild0408.nanxinshiguang.ui.material.schedule.WeeklyScheduleScreen
 import com.wild0408.nanxinshiguang.ui.material.schoolselection.list.AdapterSelectionScreen
 import com.wild0408.nanxinshiguang.ui.material.schoolselection.list.SchoolSelectionListScreen
-import com.wild0408.nanxinshiguang.ui.schoolselection.web.WebViewScreen
+import com.wild0408.nanxinshiguang.ui.material.schoolselection.web.WebViewScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.main.SettingsScreen
-import com.wild0408.nanxinshiguang.ui.settings.SettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
 import com.wild0408.nanxinshiguang.ui.settings.additional.LanguageSettingScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.main.MoreOptionsScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.about.OpenSourceLicensesScreen
@@ -40,7 +40,7 @@ import com.wild0408.nanxinshiguang.ui.material.settings.course.AddEditCourseScre
 import com.wild0408.nanxinshiguang.ui.material.settings.course.CourseInstanceListScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.course.CourseNameListScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.course.ManageCourseTablesScreen
-import com.wild0408.nanxinshiguang.ui.settings.notification.NotificationSettingsScreen
+import com.wild0408.nanxinshiguang.ui.material.settings.notification.NotificationSettingsScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.quickactions.QuickActionsScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.quickactions.QuickDeleteScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.quickactions.TweakScheduleScreen

@@ -54,9 +54,9 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.HyperLiquidTopBarButton
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBehavior
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
-import com.wild0408.nanxinshiguang.ui.settings.time.ComboScheduleEditUiState
-import com.wild0408.nanxinshiguang.ui.settings.time.ComboScheduleEditViewModel
-import com.wild0408.nanxinshiguang.ui.settings.time.SingleScheduleEditViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.ComboScheduleEditUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.ComboScheduleEditViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.SingleScheduleEditViewModel
 import com.wild0408.nanxinshiguang.ui.material.settings.time.components.calculateInitialTimes
 import com.wild0408.nanxinshiguang.ui.material.settings.time.components.formatTime
 import com.wild0408.nanxinshiguang.ui.material.settings.time.components.parseLocalTimeSafely

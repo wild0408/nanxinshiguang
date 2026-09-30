@@ -43,10 +43,10 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.wild0408.nanxinshiguang.ui.settings.conversion.ConversionEvent
-import com.wild0408.nanxinshiguang.ui.settings.conversion.ConversionUiState
-import com.wild0408.nanxinshiguang.ui.settings.conversion.CourseTableConversionViewModel
-import com.wild0408.nanxinshiguang.ui.settings.conversion.ExportType
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.course.ConversionEvent
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.course.ConversionUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.course.CourseTableConversionViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.course.ExportType
 import kotlinx.coroutines.launch
 import okio.Buffer
 import okio.FileSystem

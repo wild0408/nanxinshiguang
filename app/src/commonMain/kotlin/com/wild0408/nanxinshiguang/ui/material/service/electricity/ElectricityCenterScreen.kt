@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.service.electricity
 
-import com.wild0408.nanxinshiguang.ui.service.ElectricityViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.electricity.ElectricityViewModel
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.schedule.components
 
-import com.wild0408.nanxinshiguang.ui.schedule.MergedCourseBlock
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.MergedCourseBlock
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

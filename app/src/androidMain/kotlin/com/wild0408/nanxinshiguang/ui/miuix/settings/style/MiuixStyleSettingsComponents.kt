@@ -50,14 +50,14 @@ import com.wild0408.nanxinshiguang.data.model.schedule_style.BorderTypeProto
 import com.wild0408.nanxinshiguang.data.model.schedule_style.ScheduleModeProto
 import com.wild0408.nanxinshiguang.ui.components.AdvancedColorPicker
 import com.wild0408.nanxinshiguang.ui.components.ColorPickerConfig
-import com.wild0408.nanxinshiguang.ui.schedule.MergedCourseBlock
-import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.WeeklyScheduleUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.MergedCourseBlock
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGrid
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridActions
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridStyleComposed
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.ScheduleGridViewState
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.rememberScheduleGridState
-import com.wild0408.nanxinshiguang.ui.settings.style.StyleSettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.style.StyleSettingsViewModel
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.TimeZone

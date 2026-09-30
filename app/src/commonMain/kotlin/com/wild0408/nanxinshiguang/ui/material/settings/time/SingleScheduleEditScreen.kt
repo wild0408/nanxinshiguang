@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.time
 
-import com.wild0408.nanxinshiguang.ui.settings.time.SingleScheduleEditViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.SingleScheduleEditViewModel
 import com.wild0408.nanxinshiguang.ui.material.settings.time.components.TimeSlotItem
 import com.wild0408.nanxinshiguang.ui.material.settings.time.components.TimeSlotEditContent
 import com.wild0408.nanxinshiguang.ui.material.settings.time.components.DefaultDurationSettings

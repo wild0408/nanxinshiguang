@@ -1,4 +1,4 @@
-package com.wild0408.nanxinshiguang.ui.schoolselection.web
+package com.wild0408.nanxinshiguang.ui.material.schoolselection.web
 
 /**
  * Android 平台专属：拦截 XHR, Fetch 和 Form POST 请求的 JS 脚本

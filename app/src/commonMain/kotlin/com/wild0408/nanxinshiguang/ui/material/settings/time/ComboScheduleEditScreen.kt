@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.time
 
-import com.wild0408.nanxinshiguang.ui.settings.time.ComboScheduleEditViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.time.ComboScheduleEditViewModel
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -52,7 +52,7 @@ import com.wild0408.nanxinshiguang.data.model.AppThemeMode
 import com.wild0408.nanxinshiguang.data.model.AppUiStyle
 import com.wild0408.nanxinshiguang.ui.components.AdvancedColorPicker
 import com.wild0408.nanxinshiguang.ui.components.ColorPickerConfig
-import com.wild0408.nanxinshiguang.ui.settings.SettingsViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
 import com.wild0408.nanxinshiguang.ui.theme.LocalIsDarkTheme
 import com.wild0408.nanxinshiguang.ui.theme.supportsDynamicColor
 import org.jetbrains.compose.resources.stringResource

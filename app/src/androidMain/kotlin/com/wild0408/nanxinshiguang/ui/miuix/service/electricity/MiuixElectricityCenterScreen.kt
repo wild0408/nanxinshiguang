@@ -47,7 +47,7 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
-import com.wild0408.nanxinshiguang.ui.service.ElectricityViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.service.electricity.ElectricityViewModel
 import com.wild0408.nanxinshiguang.ui.material.service.electricity.ElectricityTrendPoint
 import com.wild0408.nanxinshiguang.ui.material.service.electricity.ElectricityTrendRange
 import com.wild0408.nanxinshiguang.ui.material.service.electricity.forRange

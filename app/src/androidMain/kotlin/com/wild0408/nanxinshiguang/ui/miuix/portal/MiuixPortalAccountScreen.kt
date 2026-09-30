@@ -32,7 +32,7 @@ import com.wild0408.nanxinshiguang.data.repository.PortalBindingState
 import com.wild0408.nanxinshiguang.ui.components.ToastManager
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperPageScaffold
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.hyperPageScroll
-import com.wild0408.nanxinshiguang.ui.portal.PortalAccountViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.portal.PortalAccountViewModel
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant

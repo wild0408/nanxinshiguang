@@ -1,6 +1,6 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.course
 
-import com.wild0408.nanxinshiguang.ui.settings.course.CourseScheme
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.course.CourseScheme
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

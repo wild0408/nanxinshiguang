@@ -1,4 +1,6 @@
-package com.wild0408.nanxinshiguang.ui.schoolselection.web
+package com.wild0408.nanxinshiguang.ui.material.schoolselection.web
+
+import com.wild0408.nanxinshiguang.ui.viewmodel.schoolselection.WebViewModel
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row

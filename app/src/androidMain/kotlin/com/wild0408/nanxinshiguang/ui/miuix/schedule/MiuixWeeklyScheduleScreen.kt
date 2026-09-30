@@ -81,10 +81,10 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.components.HyperTopBarMenuItem
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.components.HyperTopBarMenuOverlay
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
 import com.wild0408.nanxinshiguang.ui.components.LocalNavigationHostPadding
-import com.wild0408.nanxinshiguang.ui.schedule.MergedCourseBlock
-import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleViewModel
-import com.wild0408.nanxinshiguang.ui.schedule.WeeklyScheduleUiState
-import com.wild0408.nanxinshiguang.ui.schedule.PasteResult
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.MergedCourseBlock
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.WeeklyScheduleViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.WeeklyScheduleUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.schedule.PasteResult
 import com.wild0408.nanxinshiguang.navigation.AddEditCourseChannel
 import com.wild0408.nanxinshiguang.navigation.PresetCourseData
 import com.wild0408.nanxinshiguang.ui.material.schedule.components.FloatingCourseBar

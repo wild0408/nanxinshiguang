@@ -1,7 +1,7 @@
 package com.wild0408.nanxinshiguang.ui.material.settings.quickactions
 
-import com.wild0408.nanxinshiguang.ui.settings.quickactions.tweaks.UiTextRes
-import com.wild0408.nanxinshiguang.ui.settings.quickactions.tweaks.TweakScheduleViewModel
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.quickactions.UiTextRes
+import com.wild0408.nanxinshiguang.ui.viewmodel.settings.quickactions.TweakScheduleViewModel
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -83,14 +83,7 @@ import nanxinshiguang.generated.resources.tweak_mode_overwrite
 import nanxinshiguang.generated.resources.week_days_full_names
 import kotlin.time.Instant
 
-@Composable
-fun UiTextRes.asString(): String {
-    return if (args.isEmpty()) {
-        stringResource(resource)
-    } else {
-        stringResource(resource, *args.toTypedArray())
-    }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
