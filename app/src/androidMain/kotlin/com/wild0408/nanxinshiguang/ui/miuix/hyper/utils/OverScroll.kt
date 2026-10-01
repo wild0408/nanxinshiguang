@@ -10,6 +10,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.hapticfeedback.HapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -25,11 +27,13 @@ import androidx.compose.ui.node.currentValueOf
 import androidx.compose.ui.node.invalidatePlacement
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.WindowInfo
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
@@ -185,28 +189,67 @@ class OverScrollState {
 
 val LocalOverScrollState = compositionLocalOf { OverScrollState() }
 
+// ==================== 触底/触顶触感反馈 ====================
+
+/** 越界位移达到该距离后才触发触感，避免轻微越界也震动。 */
+private val OVERSCROLL_HAPTIC_TRIGGER_DISTANCE = 12.dp
+
+internal const val OVERSCROLL_EDGE_NONE = 0
+internal const val OVERSCROLL_EDGE_TOP = 1
+internal const val OVERSCROLL_EDGE_BOTTOM = -1
+
+/**
+ * 根据越界偏移量判断当前贴住哪一侧边缘。
+ * 偏移为正是内容被向下拉动（触顶），为负是内容被向上拉动（触底）。
+ */
+internal fun resolveOverScrollEdge(offset: Float, triggerDistance: Float): Int = when {
+    offset >= triggerDistance -> OVERSCROLL_EDGE_TOP
+    offset <= -triggerDistance -> OVERSCROLL_EDGE_BOTTOM
+    else -> OVERSCROLL_EDGE_NONE
+}
+
 // ==================== Modifier extensions ====================
 
+/**
+ * 垂直越界滚动：内容超出可滚动范围时提供阻尼位移与松手回弹，
+ * 并在首次拖动到顶部/底部边缘时触发一次轻触感反馈。
+ *
+ * @param hapticOnEdge 关闭后该页面不再有触底/触顶触感反馈。
+ */
 @Stable
 fun Modifier.overScrollVertical(
     nestedScrollToParent: Boolean = true,
     isEnabled: () -> Boolean = { platform() == Platform.Android || platform() == Platform.IOS },
-): Modifier = overScrollOutOfBound(isVertical = true, nestedScrollToParent = nestedScrollToParent, isEnabled = isEnabled)
+    hapticOnEdge: Boolean = true,
+): Modifier = overScrollOutOfBound(
+    isVertical = true,
+    nestedScrollToParent = nestedScrollToParent,
+    hapticOnEdge = hapticOnEdge,
+    isEnabled = isEnabled,
+)
 
+/** 水平方向的越界滚动，行为与 [overScrollVertical] 一致。 */
 @Stable
 fun Modifier.overScrollHorizontal(
     nestedScrollToParent: Boolean = true,
     isEnabled: () -> Boolean = { platform() == Platform.Android || platform() == Platform.IOS },
-): Modifier = overScrollOutOfBound(isVertical = false, nestedScrollToParent = nestedScrollToParent, isEnabled = isEnabled)
+    hapticOnEdge: Boolean = true,
+): Modifier = overScrollOutOfBound(
+    isVertical = false,
+    nestedScrollToParent = nestedScrollToParent,
+    hapticOnEdge = hapticOnEdge,
+    isEnabled = isEnabled,
+)
 
 @Stable
 fun Modifier.overScrollOutOfBound(
     isVertical: Boolean = true,
     nestedScrollToParent: Boolean = true,
+    hapticOnEdge: Boolean = true,
     isEnabled: () -> Boolean = { platform() == Platform.Android || platform() == Platform.IOS },
 ): Modifier {
     if (!isEnabled()) return this
-    return this.clipToBounds().then(OverscrollElement(isVertical, nestedScrollToParent))
+    return this.clipToBounds().then(OverscrollElement(isVertical, nestedScrollToParent, hapticOnEdge))
 }
 
 // ==================== OverscrollNode ====================
@@ -214,37 +257,46 @@ fun Modifier.overScrollOutOfBound(
 private data class OverscrollElement(
     val isVertical: Boolean,
     val nestedScrollToParent: Boolean,
+    val hapticOnEdge: Boolean,
 ) : ModifierNodeElement<OverscrollNode>() {
-    override fun create(): OverscrollNode = OverscrollNode(isVertical, nestedScrollToParent)
+    override fun create(): OverscrollNode = OverscrollNode(isVertical, nestedScrollToParent, hapticOnEdge)
     override fun update(node: OverscrollNode) {
-        node.update(isVertical, nestedScrollToParent)
+        node.update(isVertical, nestedScrollToParent, hapticOnEdge)
         node.invalidatePlacement()
     }
+
     override fun InspectorInfo.inspectableProperties() {
         name = "overScrollOutOfBound"
         properties["isVertical"] = isVertical
         properties["nestedScrollToParent"] = nestedScrollToParent
+        properties["hapticOnEdge"] = hapticOnEdge
     }
 }
 
 private class OverscrollNode(
     var isVertical: Boolean,
     var nestedScrollToParent: Boolean,
+    var hapticOnEdge: Boolean,
 ) : DelegatingNode(), CompositionLocalConsumerModifierNode, LayoutModifierNode, NestedScrollConnection {
     private val density: Density get() = currentValueOf(LocalDensity)
     private val windowInfo: WindowInfo get() = currentValueOf(LocalWindowInfo)
     private val overScrollState: OverScrollState get() = currentValueOf(LocalOverScrollState)
+    private val hapticFeedback: HapticFeedback get() = currentValueOf(LocalHapticFeedback)
     private val dispatcher = NestedScrollDispatcher()
     private val springEngine = SpringEngine()
     private var animationJob: Job? = null
     private val offsetThreshold = 1f
     private var lastPlacedOffset = 0f
 
+    /** 上一次已经反馈过的边缘，用于保证一次越界只震动一次。 */
+    private var lastHapticEdge = OVERSCROLL_EDGE_NONE
+
     var offset = 0f
         private set(value) {
             if (field != value) {
                 field = value
                 overScrollState.offset = value
+                notifyOverScrollEdge()
                 val rounded = round(value)
                 if (rounded != lastPlacedOffset) {
                     lastPlacedOffset = rounded
@@ -269,10 +321,11 @@ private class OverscrollNode(
         resetState()
     }
 
-    fun update(isVertical: Boolean, nestedScrollToParent: Boolean) {
+    fun update(isVertical: Boolean, nestedScrollToParent: Boolean, hapticOnEdge: Boolean) {
         val rangeChanged = this.isVertical != isVertical
         this.isVertical = isVertical
         this.nestedScrollToParent = nestedScrollToParent
+        this.hapticOnEdge = hapticOnEdge
         if (rangeChanged && isAttached) updateScrollRange()
     }
 
@@ -291,9 +344,32 @@ private class OverscrollNode(
     private fun resetState() {
         offset = 0f
         rawTouchAccumulation = 0f
+        lastHapticEdge = OVERSCROLL_EDGE_NONE
         if (isAttached) {
             overScrollState.isOverScrollActive = false
             overScrollState.offset = 0f
+        }
+    }
+
+    /**
+     * 拖动越过顶部或底部边缘时给一次轻触感。
+     * 同一次越界只反馈一次：继续往同一侧拖动不会重复震动，
+     * 但松手回到静止后再拖到边缘（或反向拖到另一侧边缘）会重新反馈。
+     */
+    private fun notifyOverScrollEdge() {
+        // 节点已分离时无法读取 CompositionLocal（onDetach 会重置 offset），直接跳过。
+        if (!hapticOnEdge || !isAttached) return
+        val edge = resolveOverScrollEdge(
+            offset = offset,
+            triggerDistance = with(density) { OVERSCROLL_HAPTIC_TRIGGER_DISTANCE.toPx() },
+        )
+        if (edge == OVERSCROLL_EDGE_NONE) {
+            lastHapticEdge = OVERSCROLL_EDGE_NONE
+            return
+        }
+        if (edge != lastHapticEdge) {
+            lastHapticEdge = edge
+            hapticFeedback.performHapticFeedback(HapticFeedbackType.SegmentTick)
         }
     }
 
