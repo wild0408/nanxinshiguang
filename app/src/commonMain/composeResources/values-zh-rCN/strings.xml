@@ -408,8 +408,6 @@
     <string name="item_export_ics_file">日历文件导出</string>
     <string name="desc_export_ics_with_alarm">导出ics文件,点击生成指定提醒时间参数的文件</string>
     <string name="section_school_import">教务导入</string>
-    <string name="item_school_system_import">教务系统导入</string>
-    <string name="desc_school_import_quick">从教务系统导入课程，方便快捷</string>
     <string name="item_nuist_one_click_import">一键导入 NUIST 课表</string>
     <string name="desc_nuist_one_click_import">通过统一认证导入当前学期到当前课表</string>
     <string name="error_portal_not_bound">请先绑定统一门户</string>
@@ -455,7 +453,6 @@
     <string name="item_github_repo">本项目GitHub仓库</string>
     <string name="item_open_source_licenses">查看开源许可证</string>
     <string name="title_open_source_licenses">开源许可证</string>
-    <string name="item_update_repo">更新教务适配仓库</string>
     <string name="label_version_prefix">版本: %1$s</string>
     <string name="default_app_name">未知应用</string>
     <string name="item_check_software_update">检查软件更新</string>
@@ -501,22 +498,15 @@
     <string name="date_format_month_day">%1$d月%2$d日</string>
 
     <!-- 教务导入 -->
-    <string name="title_select_school">选择学校</string>
-    <string name="search_hint_school">搜索学校名称或首字母</string>
-    <string name="text_no_adapter_for_category">当前类别暂无适配，请选择其他类别或检查数据源。</string>
-    <string name="text_no_school_found">没有找到匹配的学校</string>
     <string name="a11y_search">搜索</string>
     <string name="a11y_clear_search">清除搜索</string>
-    <string name="a11y_school_icon">学校图标</string>
     <string name="category_bachelor_associate">本科/专科</string>
     <string name="category_postgraduate">研究生</string>
     <string name="category_general_tool">通用工具</string>
     <string name="category_other">其他</string>
-    <string name="a11y_back_to_school_list">返回学校列表</string>
     <string name="text_no_detailed_description">无详细描述。</string>
     <string name="label_contributor_unknown">未知</string>
     <string name="label_contributor_format">贡献者: %1$s</string>
-    <string name="text_no_adapter_for_category_school">该学校在「%1$s」类别下暂无适配器。</string>
     <string name="title_enter_url">输入网址</string>
     <string name="a11y_cancel_editing">取消编辑</string>
     <string name="placeholder_enter_url_full">输入网址 (https://...)</string>
@@ -534,12 +524,10 @@
     <string name="toast_devtools_enabled_format">DevTools 网页调试 %1$s。</string>
     <string name="text_import_guide">请登录教务系统后切换到有课表显示的页面再点击导入课程，点击右上角的更多查看其他选项</string>
     <string name="action_execute_import">执行导入</string>
-    <string name="toast_no_script_manual_import">该适配器没有脚本，请手动导入。</string>
     <string name="dialog_title_select_table_for_import">选择一个课表以导入课程</string>
     <string name="toast_executing_import_script">正在执行导入脚本...</string>
     <string name="toast_import_script_not_found">导入脚本文件不存在: %1$s</string>
     <string name="toast_load_import_script_failed">加载导入脚本失败: %1$s</string>
-    <string name="toast_no_import_script">该适配器没有导入脚本</string>
     <string name="toast_import_script_finished">导入脚本执行完毕，返回课表页面。</string>
     <string name="dialog_ssl_error_title">SSL 证书错误</string>
     <string name="dialog_ssl_error_message">SSL证书验证失败，这可能意味着连接不安全。是否继续浏览？</string>
@@ -550,7 +538,6 @@
     <string name="text_loading_failed">加载失败: %1$s</string>
 
     <!-- 教务适配仓库 -->
-    <string name="title_update_repo_screen">更新教务适配仓库</string>
     <string name="label_select_repo">选择仓库</string>
     <string name="text_select_repo_hint">请选择仓库</string>
     <string name="action_update">更新</string>

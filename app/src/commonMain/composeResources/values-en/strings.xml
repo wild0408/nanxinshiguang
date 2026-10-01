@@ -290,8 +290,6 @@
     <string name="item_export_ics_file">Export calendar file</string>
     <string name="desc_export_ics_with_alarm">Export ICS file with specified reminder time</string>
     <string name="section_school_import">Academic system import</string>
-    <string name="item_school_system_import">Import from academic system</string>
-    <string name="desc_school_import_quick">Import courses from academic system, quick and easy</string>
     <string name="dialog_title_select_import_table">Select target schedule for import</string>
     <string name="dialog_title_select_export_table">Select schedule to export</string>
     <string name="dialog_title_ics_export_settings">Calendar export settings</string>
@@ -331,7 +329,6 @@
     <string name="item_github_repo">Project GitHub repository</string>
     <string name="item_open_source_licenses">View open source licenses</string>
     <string name="title_open_source_licenses">Open source licenses</string>
-    <string name="item_update_repo">Update academic adapter repository</string>
     <string name="label_version_prefix">Version: %1$s</string>
     <string name="default_app_name">Unknown app</string>
     <string name="item_check_software_update">Check for Software Updates</string>
@@ -377,22 +374,15 @@
     <string name="date_format_month_day">%1$d/%2$d</string>
 
     <!-- Academic System Import -->
-    <string name="title_select_school">Select school</string>
-    <string name="search_hint_school">Search school name or initials</string>
-    <string name="text_no_adapter_for_category">No adapters available for this category, please select another or check data source.</string>
-    <string name="text_no_school_found">No matching schools found</string>
     <string name="a11y_search">Search</string>
     <string name="a11y_clear_search">Clear search</string>
-    <string name="a11y_school_icon">School icon</string>
     <string name="category_bachelor_associate">Undergraduate/Associate</string>
     <string name="category_postgraduate">Postgraduate</string>
     <string name="category_general_tool">General tools</string>
     <string name="category_other">Other</string>
-    <string name="a11y_back_to_school_list">Back to school list</string>
     <string name="text_no_detailed_description">No detailed description.</string>
     <string name="label_contributor_unknown">Unknown</string>
     <string name="label_contributor_format">Contributor: %1$s</string>
-    <string name="text_no_adapter_for_category_school">No adapter available for this school in "%1$s" category.</string>
     <string name="title_enter_url">Enter URL</string>
     <string name="a11y_cancel_editing">Cancel editing</string>
     <string name="placeholder_enter_url_full">Enter URL (https://...)</string>
@@ -410,12 +400,10 @@
     <string name="toast_devtools_enabled_format">DevTools web debugging %1$s.</string>
     <string name="text_import_guide">Please log in to the academic system and navigate to a page showing the schedule before importing. Tap "More" for additional options</string>
     <string name="action_execute_import">Execute import</string>
-    <string name="toast_no_script_manual_import">This adapter has no script, please import manually.</string>
     <string name="dialog_title_select_table_for_import">Select a schedule to import courses</string>
     <string name="toast_executing_import_script">Executing import script...</string>
     <string name="toast_import_script_not_found">Import script file not found: %1$s</string>
     <string name="toast_load_import_script_failed">Failed to load import script: %1$s</string>
-    <string name="toast_no_import_script">This adapter has no import script</string>
     <string name="toast_import_script_finished">Import script completed, returning to schedule page.</string>
     <string name="dialog_ssl_error_title">SSL Certificate Error</string>
     <string name="dialog_ssl_error_message">SSL certificate verification failed, which may indicate an insecure connection. Continue browsing?</string>
@@ -426,7 +414,6 @@
     <string name="text_loading_failed">Loading failed: %1$s</string>
     
     <!-- Academic Adapter Repository -->
-    <string name="title_update_repo_screen">Update academic adapter repository</string>
     <string name="label_select_repo">Select repository</string>
     <string name="text_select_repo_hint">Please select repository</string>
     <string name="action_update">Update</string>

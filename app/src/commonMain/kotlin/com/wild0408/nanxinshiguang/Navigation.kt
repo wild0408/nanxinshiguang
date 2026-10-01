@@ -55,16 +55,6 @@ sealed interface Destination : NavKey {
     @Serializable data object PortalAccount : Destination
     @Serializable data object PortalBind : Destination
 
-
-
-    @Serializable
-    data class WebView(
-        val initialUrl: String? = "about:blank",
-        val assetJsPath: String? = null,
-        val completionDestination: String = "course",
-        val repoRoot: String = "schools"
-    ) : Destination
-
     @Serializable
     data class AddEditCourse(
         val courseId: String? = null
@@ -135,8 +125,6 @@ val navSerializersModule = SerializersModule {
         subclass(Destination.PortalAccount::class)
         subclass(Destination.PortalBind::class)
 
-
-        subclass(Destination.WebView::class)
         subclass(Destination.AddEditCourse::class)
         subclass(Destination.CourseManagementDetail::class)
         subclass(Destination.SingleScheduleEdit::class)

@@ -65,7 +65,6 @@ import nanxinshiguang.generated.resources.item_github_repo
 import nanxinshiguang.generated.resources.item_language_settings
 import nanxinshiguang.generated.resources.item_open_source_licenses
 import nanxinshiguang.generated.resources.item_start_screen_settings
-import nanxinshiguang.generated.resources.item_update_repo
 import nanxinshiguang.generated.resources.label_error_message
 import nanxinshiguang.generated.resources.label_version_prefix
 import nanxinshiguang.generated.resources.language_24px

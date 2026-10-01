@@ -25,7 +25,6 @@ import com.wild0408.nanxinshiguang.ui.miuix.settings.time.MiuixTimeScheduleManag
 
 import com.wild0408.nanxinshiguang.ui.miuix.settings.time.MiuixComboScheduleEditScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.time.MiuixSingleScheduleEditScreen
-import com.wild0408.nanxinshiguang.ui.miuix.schoolselection.MiuixWebViewScreen
 import com.wild0408.nanxinshiguang.ui.miuix.portal.MiuixPortalAccountScreen
 import com.wild0408.nanxinshiguang.ui.portal.PortalBindScreen
 import com.wild0408.nanxinshiguang.ui.miuix.service.MiuixBusMapScreen
@@ -70,12 +69,6 @@ internal fun MiuixSecondaryScreenHost(
         Destination.CourseManagementList -> MiuixCourseNameListScreen(onNavigate, onBack)
         is Destination.CourseManagementDetail -> MiuixCourseInstanceListScreen(destination.courseName, onBack, onNavigate)
         is Destination.AddEditCourse -> MiuixAddEditCourseScreen(onBack, destination.courseId)
-        is Destination.WebView -> MiuixWebViewScreen(
-            onNavigate = onNavigate,
-            onBack = onBack,
-            initialUrl = destination.initialUrl,
-            assetJsPath = destination.assetJsPath,
-        )
         is Destination.SingleScheduleEdit -> MiuixSingleScheduleEditScreen(
             tableId = destination.tableId,
             isPublic = destination.isPublic,

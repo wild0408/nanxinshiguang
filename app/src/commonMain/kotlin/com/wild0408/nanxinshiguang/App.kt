@@ -27,7 +27,6 @@ import com.wild0408.nanxinshiguang.data.model.StartScreen
 import com.wild0408.nanxinshiguang.ui.components.AdaptiveNavigationScaffold
 import com.wild0408.nanxinshiguang.ui.material.schedule.WeeklyScheduleScreen
 
-import com.wild0408.nanxinshiguang.ui.material.schoolselection.web.WebViewScreen
 import com.wild0408.nanxinshiguang.ui.material.settings.main.SettingsScreen
 import com.wild0408.nanxinshiguang.ui.viewmodel.settings.main.SettingsViewModel
 import com.wild0408.nanxinshiguang.ui.material.settings.about.LanguageSettingScreen
@@ -295,9 +294,6 @@ fun ScreenContent(
         )
 
 
-        is Destination.WebView -> WebViewScreen(
-            onNavigate, onBack, targetDest.initialUrl, targetDest.assetJsPath
-        )
         is Destination.AddEditCourse -> AddEditCourseScreen(
             onBack, targetDest.courseId
         )

@@ -287,8 +287,6 @@
     <string name="item_export_ics_file">行事曆檔案匯出</string>
     <string name="desc_export_ics_with_alarm">匯出ics檔案，點選產生指定提醒時間參數的檔案</string>
     <string name="section_school_import">教務匯入</string>
-    <string name="item_school_system_import">教務系統匯入</string>
-    <string name="desc_school_import_quick">從教務系統匯入課程，方便快捷</string>
     <string name="dialog_title_select_import_table">選擇要匯入的目標課表</string>
     <string name="dialog_title_select_export_table">選擇要匯出的課表</string>
     <string name="dialog_title_ics_export_settings">行事曆匯出設定</string>
@@ -324,7 +322,6 @@
     <string name="item_github_repo">本專案GitHub倉庫</string>
     <string name="item_open_source_licenses">檢視開放原始碼授權</string>
     <string name="title_open_source_licenses">開放原始碼授權</string>
-    <string name="item_update_repo">更新教務適配倉庫</string>
     <string name="label_version_prefix">版本: %1$s</string>
     <string name="default_app_name">未知應用程式</string>
     <string name="item_check_software_update">檢查軟體更新</string>
@@ -370,22 +367,15 @@
     <string name="date_format_month_day">%1$d月%2$d日</string>
 
     <!-- 教務匯入 -->
-    <string name="title_select_school">選擇學校</string>
-    <string name="search_hint_school">搜尋學校名稱或首字母</string>
-    <string name="text_no_adapter_for_category">目前類別暫無適配，請選擇其他類別或檢查資料來源。</string>
-    <string name="text_no_school_found">沒有找到符合的學校</string>
     <string name="a11y_search">搜尋</string>
     <string name="a11y_clear_search">清除搜尋</string>
-    <string name="a11y_school_icon">學校圖示</string>
     <string name="category_bachelor_associate">大學/專科</string>
     <string name="category_postgraduate">研究所</string>
     <string name="category_general_tool">通用工具</string>
     <string name="category_other">其他</string>
-    <string name="a11y_back_to_school_list">返回學校清單</string>
     <string name="text_no_detailed_description">無詳細說明。</string>
     <string name="label_contributor_unknown">未知</string>
     <string name="label_contributor_format">貢獻者: %1$s</string>
-    <string name="text_no_adapter_for_category_school">該學校在「%1$s」類別下暫無適配器。</string>
     <string name="title_enter_url">輸入網址</string>
     <string name="a11y_cancel_editing">取消編輯</string>
     <string name="placeholder_enter_url_full">輸入網址 (https://...)</string>
@@ -403,12 +393,10 @@
     <string name="toast_devtools_enabled_format">DevTools 網頁除錯 %1$s。</string>
     <string name="text_import_guide">請登入教務系統後切換到有課表顯示的頁面再點選匯入課程，點選右上角的更多檢視其他選項</string>
     <string name="action_execute_import">執行匯入</string>
-    <string name="toast_no_script_manual_import">該適配器沒有指令碼，請手動匯入。</string>
     <string name="dialog_title_select_table_for_import">選擇一個課表以匯入課程</string>
     <string name="toast_executing_import_script">正在執行匯入指令碼...</string>
     <string name="toast_import_script_not_found">匯入指令碼檔案不存在: %1$s</string>
     <string name="toast_load_import_script_failed">載入匯入指令碼失敗: %1$s</string>
-    <string name="toast_no_import_script">該適配器沒有匯入指令碼</string>
     <string name="toast_import_script_finished">匯入指令碼執行完畢，返回課表頁面。</string>
     <string name="dialog_ssl_error_title">SSL 憑證錯誤</string>
     <string name="dialog_ssl_error_message">SSL憑證驗證失敗，這可能意味著連線不安全。是否繼續瀏覽？</string>
@@ -419,7 +407,6 @@
     <string name="text_loading_failed">載入失敗: %1$s</string>
     
     <!-- 教務適配倉庫 -->
-    <string name="title_update_repo_screen">更新教務適配倉庫</string>
     <string name="label_select_repo">選擇倉庫</string>
     <string name="text_select_repo_hint">請選擇倉庫</string>
     <string name="action_update">更新</string>
