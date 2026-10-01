@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-   Sample backup rules file; uncomment and customize as necessary.
-   See https://developer.android.com/guide/topics/data/autobackup
-   for details.
-   Note: This file is ignored for devices older than API 31
-   See https://developer.android.com/about/versions/12/backup-restore
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 11 及以下的自动备份规则。
+  下面三类 DataStore 文件保存的是用 AndroidKeyStore 中「设备专属、不可导出」密钥
+  加密的密文（WebDAV 密码、统一门户凭据、劳动积分缓存）。云备份恢复到新设备后
+  必然解不开，只会给用户留下坏数据，因此显式排除；课表数据库与设置仍照常备份。
 -->
 <full-backup-content>
-    <!--
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
--->
+    <exclude domain="file" path="datastore/api_config.preferences_pb" />
+    <exclude domain="file" path="datastore/portal_auth.preferences_pb" />
+    <exclude domain="file" path="datastore/labor_score.preferences_pb" />
 </full-backup-content>
