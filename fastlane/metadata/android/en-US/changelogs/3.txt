@@ -1,0 +1,5 @@
+Nanxin Shiguang 1.0.2 update.
+
+- Added labor points lookup with local caching.
+- Added a real-time campus bus map.
+- Improved Material 3 and Miuix service pages.

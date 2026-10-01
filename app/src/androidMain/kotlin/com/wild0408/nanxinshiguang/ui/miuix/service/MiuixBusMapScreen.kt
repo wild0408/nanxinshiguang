@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
@@ -60,7 +59,7 @@ internal fun MiuixBusMapScreen(onBack: () -> Unit) {
                         "校园公交",
                         color = MiuixTheme.colorScheme.onSurface,
                         modifier = Modifier.clip(RoundedCornerShape(14.dp))
-                            .background(Color.Black.copy(alpha = .38f))
+                            .background(MiuixTheme.colorScheme.surfaceContainer.copy(alpha = .92f))
                             .padding(horizontal = 12.dp, vertical = 7.dp),
                     )
                 }
