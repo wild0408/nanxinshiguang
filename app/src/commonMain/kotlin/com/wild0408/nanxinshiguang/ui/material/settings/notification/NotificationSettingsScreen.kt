@@ -24,6 +24,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import nanxinshiguang.generated.resources.Res
+import nanxinshiguang.generated.resources.a11y_back
 import nanxinshiguang.generated.resources.arrow_back_24px
 import nanxinshiguang.generated.resources.title_course_notification_settings
 
@@ -41,7 +42,10 @@ fun NotificationSettingsScreen(
                 title = { Text(stringResource(Res.string.title_course_notification_settings)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(vectorResource(Res.drawable.arrow_back_24px), contentDescription = null)
+                        Icon(
+                            vectorResource(Res.drawable.arrow_back_24px),
+                            contentDescription = stringResource(Res.string.a11y_back),
+                        )
                     }
                 }
             )

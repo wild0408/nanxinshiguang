@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -45,9 +47,11 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import nanxinshiguang.generated.resources.Res
 import nanxinshiguang.generated.resources.bus_campus_map
+import nanxinshiguang.generated.resources.bus_map_title
 import nanxinshiguang.generated.resources.bus_station
 import nanxinshiguang.generated.resources.bus_vehicle
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 import kotlin.time.Instant
 
@@ -156,12 +160,16 @@ fun BusMapViewport(
     val mapPainter = painterResource(Res.drawable.bus_campus_map)
     val stationPainter = painterResource(Res.drawable.bus_station)
     val vehiclePainter = painterResource(Res.drawable.bus_vehicle)
+    // 自绘地图对读屏来说原本完全无声；至少让容器有一个可朗读的名称，
+    // 站点/车辆标记各自带 contentDescription 供逐个朗读。
+    val mapDescription = stringResource(Res.string.bus_map_title)
     val transformState = rememberTransformableState { _, zoomChange, panChange, _ ->
         state.onTransform(zoomChange, panChange)
     }
 
     BoxWithConstraints(
         modifier = modifier
+            .semantics { contentDescription = mapDescription }
             .clipToBounds()
             .transformable(transformState)
             .pointerInput(Unit) { detectTapGestures(onDoubleTap = { state.reset() }) },

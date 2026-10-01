@@ -49,6 +49,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.koinInject
 import nanxinshiguang.generated.resources.Res
+import nanxinshiguang.generated.resources.a11y_back
 import nanxinshiguang.generated.resources.arrow_back_24px
 import nanxinshiguang.generated.resources.portal_bind_title
 import nanxinshiguang.generated.resources.portal_retry
@@ -147,7 +148,10 @@ private fun AndroidPortalBindScreen(
                 title = { Text(stringResource(Res.string.portal_bind_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(vectorResource(Res.drawable.arrow_back_24px), contentDescription = null)
+                        Icon(
+                            vectorResource(Res.drawable.arrow_back_24px),
+                            contentDescription = stringResource(Res.string.a11y_back),
+                        )
                     }
                 },
                 actions = {
