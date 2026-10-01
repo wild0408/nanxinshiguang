@@ -3,6 +3,7 @@ package com.wild0408.nanxinshiguang.ui.miuix
 import androidx.compose.runtime.Composable
 import com.wild0408.nanxinshiguang.Destination
 import com.wild0408.nanxinshiguang.ui.miuix.service.grade.MiuixGradeCenterScreen
+import com.wild0408.nanxinshiguang.ui.miuix.service.grade.MiuixLaborScoreDetailsScreen
 import com.wild0408.nanxinshiguang.ui.miuix.service.electricity.MiuixElectricityCenterScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.quickactions.MiuixQuickActionsScreen
 import com.wild0408.nanxinshiguang.ui.miuix.settings.quickactions.MiuixTweakScheduleScreen
@@ -27,6 +28,7 @@ import com.wild0408.nanxinshiguang.ui.miuix.settings.time.MiuixSingleScheduleEdi
 import com.wild0408.nanxinshiguang.ui.miuix.schoolselection.MiuixWebViewScreen
 import com.wild0408.nanxinshiguang.ui.miuix.portal.MiuixPortalAccountScreen
 import com.wild0408.nanxinshiguang.ui.portal.PortalBindScreen
+import com.wild0408.nanxinshiguang.ui.miuix.service.MiuixBusMapScreen
 
 @Composable
 internal fun MiuixSecondaryScreenHost(
@@ -47,7 +49,9 @@ internal fun MiuixSecondaryScreenHost(
         )
         Destination.GradeCenter -> MiuixGradeCenterScreen(onNavigate, onBack)
         Destination.GradeDetails -> MiuixGradeCenterScreen(onNavigate, onBack, details = true)
+        Destination.LaborScoreDetails -> MiuixLaborScoreDetailsScreen(onBack, onBind = { onNavigate(Destination.PortalBind) })
         Destination.ElectricityCenter -> MiuixElectricityCenterScreen(onBack)
+        Destination.BusMap -> MiuixBusMapScreen(onBack)
         Destination.PortalAccount -> MiuixPortalAccountScreen(onNavigate, onBack)
         Destination.PortalBind -> PortalBindScreen(onBack = onBack, onCompleted = onBack)
         Destination.QuickActions -> MiuixQuickActionsScreen(onNavigate, onBack)

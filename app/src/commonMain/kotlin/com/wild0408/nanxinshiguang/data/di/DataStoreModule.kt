@@ -65,6 +65,16 @@ class DataStoreModule {
     }
 
     @Single
+    @Named("LaborScore")
+    fun provideLaborScoreDataStore(
+        @Named("FilesDir") filesDir: Path
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.createWithPath(
+            produceFile = { filesDir / "datastore" / "labor_score.preferences_pb" }
+        )
+    }
+
+    @Single
     @Named("AcademicSummary")
     fun provideAcademicSummaryDataStore(
         @Named("FilesDir") filesDir: Path

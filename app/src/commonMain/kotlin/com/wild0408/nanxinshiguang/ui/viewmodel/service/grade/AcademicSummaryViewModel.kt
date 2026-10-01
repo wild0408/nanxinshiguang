@@ -14,11 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.koin.core.annotation.KoinViewModel
-import kotlin.time.Clock
-import kotlin.time.Instant
 
 data class AcademicSummaryUiState(
     val summary: AcademicSummary? = null,
@@ -47,7 +43,7 @@ class AcademicSummaryViewModel(
                 loading = false,
                 portalBound = binding is PortalBindingState.Bound,
             )
-            if (binding is PortalBindingState.Bound && (cached == null || !cached.fetchedToday())) {
+            if (binding is PortalBindingState.Bound && cached == null) {
                 refresh()
             }
 
@@ -101,8 +97,3 @@ private fun AcademicSummary?.forAccount(binding: PortalBindingState): AcademicSu
     val id = (binding as? PortalBindingState.Bound)?.bundle?.studentId
     return takeIf { id != null && it?.studentId == id }
 }
-
-private fun AcademicSummary.fetchedToday(): Boolean =
-    fetchedAt > 0 && Instant.fromEpochMilliseconds(fetchedAt)
-        .toLocalDateTime(TimeZone.currentSystemDefault()).date ==
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date

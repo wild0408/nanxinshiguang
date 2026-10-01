@@ -205,6 +205,7 @@ fun GradeCenterScreen(
                 onBindPortal = { onNavigate(Destination.PortalAccount) },
                 gradeSyncState = gradeSyncState,
                 onRefreshGrades = gradeSyncViewModel::refresh,
+                onNavigate = onNavigate,
                 showDetails = details,
                 onOpenDetails = { onNavigate(Destination.GradeDetails) },
                 semesterMenuExpanded = semesterMenuExpanded,
@@ -224,6 +225,7 @@ private fun GradeContent(
     onBindPortal: () -> Unit,
     gradeSyncState: GradeSyncUiState,
     onRefreshGrades: () -> Unit,
+    onNavigate: (Destination) -> Unit,
     showDetails: Boolean,
     onOpenDetails: () -> Unit,
     semesterMenuExpanded: Boolean,
@@ -254,6 +256,7 @@ private fun GradeContent(
                     onOpenDetails = onOpenDetails,
                 )
             }
+            item { LaborScoreOverviewCard(onNavigate, onBindPortal) }
         } else {
             if (uiState.records.isEmpty()) {
                 item {

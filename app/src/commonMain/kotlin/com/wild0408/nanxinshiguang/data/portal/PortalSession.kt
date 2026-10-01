@@ -5,6 +5,7 @@ import com.wild0408.nanxinshiguang.data.model.PortalUserProfile
 import com.wild0408.nanxinshiguang.data.model.AcademicSummary
 import com.wild0408.nanxinshiguang.data.model.CourseImportExport
 import com.wild0408.nanxinshiguang.data.model.GradeRecord
+import com.wild0408.nanxinshiguang.data.model.LaborScore
 
 enum class PortalService(val landingUrl: String) {
     AUTH_SERVER("https://authserver.nuist.edu.cn/authserver/index"),
@@ -43,6 +44,13 @@ sealed interface GradeQueryResult {
     data class Error(val message: String) : GradeQueryResult
 }
 
+sealed interface LaborScoreResult {
+    data class Success(val score: LaborScore) : LaborScoreResult
+    data class NotLoggedIn(val message: String) : LaborScoreResult
+    data class NetworkError(val message: String) : LaborScoreResult
+    data class Error(val message: String) : LaborScoreResult
+}
+
 sealed interface CourseScheduleResult {
     data class Success(
         val semesterName: String,
@@ -65,6 +73,7 @@ interface PortalSession {
     suspend fun fetchUserProfile(force: Boolean = false): PortalProfileResult
     suspend fun fetchAcademicSummary(): AcademicSummaryResult
     suspend fun fetchGrades(): GradeQueryResult
+    suspend fun fetchLaborScore(): LaborScoreResult
     suspend fun fetchCurrentCourseSchedule(): CourseScheduleResult
     suspend fun clear(includeWebView: Boolean = false)
 }

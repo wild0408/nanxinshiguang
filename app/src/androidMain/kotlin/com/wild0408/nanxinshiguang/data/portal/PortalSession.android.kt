@@ -5,6 +5,7 @@ import android.util.Log
 import com.wild0408.nanxinshiguang.data.model.CourseImportExport
 import com.wild0408.nanxinshiguang.data.model.parseAcademicSummary
 import com.wild0408.nanxinshiguang.data.parser.parseEmapGradeRecords
+import com.wild0408.nanxinshiguang.data.parser.parseLaborScore
 import com.wild0408.nanxinshiguang.data.model.PortalUserProfile
 import com.wild0408.nanxinshiguang.data.repository.PortalBindingState
 import com.wild0408.nanxinshiguang.data.repository.PortalCredentialRepository
@@ -36,6 +37,7 @@ private const val AUTH_SERVER = "https://authserver.nuist.edu.cn"
 private const val JWXT_BASE = "https://jwxt.nuist.edu.cn"
 private const val JWXT_INDEX_URL = "$JWXT_BASE/jwapp/sys/cjcx/*default/index.do?EMAP_LANG=zh"
 private const val JWXT_QUERY_URL = "$JWXT_BASE/jwapp/sys/cjcx/modules/cjcx/xscjcx.do"
+private const val LABOR_BASE = "https://labor.nuist.edu.cn"
 private const val WDKB_INDEX_URL = "$JWXT_BASE/jwapp/sys/wdkb/*default/index.do?EMAP_LANG=zh"
 private const val WDKB_MODULE_BASE = "$JWXT_BASE/jwapp/sys/wdkb/modules"
 private const val LOGIN_PATH = "/authserver/login"
@@ -238,6 +240,35 @@ private class AndroidPortalSession(
             }
         }
         GradeQueryResult.NotLoggedIn("教务系统登录状态已失效，请重新绑定")
+    }
+
+    override suspend fun fetchLaborScore(): LaborScoreResult = withContext(Dispatchers.IO) {
+        for (force in listOf(false, true)) {
+            val login = if (force) verifyCredential(PortalService.LABOR) else ensureLoggedIn(PortalService.LABOR)
+            if (login !is PortalLoginResult.Success) return@withContext when (login) {
+                is PortalLoginResult.CredentialInvalid -> LaborScoreResult.NotLoggedIn(login.message)
+                is PortalLoginResult.NetworkError -> LaborScoreResult.NetworkError(login.message)
+                is PortalLoginResult.LoginError -> LaborScoreResult.Error(login.message)
+                is PortalLoginResult.Success -> error("unreachable")
+            }
+            try {
+                val result = follow(HttpRequest.get("$LABOR_BASE/ResultManage/StudentResult"))
+                if (isLaborLoginResponse(result)) { if (!force) continue; return@withContext LaborScoreResult.NotLoggedIn("劳动教育平台登录状态已失效，请重新绑定") }
+                val pages = listOf(
+                    follow(HttpRequest.get("$LABOR_BASE/Activity/StudentJiFen/Index?pc=%E7%94%9F%E6%B4%BB")),
+                    follow(HttpRequest.get("$LABOR_BASE/Activity/StudentJiFen/Index?pc=%E6%9C%8D%E5%8A%A1")),
+                    follow(HttpRequest.get("$LABOR_BASE/ResultManage/ZYLDScoreHZ/Index4DefaultGrades")),
+                )
+                if (pages.any(::isLaborLoginResponse)) { if (!force) continue; return@withContext LaborScoreResult.NotLoggedIn("劳动教育平台登录状态已失效，请重新绑定") }
+                return@withContext LaborScoreResult.Success(parseLaborScore(result.body, pages[0].body, pages[1].body, pages[2].body, kotlin.time.Clock.System.now().toEpochMilliseconds()))
+            } catch (e: IOException) {
+                return@withContext LaborScoreResult.NetworkError("无法连接劳动教育平台，请检查网络")
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "labor score request failed", e)
+                return@withContext LaborScoreResult.Error("劳动积分读取失败")
+            }
+        }
+        LaborScoreResult.NotLoggedIn("劳动教育平台登录状态已失效，请重新绑定")
     }
 
     override suspend fun fetchCurrentCourseSchedule(): CourseScheduleResult = withContext(Dispatchers.IO) {
@@ -557,6 +588,12 @@ private class AndroidPortalSession(
             response.url.contains("/authserver/login", ignoreCase = true) ||
             response.body.contains("name=\"execution\"", ignoreCase = true) &&
             response.body.contains("authserver/login", ignoreCase = true)
+
+    private fun isLaborLoginResponse(response: HttpResponse): Boolean =
+        response.status == 401 || response.status == 403 ||
+            response.url.contains("/AuthServer/Login", ignoreCase = true) ||
+            response.url.contains("/UnifiedAuth", ignoreCase = true) ||
+            response.body.contains("统一身份认证登录")
 
     private fun request(request: HttpRequest): HttpResponse {
         val connection = URL(request.url).openConnection() as HttpURLConnection

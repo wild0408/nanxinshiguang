@@ -53,7 +53,9 @@ import com.wild0408.nanxinshiguang.ui.theme.ShiguangScheduleTheme
 import com.wild0408.nanxinshiguang.ui.material.today.TodayScheduleScreen
 import com.wild0408.nanxinshiguang.ui.material.service.electricity.ElectricityCenterScreen
 import com.wild0408.nanxinshiguang.ui.material.service.grade.GradeCenterScreen
+import com.wild0408.nanxinshiguang.ui.material.service.grade.LaborScoreDetailsScreen
 import com.wild0408.nanxinshiguang.ui.material.service.ServiceScreen
+import com.wild0408.nanxinshiguang.ui.material.service.bus.BusMapScreen
 import com.wild0408.nanxinshiguang.ui.material.portal.MaterialPortalAccountScreen
 import com.wild0408.nanxinshiguang.ui.portal.PortalBindScreen
 import org.koin.compose.viewmodel.koinViewModel
@@ -247,7 +249,9 @@ fun ScreenContent(
         Destination.Service -> ServiceScreen(onNavigate, onBack)
         Destination.GradeCenter -> GradeCenterScreen(onNavigate, onBack)
         Destination.GradeDetails -> GradeCenterScreen(onNavigate, onBack, details = true)
+        Destination.LaborScoreDetails -> LaborScoreDetailsScreen(onBack, onBind = { onNavigate(Destination.PortalBind) })
         Destination.ElectricityCenter -> ElectricityCenterScreen(onBack)
+        Destination.BusMap -> BusMapScreen(onBack)
         Destination.PortalAccount -> MaterialPortalAccountScreen(onNavigate, onBack)
         Destination.PortalBind -> PortalBindScreen(onBack = onBack, onCompleted = onBack)
         Destination.ManageCourseTables -> ManageCourseTablesScreen(onBack)

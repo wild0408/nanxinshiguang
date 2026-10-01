@@ -49,7 +49,9 @@ sealed interface Destination : NavKey {
     @Serializable data object LanguageSettings : Destination
     @Serializable data object GradeCenter : Destination
     @Serializable data object GradeDetails : Destination
+    @Serializable data object LaborScoreDetails : Destination
     @Serializable data object ElectricityCenter : Destination
+    @Serializable data object BusMap : Destination
     @Serializable data object PortalAccount : Destination
     @Serializable data object PortalBind : Destination
 
@@ -127,7 +129,9 @@ val navSerializersModule = SerializersModule {
         subclass(Destination.LanguageSettings::class)
         subclass(Destination.GradeCenter::class)
         subclass(Destination.GradeDetails::class)
+        subclass(Destination.LaborScoreDetails::class)
         subclass(Destination.ElectricityCenter::class)
+        subclass(Destination.BusMap::class)
         subclass(Destination.PortalAccount::class)
         subclass(Destination.PortalBind::class)
 

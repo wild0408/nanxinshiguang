@@ -31,6 +31,9 @@ import nanxinshiguang.generated.resources.item_electricity
 import nanxinshiguang.generated.resources.electricity_24px
 import nanxinshiguang.generated.resources.list_alt_24px
 import nanxinshiguang.generated.resources.nav_service
+import nanxinshiguang.generated.resources.item_bus
+import nanxinshiguang.generated.resources.desc_bus
+import nanxinshiguang.generated.resources.directions_bus_24px
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,6 +86,15 @@ fun ServiceScreen(
                         title = stringResource(Res.string.item_electricity),
                         description = stringResource(Res.string.desc_electricity)
                     )
+                }
+            }
+            item {
+                Card(
+                    onClick = { onNavigate(Destination.BusMap) },
+                    modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    RowContent(Res.drawable.directions_bus_24px, stringResource(Res.string.item_bus), stringResource(Res.string.desc_bus))
                 }
             }
         }

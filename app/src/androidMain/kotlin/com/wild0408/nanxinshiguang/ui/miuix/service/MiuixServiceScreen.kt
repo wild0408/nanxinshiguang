@@ -43,6 +43,9 @@ import nanxinshiguang.generated.resources.item_electricity
 import nanxinshiguang.generated.resources.item_grade_center
 import nanxinshiguang.generated.resources.list_alt_24px
 import nanxinshiguang.generated.resources.nav_service
+import nanxinshiguang.generated.resources.item_bus
+import nanxinshiguang.generated.resources.desc_bus
+import nanxinshiguang.generated.resources.directions_bus_24px
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
 import top.yukonga.miuix.kmp.basic.Icon
@@ -78,6 +81,12 @@ internal fun MiuixServiceScreen(onNavigate: (Destination) -> Unit) {
             description = stringResource(Res.string.desc_electricity),
             icon = Res.drawable.electricity_24px,
             destination = Destination.ElectricityCenter,
+        ),
+        ServiceCardItem(
+            title = stringResource(Res.string.item_bus),
+            description = stringResource(Res.string.desc_bus),
+            icon = Res.drawable.directions_bus_24px,
+            destination = Destination.BusMap,
         ),
     )
 
