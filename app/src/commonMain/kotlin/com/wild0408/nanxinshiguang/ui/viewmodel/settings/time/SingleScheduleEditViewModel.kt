@@ -18,6 +18,9 @@ import org.koin.core.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "SingleScheduleEditViewModel"
 
 data class SingleScheduleEditUiState(
     val isPublic: Boolean = false,
@@ -89,7 +92,7 @@ class SingleScheduleEditViewModel(
                     )
                 }
             }.onFailure { e ->
-                e.printStackTrace()
+                AppLog.e(TAG, "保存作息方案失败", e)
                 _uiState.update { it.copy(errorMsg = e.message, isDataLoaded = true) }
             }
         }
@@ -145,7 +148,7 @@ class SingleScheduleEditViewModel(
             }.onSuccess {
                 _uiState.update { it.copy(isSaved = true) }
             }.onFailure { e ->
-                e.printStackTrace()
+                AppLog.e(TAG, "保存作息方案失败", e)
                 _uiState.update { it.copy(errorMsg = e.message ?: "保存失败，请重试") }
             }
         }

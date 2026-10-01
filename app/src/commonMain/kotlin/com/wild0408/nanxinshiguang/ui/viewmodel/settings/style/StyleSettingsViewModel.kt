@@ -35,6 +35,9 @@ import org.koin.core.annotation.Named
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "StyleSettingsViewModel"
 
 @OptIn(ExperimentalUuidApi::class)
 @KoinViewModel
@@ -112,7 +115,7 @@ class StyleSettingsViewModel(
 
             styleRepository.setBackgroundImagePath(newFile.toString())
         } catch (e: Exception) {
-            e.printStackTrace()
+            AppLog.e(TAG, "保存裁剪壁纸失败", e)
         }
     }
 
@@ -133,7 +136,7 @@ class StyleSettingsViewModel(
             }
             styleRepository.setBackgroundImagePath("")
         } catch (e: Exception) {
-            e.printStackTrace()
+            AppLog.e(TAG, "移除壁纸失败", e)
         }
     }
 

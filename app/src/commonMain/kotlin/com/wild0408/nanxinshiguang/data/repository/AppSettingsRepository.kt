@@ -23,6 +23,9 @@ import kotlinx.datetime.toLocalDateTime
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import kotlin.time.Clock
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "AppSettingsRepository"
 
 /**
  * 应用配置领域仓库
@@ -153,7 +156,7 @@ class AppSettingsRepository(
             val diffWeeks = (diffDays / 7).toInt()
             diffWeeks + 1
         } catch (e: Exception) {
-            e.printStackTrace()
+            AppLog.e(TAG, "计算指定日期所在周次失败", e)
             null
         }
     }

@@ -38,6 +38,9 @@ import nanxinshiguang.generated.resources.backup_err_restore_failed_prefix
 import nanxinshiguang.generated.resources.backup_err_upload_failed
 import nanxinshiguang.generated.resources.error_webdav_unconfigured
 import kotlin.random.Random
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "BackupViewModel"
 
 /**
  * 备份与恢复界面的 UI 状态定义
@@ -305,7 +308,7 @@ class BackupViewModel(
             _uiState.update { it.copy(isBusy = false, testResult = TestResult.Success) }
             true
         } catch (e: Exception) {
-            e.printStackTrace()
+            AppLog.e(TAG, "导出本地备份失败", e)
             val exportFailMsg = getString(Res.string.backup_err_local_export_failed)
             _uiState.update { it.copy(isBusy = false, testResult = TestResult.Error(exportFailMsg)) }
             false

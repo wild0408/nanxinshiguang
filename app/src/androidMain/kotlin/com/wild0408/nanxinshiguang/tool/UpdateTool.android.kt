@@ -7,6 +7,8 @@ import androidx.core.net.toUri
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
+private const val TAG = "UpdateTool"
+
 actual object PlatformUpdateStrategy : KoinComponent {
     actual val isUpdateSupported: Boolean = true
 
@@ -64,7 +66,7 @@ actual object PlatformUpdateStrategy : KoinComponent {
             }
             context.startActivity(intent)
         } catch (e: Exception) {
-            e.printStackTrace()
+            AppLog.e(TAG, "读取设备 ABI 失败", e)
         }
     }
 }

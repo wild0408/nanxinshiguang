@@ -18,6 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+private const val TAG = "FileManager"
+
 class AndroidFileManager(
     private val onPickImage: () -> Unit,
     private val onImportFile: (List<String>) -> Unit,
@@ -50,7 +52,7 @@ actual fun rememberFileManager(callbacks: FileManagerCallbacks): FileManager {
                     BitmapFactory.decodeStream(stream)?.asImageBitmap()
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                AppLog.e(TAG, "文件操作失败", e)
                 null
             }
             withContext(Dispatchers.Main) {
@@ -71,7 +73,7 @@ actual fun rememberFileManager(callbacks: FileManagerCallbacks): FileManager {
             val bytes = try {
                 context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
             } catch (e: Exception) {
-                e.printStackTrace()
+                AppLog.e(TAG, "文件读取失败", e)
                 null
             }
             withContext(Dispatchers.Main) {
@@ -98,7 +100,7 @@ actual fun rememberFileManager(callbacks: FileManagerCallbacks): FileManager {
                 }
                 true
             } catch (e: Exception) {
-                e.printStackTrace()
+                AppLog.e(TAG, "文件写入失败", e)
                 false
             }
             pendingExportBytes = null

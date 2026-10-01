@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "ApiDateImporter"
 
 @Serializable
 data class ApiResponse(
@@ -73,10 +76,9 @@ object ApiDateImporter {
             val updatedSettings = currentSettings.copy(skippedDates = skippedDates)
             appSettingsRepository.insertOrUpdateAppSettings(updatedSettings)
 
-            println("成功导入并保存了 ${skippedDates.size} 个跳过的日期。")
+            AppLog.d(TAG, "已导入并保存跳过日期")
         } catch (e: Exception) {
-            println("数据导入失败: ${e.message}")
-            e.printStackTrace()
+            AppLog.e(TAG, "导入节假日数据失败", e)
         }
     }
 

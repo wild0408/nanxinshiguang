@@ -18,6 +18,9 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
 import org.koin.core.annotation.Single
 import kotlin.time.Clock
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "WidgetRepository"
 
 /**
  * Widget 数据仓库，负责处理与 Widget 数据库相关的所有数据操作。
@@ -109,7 +112,7 @@ class WidgetRepository(
 
             if (calculatedWeek in 1..totalWeeks) calculatedWeek else null
         } catch (e: Exception) {
-            e.printStackTrace()
+            AppLog.e(TAG, "计算当前周次失败", e)
             null
         }
     }

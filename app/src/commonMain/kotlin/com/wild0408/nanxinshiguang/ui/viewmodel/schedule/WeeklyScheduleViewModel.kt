@@ -40,6 +40,9 @@ import org.koin.core.annotation.KoinViewModel
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "WeeklyScheduleViewModel"
 
 /**
  * 课表展示块：封装单次或冲突课程
@@ -663,7 +666,7 @@ class WeeklyScheduleViewModel(
                     courseTableRepository.upsertCourse(finalClonedCourse, listOf(targetWeek))
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                AppLog.e(TAG, "浮动手势调整课程时间失败", e)
             } finally {
                 _uiState.update {
                     it.copy(
@@ -753,7 +756,7 @@ class WeeklyScheduleViewModel(
                     courseTableRepository.upsertCourse(finalClonedCourse, listOf(currentWeek))
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                AppLog.e(TAG, "手势调整课程时间失败", e)
             } finally {
                 onComplete()
             }

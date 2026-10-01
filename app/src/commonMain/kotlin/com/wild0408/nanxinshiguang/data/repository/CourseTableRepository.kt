@@ -23,6 +23,9 @@ import org.koin.core.annotation.Single
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "CourseTableRepository"
 
 /**
  * 课表数据仓库，负责处理所有与课表、课程相关的业务逻辑和数据操作。
@@ -81,7 +84,7 @@ class CourseTableRepository(
         }
         timeScheduleRepository.saveExclusiveTimeTable(exclusiveTable, defaultTimeSlotsForNewTable)
 
-        println("数据库初始化数据已完成写入")
+        AppLog.d(TAG, "数据库初始数据写入完成")
     }
 
     /**

@@ -20,6 +20,9 @@ import org.koin.core.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import com.wild0408.nanxinshiguang.tool.AppLog
+
+private const val TAG = "ComboScheduleEditViewModel"
 
 data class ComboScheduleEditUiState(
     val name: String = "",
@@ -176,7 +179,7 @@ class ComboScheduleEditViewModel(
             }.onSuccess {
                 _uiState.update { it.copy(isSaved = true) }
             }.onFailure { e ->
-                e.printStackTrace()
+                AppLog.e(TAG, "保存组合作息方案失败", e)
                 _uiState.update { it.copy(errorMsg = e.message ?: "保存失败") }
             }
         }
