@@ -262,6 +262,41 @@ tasks.matching {
     dependsOn(exportLibraryDefinitions)
 }
 
+// Compose Resources 的资产拷贝任务只写入目标目录、不清理历史内容，因此旧工程身份
+// （例如 shiguangschedule.shared.generated.resources）生成的目录会长期残留，并被原样打包进 APK。
+// 构建前移除与当前 packageOfResClass 不一致的 *.generated.resources 目录，避免旧标识再次进入安装包。
+val composeResPackageName = "nanxinshiguang.generated.resources"
+
+val cleanStaleComposeResourceDirs by tasks.registering {
+    // 配置期解析为 File，闭包只捕获可序列化对象，避免配置缓存无法序列化脚本对象。
+    val scannedRoots = listOf(
+        "generated/assets",
+        "intermediates/assets",
+        "intermediates/compressed_assets",
+    ).map { layout.buildDirectory.dir(it).get().asFile }
+    val expectedPackage = composeResPackageName
+    doLast {
+        scannedRoots.forEach { root ->
+            if (!root.isDirectory) return@forEach
+            root.walkTopDown()
+                .filter {
+                    it.isDirectory &&
+                            it.name.endsWith(".generated.resources") &&
+                            it.name != expectedPackage
+                }
+                .toList()
+                .forEach { stale ->
+                    logger.lifecycle("Removing stale Compose Resources directory: ${stale.relativeTo(root)}")
+                    stale.deleteRecursively()
+                }
+        }
+    }
+}
+
+tasks.matching { it.name == "preBuild" }.configureEach {
+    dependsOn(cleanStaleComposeResourceDirs)
+}
+
 androidComponents {
     onVariants { variant ->
         val buildType = variant.buildType ?: ""
