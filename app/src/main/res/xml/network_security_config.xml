@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  默认禁止明文流量；校园公交平台（第三方车辆平台）仍只提供 HTTP，
+  因此只对这 2 个域名放行，其余全部强制 HTTPS。
+-->
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true">
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">ns-res.cn</domain>
+        <domain includeSubdomains="false">47.96.16.23</domain>
+    </domain-config>
 </network-security-config>
