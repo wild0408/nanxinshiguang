@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.wild0408.nanxinshiguang.data.model.PortalPasskeyBundle
 import com.wild0408.nanxinshiguang.data.model.PortalUserProfile
+import com.wild0408.nanxinshiguang.tool.AppLog
 import com.wild0408.nanxinshiguang.tool.SecureCrypto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +15,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
+
+private const val TAG = "PortalCredentialRepository"
 
 sealed interface PortalBindingState {
     data object Loading : PortalBindingState
@@ -73,7 +76,10 @@ class DataStorePortalCredentialRepository(
         val profileIv = prefs[Keys.profileIv]
         _profile.value = if (!profileEncrypted.isNullOrBlank() && !profileIv.isNullOrBlank()) {
             secureCrypto.decrypt(profileEncrypted, profileIv)?.let { value ->
-                runCatching { json.decodeFromString<PortalUserProfile>(value) }.getOrNull()
+                runCatching { json.decodeFromString<PortalUserProfile>(value) }.getOrElse { error ->
+                    AppLog.w(TAG, "门户资料缓存解析失败，已按无缓存处理", error)
+                    null
+                }
             }
         } else {
             null

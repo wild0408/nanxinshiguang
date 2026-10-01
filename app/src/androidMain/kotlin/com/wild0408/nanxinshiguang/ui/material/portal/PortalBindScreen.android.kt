@@ -307,7 +307,8 @@ private suspend fun handlePortalMessage(
     onCompleted: () -> Unit,
     update: (PortalStatus, String?) -> Unit,
 ) {
-    val root = runCatching { Json.parseToJsonElement(raw).jsonObject }.getOrNull() ?: return
+    val root = runCatching { Json.parseToJsonElement(raw).jsonObject }.getOrNull()
+        ?: return update(PortalStatus.WaitingPage, "绑定页面消息格式异常，请重试")
     when (root["type"]?.jsonPrimitive?.content) {
         "status" -> when (root["stage"]?.jsonPrimitive?.content) {
             "navigating" -> update(PortalStatus.Navigating, null)

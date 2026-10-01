@@ -4,7 +4,8 @@ import android.util.Base64
 import android.util.Log
 import com.wild0408.nanxinshiguang.data.model.CourseImportExport
 import com.wild0408.nanxinshiguang.data.model.parseAcademicSummary
-import com.wild0408.nanxinshiguang.data.parser.parseEmapGradeRecords
+import com.wild0408.nanxinshiguang.data.parser.GradeParseResult
+import com.wild0408.nanxinshiguang.data.parser.parseEmapGradeRecordsResult
 import com.wild0408.nanxinshiguang.data.parser.parseLaborScore
 import com.wild0408.nanxinshiguang.data.model.PortalUserProfile
 import com.wild0408.nanxinshiguang.data.repository.PortalBindingState
@@ -220,14 +221,19 @@ private class AndroidPortalSession(
                 if (response.status >= 400) {
                     return@withContext GradeQueryResult.Error("成绩接口返回 HTTP ${response.status}")
                 }
-                val records = parseEmapGradeRecords(response.body)
-                if (records.isEmpty()) {
-                    val trimmed = response.body.trimStart()
-                    if (trimmed.startsWith("<!doctype", ignoreCase = true) ||
-                        trimmed.startsWith("<html", ignoreCase = true)
-                    ) {
-                        if (!force) continue
-                        return@withContext GradeQueryResult.NotLoggedIn("教务系统未返回成绩数据，请重新绑定")
+                val records = when (val parseResult = parseEmapGradeRecordsResult(response.body)) {
+                    is GradeParseResult.Success -> parseResult.records
+                    is GradeParseResult.Invalid -> {
+                        // 教务未返回 JSON 时通常是登录页失效，而不是"没有成绩"。
+                        val trimmed = response.body.trimStart()
+                        if (trimmed.startsWith("<!doctype", ignoreCase = true) ||
+                            trimmed.startsWith("<html", ignoreCase = true)
+                        ) {
+                            if (!force) continue
+                            return@withContext GradeQueryResult.NotLoggedIn("教务系统未返回成绩数据，请重新绑定")
+                        }
+                        Log.w(LOG_TAG, "grade parse failed: ${parseResult.reason}")
+                        return@withContext GradeQueryResult.Error("成绩数据解析失败，可能教务接口已变更")
                     }
                 }
                 return@withContext GradeQueryResult.Success(records)

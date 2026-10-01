@@ -7,11 +7,14 @@ import android.util.Log
 import android.widget.Toast
 import com.wild0408.nanxinshiguang.data.db.main.ElectricityHistoryDao
 import com.wild0408.nanxinshiguang.data.repository.ElectricityRepository
+import com.wild0408.nanxinshiguang.tool.AppLog
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.time.Duration.Companion.seconds
+
+private const val TAG = "ElectricityWidgetUpdateHelper"
 
 private object ElectricityDependencyContainer : KoinComponent {
     val electricityRepository: ElectricityRepository by inject()
@@ -105,7 +108,11 @@ object ElectricityWidgetUpdateHelper {
                     )
                     renderAllWidgets(context, snapshot)
                 }
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                // 之前是完全静默的空 catch：电费小组件刷新失败时既不写日志也不提示，
+                // 线上只能看到小组件"停在旧数据"。这里至少留下可检索的记录。
+                AppLog.e(TAG, "刷新电费小组件失败", e)
+            }
         }
     }
 

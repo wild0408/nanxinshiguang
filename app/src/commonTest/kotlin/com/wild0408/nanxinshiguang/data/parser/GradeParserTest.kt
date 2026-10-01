@@ -83,4 +83,19 @@ class GradeParserTest {
         assertEquals("初修", records.single().status)
         assertEquals("平时 30% + 期末 70%", records.single().scoreComposition)
     }
+
+    @Test
+    fun distinguishesEmptyResultFromUnparsableResponse() {
+        // 合法 JSON 但没有成绩行：属于"确实没有数据"，不应报错。
+        val empty = parseEmapGradeRecordsResult("""{"datas":{"xscjcx":{"rows":[]}}}""")
+        assertEquals(GradeParseResult.Success(emptyList()), empty)
+
+        // 非 JSON（例如登录页 HTML）：必须报"解析失败"，而不是伪装成"暂无成绩"。
+        val html = parseEmapGradeRecordsResult("<!doctype html><html><body>login</body></html>")
+        assertEquals(GradeParseResult.Invalid("响应不是合法 JSON"), html)
+
+        // 合法 JSON 但没有成绩列表字段：同样属于解析失败。
+        val noRows = parseEmapGradeRecordsResult("""{"result":0}""")
+        assertEquals(GradeParseResult.Invalid("响应中没有成绩列表字段"), noRows)
+    }
 }

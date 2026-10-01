@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.wild0408.nanxinshiguang.data.model.AcademicSummary
+import com.wild0408.nanxinshiguang.tool.AppLog
 import com.wild0408.nanxinshiguang.tool.SecureCrypto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +14,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
+
+private const val TAG = "AcademicSummaryRepository"
 
 interface AcademicSummaryRepository {
     val summary: StateFlow<AcademicSummary?>
@@ -36,8 +39,12 @@ class DataStoreAcademicSummaryRepository(
         val saved = store.data.first()
         _summary.value = saved[encryptedKey]?.let { ciphertext ->
             saved[ivKey]?.let { iv ->
-                secureCrypto.decrypt(ciphertext, iv)?.let {
-                    runCatching { json.decodeFromString<AcademicSummary>(it) }.getOrNull()
+                secureCrypto.decrypt(ciphertext, iv)?.let { plain ->
+                    runCatching { json.decodeFromString<AcademicSummary>(plain) }.getOrElse { error ->
+                        // 缓存损坏时以前会静默当成"没有缓存"；至少留下日志，便于区分存储损坏与真的没数据。
+                        AppLog.w(TAG, "学业概览缓存解析失败，已按无缓存处理", error)
+                        null
+                    }
                 }
             }
         }

@@ -17,6 +17,27 @@ private val gradeJson = Json {
     isLenient = true
 }
 
+/**
+ * 成绩解析结果。
+ *
+ * 原实现把「响应无法解析」和「解析成功但没有记录」都退化成 `emptyList()`，
+ * 页面只能显示"暂无成绩"，用户无法区分是自己确实没成绩还是接口变了。
+ */
+sealed interface GradeParseResult {
+    data class Success(val records: List<GradeRecord>) : GradeParseResult
+    data class Invalid(val reason: String) : GradeParseResult
+}
+
+/** 解析 NUIST 教务 EMAP 成绩响应，并区分"解析失败"与"确实没有数据"。 */
+fun parseEmapGradeRecordsResult(responseJson: String): GradeParseResult {
+    val root = runCatching { gradeJson.parseToJsonElement(responseJson) }
+        .getOrElse { return GradeParseResult.Invalid("响应不是合法 JSON") }
+    if (root.findEmapRows() == null) {
+        return GradeParseResult.Invalid("响应中没有成绩列表字段")
+    }
+    return GradeParseResult.Success(parseEmapGradeRecords(responseJson))
+}
+
 /** 解析适配脚本回传的统一成绩数组，不处理任何学校的原始字段。 */
 fun parseGradeRecords(responseJson: String): List<GradeRecord> {
     val root = runCatching { gradeJson.parseToJsonElement(responseJson) }.getOrNull() ?: return emptyList()
