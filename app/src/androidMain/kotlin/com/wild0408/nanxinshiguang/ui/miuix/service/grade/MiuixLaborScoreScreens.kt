@@ -11,15 +11,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -228,18 +229,41 @@ fun MiuixLaborScoreDetailsScreen(onBack: () -> Unit, onBind: () -> Unit, viewMod
 
 @Composable
 private fun MiuixLaborSummary(score: LaborScore) {
-    Column(Modifier.fillMaxWidth().padding(vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(stringResource(Res.string.labor_score_total), style = MiuixTheme.textStyles.footnote1, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
-        Text(score.officialTotalDisplay, style = MiuixTheme.textStyles.title1, fontWeight = FontWeight.Bold, color = MiuixTheme.colorScheme.primary)
-        if (!score.hasOfficialData) Text(stringResource(Res.string.labor_score_pending), style = MiuixTheme.textStyles.body2)
-        Text(stringResource(Res.string.labor_score_updated_format, score.updatedAtText()), style = MiuixTheme.textStyles.footnote1, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
+    Card(colors = CardDefaults.defaultColors(color = MiuixTheme.colorScheme.primaryContainer)) {
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            Text(
+                stringResource(Res.string.labor_score_total),
+                style = MiuixTheme.textStyles.footnote1,
+                color = MiuixTheme.colorScheme.onPrimaryContainer,
+            )
+            Text(
+                score.officialTotalDisplay,
+                style = MiuixTheme.textStyles.title1,
+                fontWeight = FontWeight.Bold,
+                color = MiuixTheme.colorScheme.onPrimaryContainer,
+            )
+            if (!score.hasOfficialData) {
+                Text(
+                    stringResource(Res.string.labor_score_pending),
+                    style = MiuixTheme.textStyles.body2,
+                    color = MiuixTheme.colorScheme.onPrimaryContainer,
+                )
+            }
+            Text(
+                stringResource(Res.string.labor_score_updated_format, score.updatedAtText()),
+                style = MiuixTheme.textStyles.footnote1,
+                color = MiuixTheme.colorScheme.onPrimaryContainer,
+            )
+        }
     }
 }
 
 @Composable private fun MiuixLaborOfficialSection(result: LaborOfficialResult) {
     MiuixLaborSection(stringResource(Res.string.labor_score_official), stringResource(Res.string.labor_score_official_source)) {
         MiuixLaborValueGrid(laborOfficialFields(result))
-        MiuixLaborRule()
         MiuixLaborStatusRow(stringResource(Res.string.labor_score_confirmed), laborConfirmationText(result.confirmed), result.isConfirmed)
         MiuixLaborStatusRow(stringResource(Res.string.labor_score_filed), laborFiledText(result.filed), result.isFiled)
         if (result.updatedAt.isNotBlank()) MiuixLaborDetailRow(stringResource(Res.string.labor_score_updated_date), result.updatedAt)
@@ -251,11 +275,15 @@ private fun MiuixLaborSummary(score: LaborScore) {
 
 @Composable
 private fun MiuixLaborSection(title: String, subtitle: String, content: @Composable ColumnScope.() -> Unit) {
-    Column(Modifier.fillMaxWidth().padding(vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        MiuixLaborRule()
-        Text(title, style = MiuixTheme.textStyles.title3, fontWeight = FontWeight.SemiBold)
-        Text(subtitle, style = MiuixTheme.textStyles.footnote1, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
-        content()
+    Card(colors = CardDefaults.defaultColors(color = MiuixTheme.colorScheme.surfaceContainer)) {
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Text(title, style = MiuixTheme.textStyles.title3, fontWeight = FontWeight.SemiBold)
+            Text(subtitle, style = MiuixTheme.textStyles.footnote1, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
+            content()
+        }
     }
 }
 
@@ -263,9 +291,8 @@ private fun MiuixLaborSection(title: String, subtitle: String, content: @Composa
 private fun MiuixLaborValueGrid(values: List<Pair<String, String?>>) {
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         val columns = if (maxWidth < 280.dp || LocalDensity.current.fontScale > 1.3f) 1 else if (maxWidth >= 600.dp) 3 else 2
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            values.chunked(columns).forEachIndexed { index, row ->
-                if (index > 0) MiuixLaborRule()
+        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            values.chunked(columns).forEach { row ->
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     row.forEach { (label, value) -> MiuixLaborValueCell(label, value, Modifier.weight(1f)) }
                     repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
@@ -285,7 +312,29 @@ private fun MiuixLaborValueGrid(values: List<Pair<String, String?>>) {
 @Composable private fun MiuixLaborStatusRow(label: String, value: String, positive: Boolean) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text(label, Modifier.weight(1f), style = MiuixTheme.textStyles.body2, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
-        Text(value, style = MiuixTheme.textStyles.body2, color = if (positive) MiuixTheme.colorScheme.primary else MiuixTheme.colorScheme.onSurface)
+        MiuixLaborStatusChip(value, positive)
+    }
+}
+
+/** 状态用圆角标签表达：已确认/已归档用主色容器，待确认/未归档用中性容器。 */
+@Composable private fun MiuixLaborStatusChip(text: String, positive: Boolean) {
+    val containerColor = if (positive) {
+        MiuixTheme.colorScheme.primaryContainer
+    } else {
+        MiuixTheme.colorScheme.secondaryContainer
+    }
+    val labelColor = if (positive) {
+        MiuixTheme.colorScheme.onPrimaryContainer
+    } else {
+        MiuixTheme.colorScheme.onSecondaryContainer
+    }
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(containerColor)
+            .padding(horizontal = 10.dp, vertical = 4.dp),
+    ) {
+        Text(text, style = MiuixTheme.textStyles.footnote1, color = labelColor, fontWeight = FontWeight.Medium)
     }
 }
 
@@ -295,8 +344,6 @@ private fun MiuixLaborValueGrid(values: List<Pair<String, String?>>) {
         Text(value, Modifier.weight(1f), style = MiuixTheme.textStyles.body2, textAlign = TextAlign.End)
     }
 }
-
-@Composable private fun MiuixLaborRule() = Box(Modifier.fillMaxWidth().padding(vertical = 2.dp).height(1.dp).background(MiuixTheme.colorScheme.dividerLine))
 
 @Composable private fun MiuixLaborError(state: LaborScoreState, onBind: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
