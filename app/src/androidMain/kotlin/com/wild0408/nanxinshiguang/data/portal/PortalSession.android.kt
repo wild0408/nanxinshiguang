@@ -676,37 +676,17 @@ private class AndroidPortalSession(
         .firstOrNull { it.isNotEmpty() && !it.equals("null", ignoreCase = true) }
 
     private fun JsonObject.toImportCourse(): CourseImportExport.ImportCourseJsonModel? {
-        val name = text("KCM") ?: return null
-        val day = rawText("SKXQ")?.toIntOrNull()?.takeIf { it in 1..7 } ?: return null
-        val startSection = rawText("KSJC")?.toIntOrNull()?.takeIf { it > 0 } ?: return null
-        val endSection = rawText("JSJC")?.toIntOrNull()?.takeIf { it >= startSection } ?: return null
-        val weeks = rawText("SKZC").orEmpty().mapIndexedNotNull { weekIndex, value ->
-            (weekIndex + 1).takeIf { value == '1' }
-        }
-        if (weeks.isEmpty()) return null
-        val campus = text("XXXQDM").orEmpty()
-        val room = text("JASMC").orEmpty()
-        val position = when {
-            campus.isNotBlank() && room.isNotBlank() -> "$room（$campus）"
-            room.isNotBlank() -> room
-            campus.isNotBlank() -> campus
-            else -> "待定"
-        }
-        val teacher = text("SKJS").orEmpty()
-            .split(Regex("[\\/、,，]"))
-            .firstOrNull()
-            ?.trim()
-            .orEmpty()
-            .ifBlank { "未知" }
+        // 解析规则已抽到 commonMain 的 parsePortalCourseRow，便于在 commonTest 覆盖边界。
+        val row = parsePortalCourseRow(this) ?: return null
         return CourseImportExport.ImportCourseJsonModel(
             id = null,
-            name = name,
-            teacher = teacher,
-            position = position,
-            day = day,
-            startSection = startSection,
-            endSection = endSection,
-            weeks = weeks,
+            name = row.name,
+            teacher = row.teacher,
+            position = row.position,
+            day = row.day,
+            startSection = row.startSection,
+            endSection = row.endSection,
+            weeks = row.weeks,
         )
     }
 
