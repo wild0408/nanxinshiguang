@@ -74,25 +74,30 @@ fun ScheduleGrid(
         var activeDragHour by remember { mutableStateOf<Int?>(null) }
         var activeDragMinuteStr by remember { mutableStateOf<String?>(null) }
 
-        if (is24HourMode && state.expandedItem != null) {
+        // 手势回调不保证与状态快照同帧，这里先取出局部非空引用，
+        // 取代原先在 pointerInput 回调里对 state.expandedItem!! / activeMoveIntent!! 的解包。
+        val expandedItem = state.expandedItem
+        val activeMoveIntent = state.activeMoveIntent
+
+        if (is24HourMode && expandedItem != null) {
             val currentTargetSection = when {
                 state.isTopHandleDragging -> {
                     val minGap = 0.25f
                     val deltaSection = state.topHandleDragOffsetY / sectionHeightPx
-                    var proposedStart = state.expandedItem!!.startSection + deltaSection
+                    var proposedStart = expandedItem.startSection + deltaSection
                     proposedStart = (proposedStart / 0.25f).roundToInt() * 0.25f
-                    proposedStart.coerceIn(0f, state.expandedItem!!.endSection - minGap)
+                    proposedStart.coerceIn(0f, expandedItem.endSection - minGap)
                 }
                 state.isBottomHandleDragging -> {
                     val minGap = 0.25f
                     val deltaSection = state.bottomHandleDragOffsetY / sectionHeightPx
-                    var proposedEnd = state.expandedItem!!.endSection + deltaSection
+                    var proposedEnd = expandedItem.endSection + deltaSection
                     proposedEnd = (proposedEnd / 0.25f).roundToInt() * 0.25f
-                    proposedEnd.coerceIn(state.expandedItem!!.startSection + minGap, maxGridSections.toFloat())
+                    proposedEnd.coerceIn(expandedItem.startSection + minGap, maxGridSections.toFloat())
                 }
-                state.activeMoveIntent != null -> {
-                    val duration = state.activeMoveIntent!!.duration
-                    var targetStart = state.activeMoveIntent!!.initialStartSection + (state.bodyDragOffsetY / sectionHeightPx)
+                activeMoveIntent != null -> {
+                    val duration = activeMoveIntent.duration
+                    var targetStart = activeMoveIntent.initialStartSection + (state.bodyDragOffsetY / sectionHeightPx)
                     targetStart = (targetStart / 0.25f).roundToInt() * 0.25f
                     targetStart.coerceIn(0f, maxGridSections - duration)
                 }
