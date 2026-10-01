@@ -1,5 +1,32 @@
 package com.wild0408.nanxinshiguang.ui.material.service.electricity
 
+import nanxinshiguang.generated.resources.action_edit_room
+import nanxinshiguang.generated.resources.electricity_action_authenticating
+import nanxinshiguang.generated.resources.electricity_action_clear
+import nanxinshiguang.generated.resources.electricity_action_load_rooms
+import nanxinshiguang.generated.resources.electricity_action_reauth
+import nanxinshiguang.generated.resources.electricity_action_refresh
+import nanxinshiguang.generated.resources.electricity_balance_low
+import nanxinshiguang.generated.resources.electricity_balance_normal
+import nanxinshiguang.generated.resources.electricity_current_balance
+import nanxinshiguang.generated.resources.electricity_history_empty
+import nanxinshiguang.generated.resources.electricity_insufficient_data
+import nanxinshiguang.generated.resources.electricity_no_room
+import nanxinshiguang.generated.resources.electricity_none
+import nanxinshiguang.generated.resources.electricity_query_failed
+import nanxinshiguang.generated.resources.electricity_section_auth
+import nanxinshiguang.generated.resources.electricity_section_history
+import nanxinshiguang.generated.resources.electricity_section_recent
+import nanxinshiguang.generated.resources.electricity_section_trend
+import nanxinshiguang.generated.resources.electricity_stat_queries
+import nanxinshiguang.generated.resources.electricity_stat_recent_change
+import nanxinshiguang.generated.resources.electricity_stat_recent_record
+import nanxinshiguang.generated.resources.electricity_trend_need_two
+import nanxinshiguang.generated.resources.electricity_unit_degree
+import nanxinshiguang.generated.resources.electricity_updated_at
+
+import kotlinx.datetime.number
+
 import com.wild0408.nanxinshiguang.ui.viewmodel.service.electricity.ElectricityViewModel
 
 import androidx.compose.foundation.layout.Arrangement
@@ -58,7 +85,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wild0408.nanxinshiguang.data.api.electricity.ElectricityLocation
 import com.wild0408.nanxinshiguang.ui.components.ToastManager
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
@@ -87,9 +114,11 @@ fun ElectricityCenterScreen(
         state.selectedRoom?.name,
     ).joinToString(" ")
 
+    val failedTemplate = stringResource(Res.string.electricity_query_failed)
+
     LaunchedEffect(state.errorMessage) {
         state.errorMessage?.takeIf(String::isNotBlank)?.let { message ->
-            ToastManager.show("查询失败：$message")
+            ToastManager.show(failedTemplate.format(message))
             vm.dismissError()
         }
     }
@@ -108,7 +137,7 @@ fun ElectricityCenterScreen(
                 },
                 actions = {
                     IconButton(onClick = vm::refresh, enabled = state.isConfigured && !state.isLoading) {
-                        Icon(vectorResource(Res.drawable.refresh_24px), contentDescription = "刷新电量")
+                        Icon(vectorResource(Res.drawable.refresh_24px), contentDescription = stringResource(Res.string.electricity_action_refresh))
                     }
                 },
             )
@@ -129,7 +158,7 @@ fun ElectricityCenterScreen(
                     }
                 }
             } else if (!state.isConfigured || state.editing) {
-                item { Text("统一认证与宿舍", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold) }
+                item { Text(stringResource(Res.string.electricity_section_auth), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold) }
                 item {
                     Button(
                         onClick = vm::loginAndLoadCampuses,
@@ -138,9 +167,9 @@ fun ElectricityCenterScreen(
                     ) {
                         Text(
                             when {
-                                state.isLoadingLocations -> "统一认证中"
-                                state.isLoggedIn -> "重新认证"
-                                else -> "通过统一认证加载宿舍"
+                                state.isLoadingLocations -> stringResource(Res.string.electricity_action_authenticating)
+                                state.isLoggedIn -> stringResource(Res.string.electricity_action_reauth)
+                                else -> stringResource(Res.string.electricity_action_load_rooms)
                             },
                         )
                     }
@@ -164,14 +193,14 @@ fun ElectricityCenterScreen(
                 item { BalanceCard(balance, room, state.lastUpdated) }
                 item {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        Button(vm::refresh, Modifier.weight(1f), enabled = !state.isLoading) { Text("刷新电量") }
-                        Button(vm::editConfiguration, Modifier.weight(1f)) { Text("修改宿舍") }
+                        Button(vm::refresh, Modifier.weight(1f), enabled = !state.isLoading) { Text(stringResource(Res.string.electricity_action_refresh)) }
+                        Button(vm::editConfiguration, Modifier.weight(1f)) { Text(stringResource(Res.string.action_edit_room)) }
                     }
                 }
-                item { Text("用电记录", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold) }
+                item { Text(stringResource(Res.string.electricity_section_history), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold) }
                 item { StatsCard(state.history) }
                 item { TrendCard(state.history) }
-                item { TextButton(onClick = vm::clearConfiguration, modifier = Modifier.fillMaxWidth()) { Text("清除宿舍与记录") } }
+                item { TextButton(onClick = vm::clearConfiguration, modifier = Modifier.fillMaxWidth()) { Text(stringResource(Res.string.electricity_action_clear)) } }
             }
             if (state.isConfigured && state.balance == null && state.isLoading) {
                 item {
@@ -199,11 +228,11 @@ private fun BalanceCard(balance: Double, room: String, updated: Long?) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
     ) {
         Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            Text("当前剩余电量", style = MaterialTheme.typography.bodyLarge)
-            Text("%.2f 度".format(balance), style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp, fontWeight = FontWeight.Bold), color = color)
-            Text(if (balance < 10) "电量偏低，请及时充值" else "电量正常", color = color, style = MaterialTheme.typography.labelMedium)
-            Text(room.ifBlank { "未选择宿舍" }, modifier = Modifier.padding(top = 14.dp))
-            Text("更新于 ${updated?.let(::formatTime) ?: "--"}", style = MaterialTheme.typography.labelMedium)
+            Text(stringResource(Res.string.electricity_current_balance), style = MaterialTheme.typography.bodyLarge)
+            Text(stringResource(Res.string.electricity_unit_degree, "%.2f".format(balance)), style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp, fontWeight = FontWeight.Bold), color = color)
+            Text(if (balance < 10) stringResource(Res.string.electricity_balance_low) else stringResource(Res.string.electricity_balance_normal), color = color, style = MaterialTheme.typography.labelMedium)
+            Text(if (room.isBlank()) stringResource(Res.string.electricity_no_room) else room, modifier = Modifier.padding(top = 14.dp))
+            Text(stringResource(Res.string.electricity_updated_at, updated?.let(::formatTime) ?: "--"), style = MaterialTheme.typography.labelMedium)
         }
     }
 }
@@ -214,9 +243,9 @@ private fun StatsCard(history: List<Pair<Long, Double>>) {
     val previous = history.getOrNull(1)
     Card(modifier = Modifier.fillMaxWidth()) {
         Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Stat("查询次数", history.size.toString())
-            Stat("最近变化", if (latest != null && previous != null) "%+.2f 度".format(latest.second - previous.second) else "数据不足")
-            Stat("最近记录", latest?.first?.let(::formatTime) ?: "暂无")
+            Stat(stringResource(Res.string.electricity_stat_queries), history.size.toString())
+            Stat(stringResource(Res.string.electricity_stat_recent_change), if (latest != null && previous != null) stringResource(Res.string.electricity_unit_degree, "%+.2f".format(latest.second - previous.second)) else stringResource(Res.string.electricity_insufficient_data))
+            Stat(stringResource(Res.string.electricity_stat_recent_record), latest?.first?.let(::formatTime) ?: stringResource(Res.string.electricity_none))
         }
     }
 }
@@ -227,10 +256,10 @@ private fun TrendCard(history: List<Pair<Long, Double>>) {
     val points = history.withoutConsecutiveDuplicates().forRange(range)
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("电量趋势", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(Res.string.electricity_section_trend), style = MaterialTheme.typography.titleMedium)
             SlidingRangeSelector(range, { range = it }, MaterialTheme.colorScheme)
             if (points.size < 2) {
-                Text("数据不足，至少需要两次不同余额记录", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(Res.string.electricity_trend_need_two), style = MaterialTheme.typography.labelMedium)
             } else {
                 ElectricityLineChart(points, MaterialTheme.colorScheme.primary)
             }
@@ -257,7 +286,7 @@ private fun SlidingRangeSelector(
                     ).height(36.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(option.label, color = if (selected == option) colors.onPrimaryContainer else colors.onSurfaceVariant, fontWeight = if (selected == option) FontWeight.Bold else FontWeight.Normal)
+                    Text(stringResource(option.labelRes), color = if (selected == option) colors.onPrimaryContainer else colors.onSurfaceVariant, fontWeight = if (selected == option) FontWeight.Bold else FontWeight.Normal)
                 }
             }
         }
@@ -305,13 +334,13 @@ private fun ElectricityLineChart(points: List<ElectricityTrendPoint>, color: Col
             if (points.size > 2) Text(formatTrendDate(points[points.size / 2].time), style = MaterialTheme.typography.labelSmall)
             Text(formatTrendDate(points.last().time), style = MaterialTheme.typography.labelSmall)
         }
-        selected?.let { Text(formatTrendDate(it.time) + "  %.2f 度".format(it.balance), style = MaterialTheme.typography.labelMedium, color = color, modifier = Modifier.padding(start = 52.dp, top = 6.dp)) }
+        selected?.let { Text(formatTrendDate(it.time) + "  " + stringResource(Res.string.electricity_unit_degree, "%.2f".format(it.balance)), style = MaterialTheme.typography.labelMedium, color = color, modifier = Modifier.padding(start = 52.dp, top = 6.dp)) }
     }
 }
 
 private fun formatTrendDate(time: Long): String {
     val date = Instant.fromEpochMilliseconds(time).toLocalDateTime(TimeZone.currentSystemDefault())
-    return "%02d/%02d".format(date.monthNumber, date.dayOfMonth)
+    return "%02d/%02d".format(date.month.number, date.day)
 }
 
 @Composable
@@ -326,14 +355,14 @@ private fun Stat(label: String, value: String) {
 private fun HistoryCard(history: List<Pair<Long, Double>>) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            Text("最近 7 次", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(Res.string.electricity_section_recent), style = MaterialTheme.typography.titleMedium)
             if (history.isEmpty()) {
-                Text("成功查询后会在这里显示历史记录", style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(top = 8.dp))
+                Text(stringResource(Res.string.electricity_history_empty), style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(top = 8.dp))
             } else {
                 history.take(7).forEach { record ->
                     Row(Modifier.fillMaxWidth().padding(top = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text(formatTime(record.first), style = MaterialTheme.typography.labelMedium)
-                        Text("%.2f 度".format(record.second), fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(Res.string.electricity_unit_degree, "%.2f".format(record.second)), fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -343,7 +372,7 @@ private fun HistoryCard(history: List<Pair<Long, Double>>) {
 
 private fun formatTime(ms: Long): String {
     val time = Instant.fromEpochMilliseconds(ms).toLocalDateTime(TimeZone.currentSystemDefault())
-    return "%04d-%02d-%02d %02d:%02d".format(time.year, time.monthNumber, time.dayOfMonth, time.hour, time.minute)
+    return "%04d-%02d-%02d %02d:%02d".format(time.year, time.month.number, time.day, time.hour, time.minute)
 }
 
 @Composable
