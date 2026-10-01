@@ -9,7 +9,7 @@
 
 ## 项目状态
 
-- 当前版本为 **1.0.1（versionCode 2）**，仅支持 Android。
+- 当前版本为 **1.0.2（versionCode 3）**，仅支持 Android。
 - 课程表、课程管理、提醒、小组件和数据导入导出能力来自上游项目并持续维护。
 - 已加入 NUIST 教务导入、成绩中心、学业概览、统一门户绑定和宿舍电费查询等功能。
 - 已加入劳动积分查询：首次进入且没有本地缓存时获取，成功结果会加密保存；之后仅通过页面刷新按钮手动更新。
@@ -105,10 +105,10 @@ app/build/outputs/apk/debug/
 app/build/outputs/apk/release/
 ```
 
-选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.1 Release：
+选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.2 Release：
 
 ```powershell
-adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.1-arm64-v8a-release.apk
+adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.2-arm64-v8a-release.apk
 ```
 
 `-r` 仅适用于同包名且签名兼容的已安装版本。Debug 与 Release 使用不同证书，不能直接互相覆盖；如需切换签名，先评估和备份应用数据，**不要为了安装而直接卸载现有应用**。旧版拾光课程表与本项目的 applicationId 不同，可分别安装。
