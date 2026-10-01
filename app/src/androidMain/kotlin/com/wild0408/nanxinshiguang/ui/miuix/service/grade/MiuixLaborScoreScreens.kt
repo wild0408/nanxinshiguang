@@ -20,17 +20,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.wild0408.nanxinshiguang.data.model.LaborOfficialResult
 import com.wild0408.nanxinshiguang.data.model.LaborScore
 import com.wild0408.nanxinshiguang.data.model.updatedAtText
 import com.wild0408.nanxinshiguang.data.repository.LaborScoreState
 import com.wild0408.nanxinshiguang.data.repository.LaborScoreStatus
+import com.wild0408.nanxinshiguang.ui.components.LocalNavigationHostPadding
 import com.wild0408.nanxinshiguang.ui.components.laborConfirmationText
 import com.wild0408.nanxinshiguang.ui.components.laborFiledText
 import com.wild0408.nanxinshiguang.ui.components.laborLiveFields
@@ -40,13 +44,15 @@ import com.wild0408.nanxinshiguang.ui.components.laborScoreEmptyMessage
 import com.wild0408.nanxinshiguang.ui.components.laborScoreEmptyTitle
 import com.wild0408.nanxinshiguang.ui.components.laborScoreSource
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.HyperLiquidTopBarButton
-import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperPageScaffold
-import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.hyperPageScroll
+import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBehavior
+import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
+import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
 import com.wild0408.nanxinshiguang.ui.viewmodel.service.labor.LaborScoreViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import nanxinshiguang.generated.resources.Res
+import nanxinshiguang.generated.resources.a11y_back
 import nanxinshiguang.generated.resources.arrow_back_24px
 import nanxinshiguang.generated.resources.chevron_right_24px
 import nanxinshiguang.generated.resources.labor_score_bind
@@ -73,6 +79,7 @@ import top.yukonga.miuix.kmp.basic.CardDefaults
 import top.yukonga.miuix.kmp.basic.CircularProgressIndicator
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.IconButton
+import top.yukonga.miuix.kmp.basic.Scaffold
 import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.basic.TextButton
 import top.yukonga.miuix.kmp.icon.MiuixIcons
@@ -136,51 +143,84 @@ private fun MiuixLaborOverviewEmpty(state: LaborScoreState, onBind: () -> Unit, 
 fun MiuixLaborScoreDetailsScreen(onBack: () -> Unit, onBind: () -> Unit, viewModel: LaborScoreViewModel = koinViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val score = state.score
-    HyperPageScaffold(
-        title = stringResource(Res.string.title_labor_score),
-        onBack = onBack,
-        startAction = { backdrop, a, s ->
-            HyperLiquidTopBarButton(
-                onClick = onBack,
+    val title = stringResource(Res.string.title_labor_score)
+    val scrollBehavior = rememberSharedScrollBehavior()
+    val background = MiuixTheme.colorScheme.surface
+    val backdrop = rememberLayerBackdrop {
+        drawRect(background)
+        drawContent()
+    }
+    val hostPadding = LocalNavigationHostPadding.current
+    val layoutDirection = LocalLayoutDirection.current
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = background,
+        topBar = {
+            HyperGlassTopBar(
+                title = title,
+                largeTitle = title,
                 backdrop = backdrop,
-                icon = MiuixIcons.ChevronBackward,
-                contentDescription = "返回",
-                backdropAlpha = a,
-                shadowAlpha = s,
+                scrollBehavior = scrollBehavior,
+                startAction = { backdropAlpha, shadowAlpha ->
+                    HyperLiquidTopBarButton(
+                        onClick = onBack,
+                        backdrop = backdrop,
+                        icon = MiuixIcons.ChevronBackward,
+                        contentDescription = stringResource(Res.string.a11y_back),
+                        backdropAlpha = backdropAlpha,
+                        shadowAlpha = shadowAlpha,
+                    )
+                },
+                endAction = { backdropAlpha, shadowAlpha ->
+                    if (state.loading) {
+                        CircularProgressIndicator(Modifier.size(22.dp))
+                    } else {
+                        HyperLiquidTopBarButton(
+                            onClick = viewModel::refresh,
+                            backdrop = backdrop,
+                            icon = vectorResource(Res.drawable.refresh_24px),
+                            contentDescription = stringResource(Res.string.labor_score_refresh),
+                            backdropAlpha = backdropAlpha,
+                            shadowAlpha = shadowAlpha,
+                        )
+                    }
+                },
             )
         },
-        endAction = { backdrop, a, s ->
-            if (state.loading) CircularProgressIndicator(Modifier.size(22.dp))
-            else HyperLiquidTopBarButton(
-                onClick = viewModel::refresh,
-                backdrop = backdrop,
-                icon = vectorResource(Res.drawable.refresh_24px),
-                contentDescription = stringResource(Res.string.labor_score_refresh),
-                backdropAlpha = a,
-                shadowAlpha = s,
-            )
-        },
-    ) { padding, scrollBehavior, _ ->
-        val direction = LocalLayoutDirection.current
-        LazyColumn(
-            Modifier.fillMaxSize().hyperPageScroll(scrollBehavior).background(MiuixTheme.colorScheme.surface),
-            contentPadding = PaddingValues(
-                start = padding.calculateLeftPadding(direction) + 20.dp,
-                top = padding.calculateTopPadding() + 12.dp,
-                end = padding.calculateRightPadding(direction) + 20.dp,
-                bottom = padding.calculateBottomPadding() + 20.dp,
-            ),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+    ) { scaffoldPadding ->
+        val contentPadding = PaddingValues(
+            start = scaffoldPadding.calculateLeftPadding(layoutDirection) + 20.dp,
+            top = scaffoldPadding.calculateTopPadding() + 12.dp,
+            end = scaffoldPadding.calculateRightPadding(layoutDirection) + 20.dp,
+            bottom = scaffoldPadding.calculateBottomPadding() +
+                hostPadding.calculateBottomPadding() + 20.dp,
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(background)
+                .layerBackdrop(backdrop),
         ) {
-            if (score == null) item(key = "empty") { MiuixLaborEmptyState(state, onBind, viewModel::refresh) }
-            else {
-                item(key = "summary") { MiuixLaborSummary(score) }
-                if (state.error != null) item(key = "error") { MiuixLaborError(state, onBind) }
-                item(key = "official") {
-                    if (score.hasOfficialData) MiuixLaborOfficialSection(requireNotNull(score.official))
-                    else MiuixLaborSection(stringResource(Res.string.labor_score_official), stringResource(Res.string.labor_score_official_source)) { Text(stringResource(Res.string.labor_score_official_empty), color = MiuixTheme.colorScheme.onSurfaceVariantSummary) }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .overScrollVertical()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                contentPadding = contentPadding,
+                verticalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                if (score == null) item(key = "empty") { MiuixLaborEmptyState(state, onBind, viewModel::refresh) }
+                else {
+                    item(key = "summary") { MiuixLaborSummary(score) }
+                    if (state.error != null) item(key = "error") { MiuixLaborError(state, onBind) }
+                    item(key = "official") {
+                        if (score.hasOfficialData) MiuixLaborOfficialSection(requireNotNull(score.official))
+                        else MiuixLaborSection(stringResource(Res.string.labor_score_official), stringResource(Res.string.labor_score_official_source)) { Text(stringResource(Res.string.labor_score_official_empty), color = MiuixTheme.colorScheme.onSurfaceVariantSummary) }
+                    }
+                    if (score.hasLiveData) item(key = "live") { MiuixLaborLiveSection(score) }
                 }
-                if (score.hasLiveData) item(key = "live") { MiuixLaborLiveSection(score) }
             }
         }
     }
