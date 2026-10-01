@@ -1,7 +1,7 @@
 # 南信拾光
 
 面向南京信息工程大学（NUIST）的课程表与校园信息工具。
-本项目基于[拾光课程表](https://github.com/XingHeYuZhuan/shiguangschedule)进行二次开发，针对 NUIST 教务系统和统一门户进行了深度的功能适配与架构重构。
+本项目基于[拾光课程表](https://github.com/ShiGuangSchedule/shiguangschedule)进行二次开发，针对 NUIST 教务系统和统一门户进行了深度的功能适配与架构重构。
 
 > 本项目为社区维护的非官方项目，与南京信息工程大学及其官方信息系统没有隶属或授权关系。
 
@@ -156,7 +156,7 @@ C6:23:57:85:44:DF:D6:12:2E:8C:37:1E:D4:55:5A:CF:90:41:1A:FD:C0:4B:92:67:CC:D7:91
 
 本项目是拾光课程表的派生项目。上游项目及本项目的主要代码使用 Apache License 2.0，许可证文本见 [`LICENSE`](LICENSE)，完整的来源与修改声明见 [`NOTICE`](NOTICE)。
 
-- 上游主仓库：[XingHeYuZhuan/shiguangschedule](https://github.com/XingHeYuZhuan/shiguangschedule)
+- 上游主仓库：[ShiGuangSchedule/shiguangschedule](https://github.com/ShiGuangSchedule/shiguangschedule)（原组织名 XingHeYuZhuan）
 
 ### 修改声明
 

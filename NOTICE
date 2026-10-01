@@ -13,7 +13,10 @@ Technology (NUIST) or its official information systems.
 ================================================================================
 
 拾光课程表 (shiguangschedule)
-  Repository: https://github.com/XingHeYuZhuan/shiguangschedule
+  Repository: https://github.com/ShiGuangSchedule/shiguangschedule
+  (formerly https://github.com/XingHeYuZhuan/shiguangschedule; the upstream
+   organisation was renamed from XingHeYuZhuan to ShiGuangSchedule, the old URL
+   redirects to the new one)
   Copyright (C) 2025 XingHeYuZhuan
   License:    Apache License, Version 2.0
 
@@ -74,9 +77,11 @@ code from it may be copied, translated or otherwise incorporated into this
 repository; only independently written implementations of the observed
 network protocol are permitted.
 
-The upstream school-adapter repository and the third-party `kgit` coordinate
-(io.github.xingheyuzhuan:kgit) are used as published dependencies and are not
-modified by this repository.
+The upstream school-adapter repository and its client library (previously
+consumed as the published coordinate io.github.xingheyuzhuan:kgit) are **no
+longer used** by this project: the multi-school adapter system was removed, and
+the dependency was dropped from the build. No code from those repositories is
+included here.
 
 ================================================================================
 5. Third-party dependencies
