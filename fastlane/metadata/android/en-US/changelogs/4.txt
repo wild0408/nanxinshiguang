@@ -1,0 +1,8 @@
+Nanxin Shiguang 1.0.3 update.
+
+- Added portal credential export/import so a bound passkey can be reused on a new device.
+- Reworked the campus bus map: native Miuix styling, new station and vehicle markers, zoom/reset controls, always-visible station labels, and no station detail dialog.
+- Refreshed the labor score page: hero card for the total, card-based sections, rounded status chips.
+- Added a light haptic tick when scrolling reaches the top or bottom edge.
+- Upgraded Miuix to the 0.9.4 stable release and unified every Miuix page on one page shell.
+- Added a NOTICE file and third-party license headers, and removed leftover legacy identity resources.
