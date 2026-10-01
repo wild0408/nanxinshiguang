@@ -2,19 +2,33 @@ package com.wild0408.nanxinshiguang.data.api.bus
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class BusRepositoryTest {
     @Test
     fun mapBoundsProjectToImageEdges() {
-        assertEquals(0f to 1f, projectBusCoordinate(118.704857, 32.197464))
-        assertEquals(1f to 0f, projectBusCoordinate(118.728726, 32.208535))
+        val southWest = projectBusCoordinate(LONGITUDE_MIN, LATITUDE_MIN)
+        assertEquals(0f, southWest.x)
+        assertEquals(1f, southWest.y)
+        assertTrue(southWest.inBounds)
+
+        val northEast = projectBusCoordinate(LONGITUDE_MAX, LATITUDE_MAX)
+        assertEquals(1f, northEast.x)
+        assertEquals(0f, northEast.y)
+        assertTrue(northEast.inBounds)
     }
 
     @Test
-    fun coordinatesOutsideMapAreClamped() {
-        val (x, y) = projectBusCoordinate(120.0, 31.0)
-        assertTrue(x in 0f..1f)
-        assertTrue(y in 0f..1f)
+    fun coordinatesOutsideMapAreFlaggedInsteadOfPinned() {
+        val outside = projectBusCoordinate(120.0, 31.0)
+        assertFalse(outside.inBounds, "底图范围外的坐标应被标记越界，而不是钉在边缘伪装成图内车辆")
+        assertTrue(outside.x in 0f..1f)
+        assertTrue(outside.y in 0f..1f)
+    }
+
+    @Test
+    fun nonFiniteCoordinatesAreNotInBounds() {
+        assertFalse(projectBusCoordinate(Double.NaN, 32.2).inBounds)
     }
 }

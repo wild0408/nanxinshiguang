@@ -4,6 +4,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -24,6 +26,16 @@ data class BusSnapshot(
     val fetchedAtMillis: Long,
 )
 
+/**
+ * 经纬度投影到校园底图后的归一化坐标。
+ * [inBounds] 为 false 表示该点落在底图范围外，调用方应跳过而不是把它钉在边缘。
+ */
+data class BusMapPoint(
+    val x: Float,
+    val y: Float,
+    val inBounds: Boolean,
+)
+
 class BusRepository(private val client: HttpClient) {
     companion object {
         private const val PAGE_URL = "http://www.ns-res.cn/hydxflat/indexelct.html"
@@ -40,7 +52,12 @@ class BusRepository(private val client: HttpClient) {
     private var session: String? = null
     private var vehicleIds: List<String> = DEFAULT_VEHICLES
 
-    suspend fun fetchSnapshot(): BusSnapshot {
+    /** 轮询与手动刷新可能同时触发，这里串行化，避免同一接口被并发请求、会话被互相覆盖。 */
+    private val fetchMutex = Mutex()
+
+    suspend fun fetchSnapshot(): BusSnapshot = fetchMutex.withLock { fetchSnapshotLocked() }
+
+    private suspend fun fetchSnapshotLocked(): BusSnapshot {
         val jsession = session ?: login()
         val response = client.get("$API_BASE/StandardApiAction_getDeviceStatus.action") {
             parameter("jsession", jsession)
@@ -91,8 +108,19 @@ class BusRepository(private val client: HttpClient) {
 
 expect fun createBusRepository(): BusRepository
 
-fun projectBusCoordinate(longitude: Double, latitude: Double): Pair<Float, Float> {
-    val x = ((longitude - 118.704857) / (118.728726 - 118.704857)).toFloat()
-    val y = (1.0 - (latitude - 32.197464) / (32.208535 - 32.197464)).toFloat()
-    return x.coerceIn(0f, 1f) to y.coerceIn(0f, 1f)
+fun projectBusCoordinate(longitude: Double, latitude: Double): BusMapPoint {
+    val rawX = (longitude - LONGITUDE_MIN) / (LONGITUDE_MAX - LONGITUDE_MIN)
+    val rawY = 1.0 - (latitude - LATITUDE_MIN) / (LATITUDE_MAX - LATITUDE_MIN)
+    val inBounds = rawX in 0.0..1.0 && rawY in 0.0..1.0
+    return BusMapPoint(
+        x = rawX.coerceIn(0.0, 1.0).toFloat(),
+        y = rawY.coerceIn(0.0, 1.0).toFloat(),
+        inBounds = inBounds,
+    )
 }
+
+/** 校园底图覆盖的经纬度范围（与底图四角一致）。 */
+const val LONGITUDE_MIN: Double = 118.704857
+const val LONGITUDE_MAX: Double = 118.728726
+const val LATITUDE_MIN: Double = 32.197464
+const val LATITUDE_MAX: Double = 32.208535

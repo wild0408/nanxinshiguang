@@ -25,6 +25,11 @@ class SharedModule {
     fun provideElectricityApi(): com.wild0408.nanxinshiguang.data.api.electricity.ElectricityApi =
         com.wild0408.nanxinshiguang.data.api.electricity.createElectricityApi()
 
+    /** 公交仓库全局单例：此前在页面内按需创建，导致每次进入页面都新建一个 HttpClient 且从不关闭。 */
+    @Single
+    fun provideBusRepository(): com.wild0408.nanxinshiguang.data.api.bus.BusRepository =
+        com.wild0408.nanxinshiguang.data.api.bus.createBusRepository()
+
     @Single
     fun providePortalSession(repository: PortalCredentialRepository): PortalSession =
         createPortalSession(repository)
