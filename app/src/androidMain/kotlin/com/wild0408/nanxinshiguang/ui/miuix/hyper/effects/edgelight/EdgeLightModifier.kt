@@ -1,5 +1,7 @@
 package com.wild0408.nanxinshiguang.ui.miuix.hyper.effects.edgelight
 
+import androidx.compose.ui.graphics.nativePaint
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
@@ -210,7 +212,7 @@ internal class EdgeLightNode(
                 android.graphics.BlurMaskFilter(blurRadius, android.graphics.BlurMaskFilter.Blur.NORMAL)
             } else null
         }
-        paint.asFrameworkPaint().maskFilter = cachedBlurMaskFilter
+        paint.nativePaint.maskFilter = cachedBlurMaskFilter
 
         if (isRuntimeShaderSupported() && edgeLight.style !is EdgeLightStyle.Uniform) {
             val shader = createEdgeLightShader(

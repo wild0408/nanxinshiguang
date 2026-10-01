@@ -406,4 +406,4 @@ internal fun MiuixComboScheduleEditScreen(
 }
 
 private fun checkRuleOverlap(index: Int, rule: TimeTableComboRule, rules: List<TimeTableComboRule>): Boolean = rules.indices.any { other -> if (other == index) false else rule.startDate <= rules[other].endDate && rule.endDate >= rules[other].startDate }
-private fun millisToDate(millis: Long): LocalDate = kotlinx.datetime.Instant.fromEpochMilliseconds(millis).toLocalDateTime(TimeZone.currentSystemDefault()).date
+private fun millisToDate(millis: Long): LocalDate = kotlin.time.Instant.fromEpochMilliseconds(millis).toLocalDateTime(TimeZone.currentSystemDefault()).date

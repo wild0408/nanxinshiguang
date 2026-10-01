@@ -1,5 +1,7 @@
 package com.wild0408.nanxinshiguang.ui.miuix.hyper.effects.edgelight
 
+import androidx.compose.ui.graphics.nativePaint
+
 import android.graphics.RuntimeShader
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
@@ -45,7 +47,7 @@ internal fun Canvas.clipOutline(outline: Outline, path: Path?) {
 
 internal fun androidx.compose.ui.graphics.Paint.blur(radius: Float) {
     if (radius > 0f) {
-        asFrameworkPaint().apply {
+        nativePaint.apply {
             maskFilter = android.graphics.BlurMaskFilter(
                 radius,
                 android.graphics.BlurMaskFilter.Blur.NORMAL
@@ -56,7 +58,7 @@ internal fun androidx.compose.ui.graphics.Paint.blur(radius: Float) {
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 internal fun androidx.compose.ui.graphics.Paint.setRuntimeShader(runtimeShader: RuntimeShader?) {
-    asFrameworkPaint().shader = runtimeShader
+    nativePaint.shader = runtimeShader
 }
 
 internal fun getCornerRadii(

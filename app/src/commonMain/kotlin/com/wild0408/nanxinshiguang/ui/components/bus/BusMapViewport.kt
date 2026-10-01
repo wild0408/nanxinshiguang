@@ -156,7 +156,7 @@ fun BusMapViewport(
     val mapPainter = painterResource(Res.drawable.bus_campus_map)
     val stationPainter = painterResource(Res.drawable.bus_station)
     val vehiclePainter = painterResource(Res.drawable.bus_vehicle)
-    val transformState = rememberTransformableState { zoomChange, panChange, _ ->
+    val transformState = rememberTransformableState { _, zoomChange, panChange, _ ->
         state.onTransform(zoomChange, panChange)
     }
 

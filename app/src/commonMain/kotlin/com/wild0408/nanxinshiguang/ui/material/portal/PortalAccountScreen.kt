@@ -508,7 +508,7 @@ private fun ProfileHeroCard(
                 )
                 Text(studentId.ifBlank { "****" }, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 if (!profile?.organizationLine.isNullOrBlank()) {
-                    Text(profile!!.organizationLine, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(profile.organizationLine, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
             }
         }
