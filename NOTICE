@@ -1,0 +1,88 @@
+Nanxin Shiguang (南信拾光)
+Copyright 2025-2026 Nanxin Shiguang maintainers
+
+This product is a modified derivative work of 拾光课程表 (shiguangschedule) and
+is distributed under the Apache License, Version 2.0 (see LICENSE).
+
+This project is a community-maintained, UNOFFICIAL edition. It is not
+affiliated with or authorized by Nanjing University of Information Science and
+Technology (NUIST) or its official information systems.
+
+================================================================================
+1. Upstream project
+================================================================================
+
+拾光课程表 (shiguangschedule)
+  Repository: https://github.com/XingHeYuZhuan/shiguangschedule
+  Copyright (C) 2025 XingHeYuZhuan
+  License:    Apache License, Version 2.0
+
+This repository is an independent derivative project (not a fork): it keeps its
+own Git history, package identity and release artifacts.
+
+================================================================================
+2. Modification notice (Apache License 2.0, section 4(b))
+================================================================================
+
+Every file in this repository that originates from the upstream project has
+been modified and/or adapted for the NUIST edition. Modifications have been
+made by the maintainers of this repository since 2025 and include, among
+others: package and application identity changes
+(com.wild0408.nanxinshiguang), the single-module `app/` project layout, the
+Material 3 and Miuix/Hyper dual UI layers, and the NUIST-specific service
+integrations (academic affairs import, grade center, academic overview,
+unified portal binding, dormitory electricity, labor score, campus bus map).
+
+Unless a file states otherwise, the statements in this NOTICE apply to all
+such files repository-wide, and they must be retained in redistributions.
+
+The upstream copyright notice and the Apache License 2.0 text are preserved in
+the `LICENSE` file and must not be removed or replaced.
+
+================================================================================
+3. Bundled third-party source code
+================================================================================
+
+The following source code was ported into this repository and is retained with
+its original copyright and license header:
+
+  Kyant Backdrop / continuous rounded rectangle implementation
+    Source files: app/src/androidMain/kotlin/com/kyant/
+    Upstream:     https://github.com/Kyant0/AndroidLiquidGlass
+    Artifacts:    io.github.kyant0:backdrop, io.github.kyant0:shapes
+                  (Maven Central)
+    Copyright 2025 Kyant
+    License:      Apache License, Version 2.0
+
+================================================================================
+4. Interface references (no third-party source code copied)
+================================================================================
+
+The NUIST academic overview, grade detail, electricity and labor score
+integrations were implemented against the publicly observable HTTP behaviour
+of the corresponding NUIST services. The request/response protocol was
+cross-checked against the public project below in order to verify field names
+and endpoints:
+
+  nuist-sta-app
+    Repository: https://github.com/DuoHuo/nuist-sta-app
+    Reference:  commit 6e9f464 (Dart/Flutter)
+    License:    NONE DECLARED
+
+That reference project declares no open-source license. Therefore no source
+code from it may be copied, translated or otherwise incorporated into this
+repository; only independently written implementations of the observed
+network protocol are permitted.
+
+The upstream school-adapter repository and the third-party `kgit` coordinate
+(io.github.xingheyuzhuan:kgit) are used as published dependencies and are not
+modified by this repository.
+
+================================================================================
+5. Third-party dependencies
+================================================================================
+
+All other third-party libraries are consumed as published dependencies. Their
+names, versions, licenses, source links and license texts are listed in the
+in-app "开源许可证" (Open Source Licenses) screen, which is generated offline
+from AboutLibraries metadata bundled in the APK.

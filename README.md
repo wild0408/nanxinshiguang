@@ -150,11 +150,23 @@ C6:23:57:85:44:DF:D6:12:2E:8C:37:1E:D4:55:5A:CF:90:41:1A:FD:C0:4B:92:67:CC:D7:91
 
 ## 开源来源与许可证
 
-本项目是拾光课程表的派生项目。上游项目及本项目的主要代码使用 Apache License 2.0，许可证文本见 [`LICENSE`](LICENSE)。
+本项目是拾光课程表的派生项目。上游项目及本项目的主要代码使用 Apache License 2.0，许可证文本见 [`LICENSE`](LICENSE)，完整的来源与修改声明见 [`NOTICE`](NOTICE)。
 
 - 上游主仓库：[XingHeYuZhuan/shiguangschedule](https://github.com/XingHeYuZhuan/shiguangschedule)
 
-重新分发本项目或其衍生版本时，请保留 Apache-2.0 许可证、原作者版权和归属声明，并在修改文件中说明修改内容。项目中使用的第三方依赖许可证可在应用内“开源许可证”页面查看。
+### 修改声明
+
+本仓库中源自上游项目的文件均已针对南信拾光专版做过修改（包与应用标识、单模块工程结构、Material 3 与 Miuix/Hyper 双 UI 层、NUIST 各项服务接入等），修改自 2025 年起由本仓库维护者进行。该声明对全仓库生效并随 `NOTICE` 一并保留；上游版权行与 Apache-2.0 许可证文本不得移除或替换。
+
+### 移植的第三方源码
+
+`app/src/androidMain/kotlin/com/kyant/` 下的源码移植自 Kyant 的 Backdrop / 连续圆角实现（[Kyant0/AndroidLiquidGlass](https://github.com/Kyant0/AndroidLiquidGlass)，`io.github.kyant0:backdrop`、`io.github.kyant0:shapes`，Apache-2.0，Copyright 2025 Kyant）。这些文件保留了上游版权与许可证头。
+
+### 接口参考的边界
+
+NUIST 学业概览、成绩明细、电费与劳动积分的请求协议参考了公开项目 [DuoHuo/nuist-sta-app](https://github.com/DuoHuo/nuist-sta-app)（核对至提交 `6e9f464`）。**该项目未声明任何开源许可证**，因此不得从其复制、翻译或改写源码；本项目仅基于可公开观察到的接口行为独立实现，后续如需引用其代码必须先解决许可问题。
+
+重新分发本项目或其衍生版本时，请保留 Apache-2.0 许可证、原作者版权和归属声明，一并附带 `NOTICE`，并在修改文件中说明修改内容。项目中使用的第三方依赖许可证可在应用内“开源许可证”页面查看，该页面由构建期生成的 AboutLibraries 元数据离线渲染。
 
 ---
 
