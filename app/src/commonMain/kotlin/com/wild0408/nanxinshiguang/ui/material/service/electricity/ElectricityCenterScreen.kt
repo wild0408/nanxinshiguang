@@ -9,14 +9,12 @@ import nanxinshiguang.generated.resources.electricity_action_refresh
 import nanxinshiguang.generated.resources.electricity_balance_low
 import nanxinshiguang.generated.resources.electricity_balance_normal
 import nanxinshiguang.generated.resources.electricity_current_balance
-import nanxinshiguang.generated.resources.electricity_history_empty
 import nanxinshiguang.generated.resources.electricity_insufficient_data
 import nanxinshiguang.generated.resources.electricity_no_room
 import nanxinshiguang.generated.resources.electricity_none
 import nanxinshiguang.generated.resources.electricity_query_failed
 import nanxinshiguang.generated.resources.electricity_section_auth
 import nanxinshiguang.generated.resources.electricity_section_history
-import nanxinshiguang.generated.resources.electricity_section_recent
 import nanxinshiguang.generated.resources.electricity_section_trend
 import nanxinshiguang.generated.resources.electricity_stat_queries
 import nanxinshiguang.generated.resources.electricity_stat_recent_change
@@ -348,25 +346,6 @@ private fun Stat(label: String, value: String) {
     Column {
         Text(label, style = MaterialTheme.typography.labelMedium)
         Text(value, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
-    }
-}
-
-@Composable
-private fun HistoryCard(history: List<Pair<Long, Double>>) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            Text(stringResource(Res.string.electricity_section_recent), style = MaterialTheme.typography.titleMedium)
-            if (history.isEmpty()) {
-                Text(stringResource(Res.string.electricity_history_empty), style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(top = 8.dp))
-            } else {
-                history.take(7).forEach { record ->
-                    Row(Modifier.fillMaxWidth().padding(top = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(formatTime(record.first), style = MaterialTheme.typography.labelMedium)
-                        Text(stringResource(Res.string.electricity_unit_degree, "%.2f".format(record.second)), fontWeight = FontWeight.SemiBold)
-                    }
-                }
-            }
-        }
     }
 }
 

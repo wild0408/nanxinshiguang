@@ -138,7 +138,6 @@ import nanxinshiguang.generated.resources.toast_no_course_to_paste
 import nanxinshiguang.generated.resources.toast_paste_failed
 import nanxinshiguang.generated.resources.swap_horiz_24px
 import nanxinshiguang.generated.resources.week_days_short_names
-import top.yukonga.miuix.kmp.basic.BasicComponent
 import top.yukonga.miuix.kmp.basic.Scaffold as MiuixScaffold
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
@@ -704,15 +703,6 @@ private fun WeekdayHeader(
             }
         }
     }
-}
-
-@Composable
-private fun MiuixMenuItem(icon: org.jetbrains.compose.resources.DrawableResource, title: String, onClick: () -> Unit) {
-    BasicComponent(
-        title = title,
-        onClick = onClick,
-        startAction = { Icon(vectorResource(icon), null, tint = MiuixTheme.colorScheme.primary) }
-    )
 }
 
 @Composable

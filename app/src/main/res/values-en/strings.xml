@@ -2,16 +2,11 @@
     <!-- Basic App Information -->
     <string name="app_name">Nanxin Shiguang</string>
 
-    <string name="action_confirm">Confirm</string>
-    <string name="action_cancel">Cancel</string>
-    <string name="label_none">None</string>
     <string name="text_no_courses_today">No courses today</string>
-    <string name="title_vacation_until_start">Vacation (%1$s days left)</string>
     <string name="course_position_prefix">Location: %1$s</string>
     <string name="course_teacher_prefix">Instructor: %1$s</string>
     <string name="title_current_week">Week %1$s</string>
     <string name="title_vacation">On vacation</string>
-    <string name="status_semester_ended">Semester ended %d days ago</string>
     <string-array name="week_days_names">
         <item>MON</item>
         <item>TUE</item>
@@ -42,7 +37,6 @@
     <string name="widget_electricity_updated_just_now">Just updated</string>
     <string name="widget_electricity_updated_format">Updated %1$s</string>
     <string name="widget_tomorrow_course_preview">Tomorrow</string>
-    <string name="widget_no_courses_tomorrow">No courses tomorrow</string>
     <string name="widget_today_courses_finished">Today\'s classes ended.</string>
     <string name="widget_vacation_expecting">Looking forward to new semester</string>
     <string name="widget_remaining_courses_format_today">%1$d courses left today</string>

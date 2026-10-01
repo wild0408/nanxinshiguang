@@ -22,7 +22,6 @@
     <string name="common_dialog_msg_unsaved_changes">目前內容已修改，退出將丟失未儲存的數據。</string>
     <string name="common_action_exit_without_save">退出</string>
     <string name="common_action_continue_editing">繼續編輯</string>
-    <string name="label_recent_visit">最近訪問</string>
     
     <!-- 主介面及今日課表 -->
     <string name="action_reset">重置</string>
@@ -53,36 +52,26 @@
     <string name="label_course_weeks">上課週次</string>
     <string name="action_single_week">單週</string>
     <string name="action_double_week">雙週</string>
-    <string name="label_course_color">課程顏色</string>
-    <string name="button_select_color">選擇顏色</string>
     <string name="snackbar_add_course_within_semester">請於學期教學週期間新增或調整課程</string>
     <string name="label_section_range_suffix">節</string>
     <string name="title_select_time">選擇上課時間</string>
-    <string name="button_select_weeks">選擇週數</string>
     <string name="text_weeks_selected">已選: %1$s</string>
     <string name="title_select_weeks">選擇上課週次</string>
     <string name="title_select_color">選擇課程顏色</string>
     <string name="a11y_color_selected">已選擇</string>
     <string name="label_custom_time_range">自訂時間段</string>
-    <string name="label_select_custom_time">選擇自訂時間</string>
-    <string name="toast_custom_time_empty">起始時間或結束時間不能為空</string>
     <string name="label_custom_time">自訂時間</string>
     <string name="label_start_time">開始時間</string>
     <string name="label_end_time">結束時間</string>
 
     <!-- 課程相關 -->
     <string name="label_remark">備註</string>
-    <string name="course_time_description">時間: 第%1$s-%2$s節 (%3$s-%4$s)</string>
     <string name="course_position_prefix">地點: %1$s</string>
     <string name="course_teacher_prefix">老師: %1$s</string>
-    <string name="title_course_overlap">重疊課程列表</string>
-    <string name="label_courses_overlap">%1$d門重疊</string>
-    <string name="course_time_sections_count">(%1$s節)</string>
     <string name="title_select_week">選擇週次</string>
     <string name="title_current_week">第 %1$s 週</string>
     <string name="title_vacation">假期中</string>
     <string name="status_semester_ended">學期已結束 %1$d 天</string>
-    <string name="status_week_calc_error">週次計算錯誤</string>
     
     <!-- 時間與星期格式 -->
     <string-array name="week_days_short_names">
@@ -106,33 +95,15 @@
     
     <!-- 通知與鬧鐘 -->
     <string name="format_week_display">%1$d週</string>
-    <string name="notification_channel_desc_course_alert">上課提醒通知</string>
-    <string name="notification_title_course_alert">上課提醒</string>
     <string name="item_auto_mode">上課自動模式</string>
     <string name="text_auto_mode_dependency">依賴於「課程提醒」的開啟</string>
     <string name="toast_enable_reminder_first">請先開啟「課程提醒」</string>
     <string name="alarm_option_none">不提醒</string>
     <string name="alarm_option_on_time">準時提醒</string>
-    <string name="notification_live_status_preparing">準備上課</string>
-    <string name="notification_unknown_course">未知課程</string>
-    <string name="notification_unknown_position">地點未知</string>
 
     <!-- 小工具相關 -->
-    <string name="widget_name_tiny">超小課程2x1</string>
-    <string name="widget_name_compact">緊湊課程2x2</string>
-    <string name="widget_name_double_days">近日課程4x2</string>
-    <string name="widget_name_list_vertical">垂直列表課表4xN</string>
-    <string name="widget_tomorrow_course_preview">明日預告</string>
-    <string name="widget_no_courses_tomorrow">明天沒有課程</string>
-    <string name="widget_today_courses_finished">今日課程已結束</string>
-    <string name="widget_vacation_expecting">期待新學期</string>
-    <string name="widget_remaining_courses_format_today">今日還有 %1$d 節課</string>
-    <string name="widget_remaining_courses_format_tomorrow">明天有 %1$d 節課</string>
-    <string name="widget_title_today">今天</string>
-    <string name="widget_title_tomorrow">明天</string>
     
     <!-- 通知設定 -->
-    <string name="widget_course_total_count">共有 %1$d 節</string>
     <string name="title_course_notification_settings">課程提醒設定</string>
     <string name="section_title_general">一般</string>
     <string name="section_title_advanced">進階</string>
@@ -178,7 +149,6 @@
     <string name="auto_mode_dnd">勿擾模式 (DND)</string>
     <string name="auto_mode_silent">靜音模式 (SILENT)</string>
     <string name="dialog_title_view_skipped_dates">跳過的提醒日期</string>
-    <string name="text_no_skipped_dates">沒有設定跳過的日期。</string>
     <string name="action_close">關閉</string>
     <string name="toast_notification_permission_denied">通知權限被拒絕，無法接收課程提醒。</string>
     <string name="item_compat_wearable_sync">兼容穿戴設備同步通知</string>
@@ -214,7 +184,6 @@
     <string name="desc_manage_course_tables">管理多份課程表，可切換、刪除</string>
     <string name="item_more_options">更多</string>
     <string name="desc_more_options">提供我們的更多資訊</string>
-    <string name="a11y_more_options">更多選項</string>
     <string name="dialog_title_select_total_weeks">選擇總週數</string>
     <string name="dialog_title_manual_set_week">手動設定目前週數</string>
     <string name="dialog_title_set_first_day_of_week">設定每週起始日</string>
@@ -246,11 +215,9 @@
     <string name="a11y_cancel_selection">取消多選</string>
     <string name="a11y_exit_selection_mode">退出選擇模式</string>
     <string name="a11y_enter_selection_mode">進入選擇模式</string>
-    <string name="a11y_not_selected">未選中</string>
     <string name="label_weeks_format">週次: %1$s</string>
 
     <!-- 時間段管理 -->
-    <string name="title_time_slot_management">時間段管理</string>
     <string name="a11y_add_time_slot">新增時間段</string>
     <string name="a11y_save_all_settings">儲存所有設定</string>
     <string name="toast_settings_saved">所有設定已儲存到資料庫</string>
@@ -290,39 +257,29 @@
     <string name="dialog_title_select_export_table">選擇要匯出的課表</string>
     <string name="dialog_title_ics_export_settings">行事曆匯出設定</string>
     <string name="label_select_alarm_time">選擇提醒時間：</string>
-    <string name="a11y_import">匯入</string>
-    <string name="a11y_export">匯出</string>
     <string name="a11y_details">詳情</string>
-    <string name="snackbar_cannot_open_file">無法開啟檔案。</string>
     <string name="snackbar_file_selection_canceled">檔案選擇已取消。</string>
-    <string name="snackbar_cannot_save_file">無法儲存檔案。</string>
     <string name="snackbar_file_save_canceled">檔案儲存已取消。</string>
     <string name="dialog_title_file_saved">檔案已儲存</string>
     <string name="dialog_text_file_saved_share_prompt">檔案已成功匯出到您的下載目錄，您想分享它嗎？</string>
-    <string name="snackbar_file_copy_failed_for_share">檔案複製失敗，無法分享。</string>
     <string name="action_share">分享</string>
     <string name="toast_import_success">課表匯入成功！</string>
-    <string name="toast_ics_export_success">行事曆檔案匯出成功！</string>
     <string name="error_export_table_not_found">匯出失敗：找不到課表</string>
     <string name="error_export_failed">匯出失敗：%1$s</string>
     <string name="error_import_failed">匯入失敗：%1$s</string>
     <string name="error_ics_export_data_failed">行事曆檔案匯出失敗：取得資料失敗</string>
-    <string name="error_ics_export_failed">行事曆檔案匯出失敗：%1$s</string>
     
     <!-- 更多設定 -->
     <string name="item_developer_options">開發者選項</string>
     <string name="error_sync_calendar_failed">同步失敗，請檢查行事曆權限</string>
     <string name="title_more_options">更多</string>
     <string name="a11y_app_icon">應用程式圖示</string>
-    <string name="a11y_navigate">跳轉</string>
-    <string name="a11y_acknowledgment">鳴謝</string>
     <string name="label_special_thanks">特別鳴謝</string>
     <string name="text_acknowledgment_body">衷心感謝為本應用軟體和教務適配程式碼倉庫的開發和維護做出貢獻的每一位開發者。您的奉獻是應用程式持續更新和完善的動力！</string>
     <string name="item_github_repo">本專案GitHub倉庫</string>
     <string name="item_open_source_licenses">檢視開放原始碼授權</string>
     <string name="title_open_source_licenses">開放原始碼授權</string>
     <string name="label_version_prefix">版本: %1$s</string>
-    <string name="default_app_name">未知應用程式</string>
     <string name="item_check_software_update">檢查軟體更新</string>
     <string name="item_language_settings">語言設定</string>
     <string name="language_follow_system">跟隨系統</string>
@@ -335,10 +292,6 @@
     <string name="dialog_update_check_failed">更新檢查失敗</string>
     <string name="label_error_message">錯誤資訊：%1$s</string>
     <string name="btn_download_update">下載更新</string>
-    <string name="btn_update_now">立即更新</string>
-    <string name="tip_non_mandatory_update">提示：強制更新不會顯示此取消按鈕。</string>
-    <string name="dialog_select_update_channel">選擇更新渠道</string>
-    <string name="a11y_selected">已選中</string>
     <string name="item_start_screen_settings">啟動頁面設置</string>
     <string name="dialog_select_start_screen">選擇啟動時顯示的頁面</string>
 
@@ -366,56 +319,11 @@
     <string name="date_format_month_day">%1$d月%2$d日</string>
 
     <!-- 教務匯入 -->
-    <string name="a11y_search">搜尋</string>
-    <string name="a11y_clear_search">清除搜尋</string>
-    <string name="category_bachelor_associate">大學/專科</string>
-    <string name="category_postgraduate">研究所</string>
-    <string name="category_general_tool">通用工具</string>
-    <string name="category_other">其他</string>
-    <string name="text_no_detailed_description">無詳細說明。</string>
-    <string name="label_contributor_unknown">未知</string>
-    <string name="label_contributor_format">貢獻者: %1$s</string>
-    <string name="title_enter_url">輸入網址</string>
-    <string name="a11y_cancel_editing">取消編輯</string>
-    <string name="placeholder_enter_url_full">輸入網址 (https://...)</string>
-    <string name="a11y_load">載入</string>
-    <string name="a11y_enter_url">輸入網址</string>
-    <string name="action_refresh">重新整理</string>
     <string name="a11y_refresh">重新整理</string>
-    <string name="action_switch_to_phone_mode">切換到手機模式</string>
-    <string name="action_switch_to_desktop_mode">切換到電腦模式</string>
-    <string name="toast_switched_to_desktop">已切換到電腦模式</string>
-    <string name="toast_switched_to_phone">已切換到手機模式</string>
-    <string name="toast_url_empty_enter_first">URL為空，請先輸入網址。</string>
-    <string name="item_devtools_debug">DevTools 網頁除錯</string>
-    <string name="a11y_devtools">DevTools</string>
-    <string name="toast_devtools_enabled_format">DevTools 網頁除錯 %1$s。</string>
-    <string name="text_import_guide">請登入教務系統後切換到有課表顯示的頁面再點選匯入課程，點選右上角的更多檢視其他選項</string>
-    <string name="action_execute_import">執行匯入</string>
-    <string name="dialog_title_select_table_for_import">選擇一個課表以匯入課程</string>
-    <string name="toast_executing_import_script">正在執行匯入指令碼...</string>
-    <string name="toast_import_script_not_found">匯入指令碼檔案不存在: %1$s</string>
-    <string name="toast_load_import_script_failed">載入匯入指令碼失敗: %1$s</string>
-    <string name="toast_import_script_finished">匯入指令碼執行完畢，返回課表頁面。</string>
-    <string name="dialog_ssl_error_title">SSL 憑證錯誤</string>
-    <string name="dialog_ssl_error_message">SSL憑證驗證失敗，這可能意味著連線不安全。是否繼續瀏覽？</string>
-    <string name="action_continue_browsing">繼續瀏覽</string>
-    <string name="toast_ssl_error_cancelled">SSL憑證驗證失敗，已取消連線。</string>
-    <string name="toast_web_load_error_format">網頁載入錯誤: %1$s</string>
 
     <string name="text_loading_failed">載入失敗: %1$s</string>
     
     <!-- 教務適配倉庫 -->
-    <string name="label_select_repo">選擇倉庫</string>
-    <string name="text_select_repo_hint">請選擇倉庫</string>
-    <string name="action_update">更新</string>
-    <string name="action_updating">更新中...</string>
-    <string name="label_repo_url">倉庫 URL</string>
-    <string name="label_repo_branch">分支 (Branch)</string>
-    <string name="label_private_repo_credentials">私人倉庫憑證 (Username/Token)</string>
-    <string name="label_username_or_token_key">使用者名稱或 Token Key</string>
-    <string name="label_password_or_token_value">密碼或 Token Value</string>
-    <string name="title_update_log">更新日誌</string>
 
     <!-- 色彩編輯器 -->
     <string name="color_picker_title_edit">顏色調節</string>
@@ -484,7 +392,6 @@
     <string name="hint_no_selection">請選擇周次、星期或日期</string>
     <string name="hint_affected_count">預計從課表中移除 %1$d 節課程記錄</string>
     <string name="dialog_delete_confirm_msg">此操作不可撤銷。受影響的課程記錄將從選定的時間點中抹除，但課程的基礎資訊仍會保留。</string>
-    <string name="btn_add_date">添加日期</string>
     <string name="quick_delete_filter_weeks_days_hint">設置重複周次與星期 (可選)</string>
     <string name="quick_delete_filter_date_range_hint">設置特定日期範圍 (可選)</string>
     <string name="quick_delete_label_days_prefix">星期: %1$s</string>
@@ -504,7 +411,6 @@
     <string name="dark_primary_color">深色模式主色</string>
     <string name="theme_color_hint">說明：改變此顏色後，系統將作為種子色重新計算全應用配色方案。</string>
     <string name="label_page_text_color">課表頁面文字顏色</string>
-    <string name="widget_course_remaining_count">剩餘 %1$d 節</string>
     <string name="section_sync">同步</string>
     <string name="item_sync_to_system_calendar">同步至系統行事曆</string>
     <string name="desc_sync_to_system_calendar">將目前课表一鍵同步至手機系統行事曆</string>
@@ -539,7 +445,6 @@
     <string name="error_stream_open_failed">無法開啟數據流</string>
     <string name="backup_err_connect_failed">連線失敗，請檢查設定或網路</string>
     <string name="backup_err_upload_failed">檔案上傳失敗</string>
-    <string name="backup_err_download_failed">下載備份失敗</string>
     <string name="backup_err_local_export_failed">本地匯出失敗</string>
     <string name="backup_err_restore_failed_prefix">還原失敗: %1$s</string>
     <string name="backup_target_webdav">WebDAV 雲端同步</string>
@@ -592,7 +497,6 @@
     <string name="toast_course_outside_semester_add">無法在學期外新增課程</string>
     <string name="toast_course_outside_semester_adjust">無法在學期外調整課程</string>
     <string name="toast_course_adjust_saved">課程調整已儲存</string>
-    <string name="toast_course_adjust_failed">課程調整失敗</string>
     <string name="toast_no_course_table">目前沒有可用課表</string>
     <string name="toast_invalid_paste_target">無法貼上到此位置</string>
     <string name="toast_paste_failed">貼上失敗：%1$s</string>
@@ -618,8 +522,6 @@
     <string name="electricity_trend_need_two">資料不足，至少需要兩次不同餘額紀錄</string>
     <string name="electricity_trend_range_days7">近 7 天</string>
     <string name="electricity_trend_range_days30">近 30 天</string>
-    <string name="electricity_section_recent">最近 7 次</string>
-    <string name="electricity_history_empty">成功查詢後會在這裡顯示歷史紀錄</string>
     <string name="electricity_select_room_hint">請先完成統一認證</string>
     <string name="electricity_select_room_prompt">請選擇%1$s</string>
     <string name="electricity_loading_prompt">正在載入%1$s</string>
@@ -680,13 +582,11 @@
     <string name="label_credits">總學分</string>
     <string name="label_course_count">課程數</string>
     <string name="label_passed_count">已通過</string>
-    <string name="label_ranking">排名</string>
     <string name="label_grade_point">績點</string>
     <string name="label_score">成績</string>
     <string name="label_exam_type">考試類型</string>
     <string name="label_score_composition">成績構成</string>
     <string name="status_no_data">暫無</string>
-    <string name="message_grade_import_pending">成績專用教務介接正在導入，目前不會寫入課表資料。</string>
     <string name="title_academic_summary">學業概覽</string>
     <string name="action_refresh_academic_summary">重新整理學業概覽</string>
     <string name="status_academic_summary_loading">載入學業概覽中...</string>
@@ -704,7 +604,6 @@
     <string name="status_grade_service_unavailable">成績服務暫時無法使用，成績詳細資料將於稍後補上。</string>
     <string name="status_grade_loading">載入成績中...</string>
     <string name="status_grade_no_data">暫無成績資料</string>
-    <string name="status_grade_not_bound">綁定統一入口網站後即可載入成績</string>
     <string name="status_grade_fetch_failed">成績載入失敗，請稍後再試。</string>
     <string name="item_nuist_one_click_import">一鍵匯入 NUIST 課表</string>
     <string name="desc_nuist_one_click_import">透過統一認證將當前學期匯入當前課表</string>
@@ -718,18 +617,11 @@
     <string name="item_electricity">電費查詢</string>
     <string name="desc_electricity">查詢宿舍剩餘電量</string>
     <string name="title_electricity">電費查詢</string>
-    <string name="label_student_id">學號</string>
-    <string name="label_password">密碼</string>
     <string name="label_campus">校區</string>
     <string name="label_building">樓棟</string>
     <string name="label_room">房號</string>
     <string name="action_save_query">儲存並查詢</string>
-    <string name="action_dismiss">關閉</string>
-    <string name="label_remaining_power">剩餘電量</string>
-    <string name="label_updated">資料來自一卡通介面</string>
     <string name="action_edit_room">修改宿舍</string>
-    <string name="action_clear_account">清除帳號</string>
-    <string name="title_recent_history">最近查詢</string>
     <string name="item_portal_account">統一入口網站</string>
     <string name="desc_portal_account">綁定後可使用教務、電費等統一入口網站服務</string>
     <string name="portal_unbound">未綁定統一入口</string>
@@ -743,7 +635,6 @@
     <string name="portal_bound_description">本機已儲存通行密鑰，需要入口身分的功能會自動使用它。</string>
     <string name="portal_unbound_description">綁定後無須在應用程式中儲存統一入口密碼。</string>
     <string name="portal_bind_title">綁定統一入口</string>
-    <string name="portal_bind_hint">請登入統一入口，隨後完成頁面中的身分驗證。</string>
     <string name="portal_status_loading">正在讀取入口認證資訊…</string>
     <string name="portal_status_navigating">正在跳轉到通行密鑰頁…</string>
     <string name="portal_status_waiting_page">等待頁面載入…</string>
@@ -757,13 +648,7 @@
     <string name="portal_credential_device">認證資訊名稱</string>
     <string name="portal_bound_at">綁定時間</string>
     <string name="portal_student_id">學號</string>
-    <string name="portal_test_not_ready">入口登入驗證暫時無法使用，請重新綁定後重試</string>
-    <string name="portal_profile_name">姓名</string>
-    <string name="portal_profile_department">院系</string>
-    <string name="portal_profile_class">班級</string>
     <string name="portal_profile_loading">正在讀取入口身分資訊…</string>
-    <string name="portal_profile_unavailable">暫未取得身分資訊</string>
-    <string name="portal_profile_retry">重新整理身分資訊</string>
     <string name="portal_profile_error">身分資訊讀取失敗</string>
     <string name="portal_transfer_title">換裝置與金鑰備份</string>
     <string name="portal_transfer_summary">匯出的金鑰檔案可在新裝置上直接匯入使用，無須重新綁定入口；匯入會取代本機目前的綁定。檔案會用你設定的密碼加密，請妥善保管。</string>
@@ -788,7 +673,6 @@
     <string name="bus_refresh">重新整理</string>
     <string name="bus_close">關閉</string>
     <string name="bus_connecting">正在連線車輛平台…</string>
-    <string name="bus_connecting_short">正在連線…</string>
     <string name="bus_online_count">線上車輛 %1$d</string>
     <string name="bus_online_of_total">線上車輛 %1$d / %2$d</string>
     <string name="bus_updated_at">更新於 %1$s</string>
@@ -803,11 +687,11 @@
     <string name="bus_vehicle_heading_value">%1$s°</string>
     <string name="bus_unknown">未知</string>
     <string name="bus_load_failed">公車資料讀取失敗</string>
-    <string name="bus_init_failed">公車網路模組初始化失敗</string>
     <string name="bus_zoom_in">放大</string>
     <string name="bus_zoom_out">縮小</string>
     <string name="bus_reset_view">重設視圖</string>
     <string name="ui_style_label">介面風格</string>
     <string name="ui_style_miuix">Miuix</string>
     <string name="ui_style_material">Material</string>
+    <string name="label_unsupported_destination">頁面暫不可用</string>
 </resources>

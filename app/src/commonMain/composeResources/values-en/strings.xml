@@ -23,7 +23,6 @@
     <string name="common_dialog_msg_unsaved_changes">You have unsaved changes. Are you sure you want to exit and lose them?</string>
     <string name="common_action_exit_without_save">Exit</string>
     <string name="common_action_continue_editing">Keep editing</string>
-    <string name="label_recent_visit">Recent Visit</string>
     
     <!-- Main Interface and Today's Schedule -->
     <string name="action_reset">Reset</string>
@@ -57,36 +56,26 @@
     <string name="label_course_weeks">Course weeks</string>
     <string name="action_single_week">Odd weeks</string>
     <string name="action_double_week">Even weeks</string>
-    <string name="label_course_color">Course color</string>
-    <string name="button_select_color">Select color</string>
     <string name="snackbar_add_course_within_semester">Please add or adjust courses during the semester</string>
     <string name="label_section_range_suffix">Period(s)</string>
     <string name="title_select_time">Select class time</string>
-    <string name="button_select_weeks">Select weeks</string>
     <string name="text_weeks_selected">Selected: %1$s</string>
     <string name="title_select_weeks">Select course weeks</string>
     <string name="title_select_color">Select course color</string>
     <string name="a11y_color_selected">Selected</string>
     <string name="label_custom_time_range">Custom Time Range</string>
-    <string name="label_select_custom_time">Select Custom Time</string>
-    <string name="toast_custom_time_empty">Start time or end time cannot be empty</string>
     <string name="label_custom_time">Custom Time</string>
     <string name="label_start_time">Start Time</string>
     <string name="label_end_time">End Time</string>
 
     <!-- Course Related -->
     <string name="label_remark">Remark</string>
-    <string name="course_time_description">Time: Period %1$s-%2$s (%3$s-%4$s)</string>
     <string name="course_position_prefix">Location: %1$s</string>
     <string name="course_teacher_prefix">Instructor: %1$s</string>
-    <string name="title_course_overlap">Overlapping Courses</string>
-    <string name="label_courses_overlap">%1$d overlapping</string>
-    <string name="course_time_sections_count">(%1$s periods)</string>
     <string name="title_select_week">Select week</string>
     <string name="title_current_week">Week %1$s</string>
     <string name="title_vacation">On vacation</string>
     <string name="status_semester_ended">Semester ended %1$d days ago</string>
-    <string name="status_week_calc_error">Week calculation error</string>
     
     <!-- Time and Day Formats -->
     <string-array name="week_days_short_names">
@@ -110,33 +99,15 @@
     
     <!-- Notifications and Alarms -->
     <string name="format_week_display">Wk %1$d</string>
-    <string name="notification_channel_desc_course_alert">Course reminder notifications</string>
-    <string name="notification_title_course_alert">Class reminder</string>
     <string name="item_auto_mode">Auto mode during class</string>
     <string name="text_auto_mode_dependency">Requires "Course reminders" to be enabled</string>
     <string name="toast_enable_reminder_first">Please enable "Course reminders" first</string>
     <string name="alarm_option_none">No reminder</string>
     <string name="alarm_option_on_time">On time</string>
-    <string name="notification_live_status_preparing">Pre-class</string>
-    <string name="notification_unknown_course">Unknown Course</string>
-    <string name="notification_unknown_position">Unknown Location</string>
 
     <!-- Widget Related -->
-    <string name="widget_name_tiny">Tiny 2x1</string>
-    <string name="widget_name_compact">Compact 2x2</string>
-    <string name="widget_name_double_days">Recent Days 4x2</string>
-    <string name="widget_name_list_vertical">Vertical Course List 4xN</string>
-    <string name="widget_tomorrow_course_preview">Tomorrow</string>
-    <string name="widget_no_courses_tomorrow">No courses tomorrow</string>
-    <string name="widget_today_courses_finished">Today's classes ended.</string>
-    <string name="widget_vacation_expecting">Looking forward to new semester</string>
-    <string name="widget_remaining_courses_format_today">%1$d courses left today</string>
-    <string name="widget_remaining_courses_format_tomorrow">%1$d courses tomorrow</string>
-    <string name="widget_title_today">Today</string>
-    <string name="widget_title_tomorrow">Tomorrow</string>
     
     <!-- Notification Settings -->
-    <string name="widget_course_total_count">%1$d total</string>
     <string name="title_course_notification_settings">Course reminder settings</string>
     <string name="section_title_general">General</string>
     <string name="section_title_advanced">Advanced</string>
@@ -182,7 +153,6 @@
     <string name="auto_mode_dnd">Do not disturb (DND)</string>
     <string name="auto_mode_silent">Silent mode</string>
     <string name="dialog_title_view_skipped_dates">Skipped reminder dates</string>
-    <string name="text_no_skipped_dates">No skipped dates set.</string>
     <string name="action_close">Close</string>
     <string name="toast_notification_permission_denied">Notification permission denied, cannot receive course reminders.</string>
     <string name="item_compat_wearable_sync">Wearable Sync Compatibility</string>
@@ -218,7 +188,6 @@
     <string name="desc_manage_course_tables">Manage multiple schedules, switch or delete</string>
     <string name="item_more_options">More</string>
     <string name="desc_more_options">Additional information and options</string>
-    <string name="a11y_more_options">More options</string>
     <string name="dialog_title_select_total_weeks">Select total weeks</string>
     <string name="dialog_title_manual_set_week">Manually set current week</string>
     <string name="dialog_title_set_first_day_of_week">Set week start day</string>
@@ -250,11 +219,9 @@
     <string name="a11y_cancel_selection">Cancel multiple selection</string>
     <string name="a11y_exit_selection_mode">Exit selection mode</string>
     <string name="a11y_enter_selection_mode">Enter selection mode</string>
-    <string name="a11y_not_selected">Not selected</string>
     <string name="label_weeks_format">Weeks: %1$s</string>
 
     <!-- Time Slot Management -->
-    <string name="title_time_slot_management">Time period management</string>
     <string name="a11y_add_time_slot">Add time period</string>
     <string name="a11y_save_all_settings">Save all settings</string>
     <string name="toast_settings_saved">All settings saved to database</string>
@@ -294,24 +261,17 @@
     <string name="dialog_title_select_export_table">Select schedule to export</string>
     <string name="dialog_title_ics_export_settings">Calendar export settings</string>
     <string name="label_select_alarm_time">Select reminder time:</string>
-    <string name="a11y_import">Import</string>
-    <string name="a11y_export">Export</string>
     <string name="a11y_details">Details</string>
-    <string name="snackbar_cannot_open_file">Cannot open file.</string>
     <string name="snackbar_file_selection_canceled">File selection canceled.</string>
-    <string name="snackbar_cannot_save_file">Cannot save file.</string>
     <string name="snackbar_file_save_canceled">File save canceled.</string>
     <string name="dialog_title_file_saved">File saved</string>
     <string name="dialog_text_file_saved_share_prompt">File successfully exported to Downloads folder. Would you like to share it?</string>
-    <string name="snackbar_file_copy_failed_for_share">File copy failed, cannot share.</string>
     <string name="action_share">Share</string>
     <string name="toast_import_success">Schedule imported successfully!</string>
-    <string name="toast_ics_export_success">Calendar file exported successfully!</string>
     <string name="error_export_table_not_found">Export failed: Schedule not found</string>
     <string name="error_export_failed">Export failed: %1$s</string>
     <string name="error_import_failed">Import failed: %1$s</string>
     <string name="error_ics_export_data_failed">Calendar export failed: Failed to get data</string>
-    <string name="error_ics_export_failed">Calendar export failed: %1$s</string>
     
     <!-- More Settings -->
     <string name="item_developer_options">Developer Options</string>
@@ -322,15 +282,12 @@
     <string name="error_sync_calendar_failed">Sync failed. Please check calendar permissions.</string>
     <string name="title_more_options">More</string>
     <string name="a11y_app_icon">App icon</string>
-    <string name="a11y_navigate">Navigate</string>
-    <string name="a11y_acknowledgment">Acknowledgment</string>
     <string name="label_special_thanks">Special thanks</string>
     <string name="text_acknowledgment_body">Heartfelt thanks to every developer who contributed to this app and the academic system adapter repository. Your dedication drives continuous improvement!</string>
     <string name="item_github_repo">Project GitHub repository</string>
     <string name="item_open_source_licenses">View open source licenses</string>
     <string name="title_open_source_licenses">Open source licenses</string>
     <string name="label_version_prefix">Version: %1$s</string>
-    <string name="default_app_name">Unknown app</string>
     <string name="item_check_software_update">Check for Software Updates</string>
     <string name="item_language_settings">Language Settings</string>
     <string name="language_follow_system">Follow System</string>
@@ -343,10 +300,6 @@
     <string name="dialog_update_check_failed">Update check failed</string>
     <string name="label_error_message">Error message: %1$s</string>
     <string name="btn_download_update">Download update</string>
-    <string name="btn_update_now">Update now</string>
-    <string name="tip_non_mandatory_update">Tip: The cancel button is not shown for mandatory updates.</string>
-    <string name="dialog_select_update_channel">Select update channel</string>
-    <string name="a11y_selected">Selected</string>
     <string name="item_start_screen_settings">Startup Page Settings</string>
     <string name="dialog_select_start_screen">Select default startup page</string>
     
@@ -374,56 +327,11 @@
     <string name="date_format_month_day">%1$d/%2$d</string>
 
     <!-- Academic System Import -->
-    <string name="a11y_search">Search</string>
-    <string name="a11y_clear_search">Clear search</string>
-    <string name="category_bachelor_associate">Undergraduate/Associate</string>
-    <string name="category_postgraduate">Postgraduate</string>
-    <string name="category_general_tool">General tools</string>
-    <string name="category_other">Other</string>
-    <string name="text_no_detailed_description">No detailed description.</string>
-    <string name="label_contributor_unknown">Unknown</string>
-    <string name="label_contributor_format">Contributor: %1$s</string>
-    <string name="title_enter_url">Enter URL</string>
-    <string name="a11y_cancel_editing">Cancel editing</string>
-    <string name="placeholder_enter_url_full">Enter URL (https://...)</string>
-    <string name="a11y_load">Load</string>
-    <string name="a11y_enter_url">Enter URL</string>
-    <string name="action_refresh">Refresh</string>
     <string name="a11y_refresh">Refresh</string>
-    <string name="action_switch_to_phone_mode">Switch to mobile mode</string>
-    <string name="action_switch_to_desktop_mode">Switch to desktop mode</string>
-    <string name="toast_switched_to_desktop">Switched to desktop mode</string>
-    <string name="toast_switched_to_phone">Switched to mobile mode</string>
-    <string name="toast_url_empty_enter_first">URL is empty, please enter a URL first.</string>
-    <string name="item_devtools_debug">DevTools web debugging</string>
-    <string name="a11y_devtools">DevTools</string>
-    <string name="toast_devtools_enabled_format">DevTools web debugging %1$s.</string>
-    <string name="text_import_guide">Please log in to the academic system and navigate to a page showing the schedule before importing. Tap "More" for additional options</string>
-    <string name="action_execute_import">Execute import</string>
-    <string name="dialog_title_select_table_for_import">Select a schedule to import courses</string>
-    <string name="toast_executing_import_script">Executing import script...</string>
-    <string name="toast_import_script_not_found">Import script file not found: %1$s</string>
-    <string name="toast_load_import_script_failed">Failed to load import script: %1$s</string>
-    <string name="toast_import_script_finished">Import script completed, returning to schedule page.</string>
-    <string name="dialog_ssl_error_title">SSL Certificate Error</string>
-    <string name="dialog_ssl_error_message">SSL certificate verification failed, which may indicate an insecure connection. Continue browsing?</string>
-    <string name="action_continue_browsing">Continue</string>
-    <string name="toast_ssl_error_cancelled">SSL certificate verification failed, connection canceled.</string>
-    <string name="toast_web_load_error_format">Web page load error: %1$s</string>
     
     <string name="text_loading_failed">Loading failed: %1$s</string>
     
     <!-- Academic Adapter Repository -->
-    <string name="label_select_repo">Select repository</string>
-    <string name="text_select_repo_hint">Please select repository</string>
-    <string name="action_update">Update</string>
-    <string name="action_updating">Updating...</string>
-    <string name="label_repo_url">Repository URL</string>
-    <string name="label_repo_branch">Branch</string>
-    <string name="label_private_repo_credentials">Private repository credentials (Username/Token)</string>
-    <string name="label_username_or_token_key">Username or token key</string>
-    <string name="label_password_or_token_value">Password or token value</string>
-    <string name="title_update_log">Update log</string>
 
     <!-- Color Picker -->
     <string name="color_picker_title_edit">Adjust Color</string>
@@ -492,7 +400,6 @@
     <string name="hint_no_selection">Please select weeks, days, or dates</string>
     <string name="hint_affected_count">%1$d course records will be removed</string>
     <string name="dialog_delete_confirm_msg">This action cannot be undone. Affected records will be erased from the selected time points, but basic course info will remain.</string>
-    <string name="btn_add_date">Add Date</string>
     <string name="quick_delete_filter_weeks_days_hint">Set recurring weeks &amp; days (Optional)</string>
     <string name="quick_delete_filter_date_range_hint">Set specific date range (Optional)</string>
     <string name="quick_delete_label_days_prefix">Days: %1$s</string>
@@ -512,7 +419,6 @@
     <string name="dark_primary_color">Dark Primary Color</string>
     <string name="theme_color_hint">Note: After changing this color, the system will use it as a seed color to recalculate the entire app's color scheme.</string>
     <string name="label_page_text_color">Schedule text color</string>
-    <string name="widget_course_remaining_count">%1$d left</string>
 
     <string name="backup_err_empty">The backup file is empty and cannot be restored</string>
     <string name="backup_err_corrupted">Failed to parse file; the data may be corrupted</string>
@@ -543,7 +449,6 @@
     <string name="error_stream_open_failed">Cannot open data stream</string>
     <string name="backup_err_connect_failed">Connection failed. Please check your configuration or network</string>
     <string name="backup_err_upload_failed">Failed to upload file</string>
-    <string name="backup_err_download_failed">Failed to download backup</string>
     <string name="backup_err_local_export_failed">Local export failed</string>
     <string name="backup_err_restore_failed_prefix">Restore failed: %1$s</string>
     <string name="backup_target_webdav">WebDAV Cloud Sync</string>
@@ -596,7 +501,6 @@
     <string name="toast_course_outside_semester_add">Courses cannot be added outside the semester</string>
     <string name="toast_course_outside_semester_adjust">Courses cannot be adjusted outside the semester</string>
     <string name="toast_course_adjust_saved">Course adjustment saved</string>
-    <string name="toast_course_adjust_failed">Course adjustment failed</string>
     <string name="toast_no_course_table">No course table is available</string>
     <string name="toast_invalid_paste_target">Cannot paste at this position</string>
     <string name="toast_paste_failed">Paste failed: %1$s</string>
@@ -622,8 +526,6 @@
     <string name="electricity_trend_need_two">Not enough data; at least two different balances are required</string>
     <string name="electricity_trend_range_days7">Last 7 days</string>
     <string name="electricity_trend_range_days30">Last 30 days</string>
-    <string name="electricity_section_recent">Last 7 entries</string>
-    <string name="electricity_history_empty">History appears here after a successful query</string>
     <string name="electricity_select_room_hint">Complete unified login first</string>
     <string name="electricity_select_room_prompt">Select %1$s</string>
     <string name="electricity_loading_prompt">Loading %1$s</string>
@@ -680,13 +582,11 @@
     <string name="label_credits">Total credits</string>
     <string name="label_course_count">Courses</string>
     <string name="label_passed_count">Passed</string>
-    <string name="label_ranking">Rank</string>
     <string name="label_grade_point">Grade point</string>
     <string name="label_score">Grade</string>
     <string name="label_exam_type">Exam type</string>
     <string name="label_score_composition">Score composition</string>
     <string name="status_no_data">None</string>
-    <string name="message_grade_import_pending">The dedicated academic-affairs adapter for grades is being integrated. Schedule data will not be written for now.</string>
     <string name="title_academic_summary">Academic overview</string>
     <string name="action_refresh_academic_summary">Refresh academic overview</string>
     <string name="status_academic_summary_loading">Loading academic overview...</string>
@@ -704,7 +604,6 @@
     <string name="status_grade_service_unavailable">The grade service is unavailable. Grade details will be added later.</string>
     <string name="status_grade_loading">Loading grades...</string>
     <string name="status_grade_no_data">No grade data</string>
-    <string name="status_grade_not_bound">Bind the unified portal to load grades</string>
     <string name="status_grade_fetch_failed">Failed to load grades. Try again.</string>
     <string name="item_nuist_one_click_import">One-tap import of NUIST schedule</string>
     <string name="desc_nuist_one_click_import">Import the current semester into the current timetable via the unified authentication</string>
@@ -718,18 +617,11 @@
     <string name="item_electricity">Electricity bill</string>
     <string name="desc_electricity">Check the remaining electricity in the dormitory</string>
     <string name="title_electricity">Electricity bill query</string>
-    <string name="label_student_id">Student ID</string>
-    <string name="label_password">Password</string>
     <string name="label_campus">Campus</string>
     <string name="label_building">Building</string>
     <string name="label_room">Room number</string>
     <string name="action_save_query">Save and query</string>
-    <string name="action_dismiss">Close</string>
-    <string name="label_remaining_power">Remaining electricity</string>
-    <string name="label_updated">Data from the campus card interface</string>
     <string name="action_edit_room">Edit dormitory</string>
-    <string name="action_clear_account">Clear account</string>
-    <string name="title_recent_history">Recent queries</string>
     <string name="item_portal_account">Unified portal</string>
     <string name="desc_portal_account">After binding, you can use unified portal services such as the academic system and electricity</string>
     <string name="portal_unbound">unified portal not bound</string>
@@ -743,7 +635,6 @@
     <string name="portal_bound_description">a passkey is saved on this device and is used automatically by features that need your portal identity.</string>
     <string name="portal_unbound_description">after binding, you no longer need to save your unified portal password in the app.</string>
     <string name="portal_bind_title">bind unified portal</string>
-    <string name="portal_bind_hint">sign in to the unified portal, then complete the identity verification on the page.</string>
     <string name="portal_status_loading">reading portal credential…</string>
     <string name="portal_status_navigating">redirecting to the passkey page…</string>
     <string name="portal_status_waiting_page">waiting for the page to load…</string>
@@ -757,13 +648,7 @@
     <string name="portal_credential_device">credential name</string>
     <string name="portal_bound_at">bound on</string>
     <string name="portal_student_id">student id</string>
-    <string name="portal_test_not_ready">portal sign-in verification is not available yet; bind again and retry</string>
-    <string name="portal_profile_name">name</string>
-    <string name="portal_profile_department">department</string>
-    <string name="portal_profile_class">class</string>
     <string name="portal_profile_loading">reading portal identity information…</string>
-    <string name="portal_profile_unavailable">no identity information yet</string>
-    <string name="portal_profile_retry">refresh identity information</string>
     <string name="portal_profile_error">failed to read identity information</string>
     <string name="portal_transfer_title">switch device &amp; back up key</string>
     <string name="portal_transfer_summary">the exported key file can be imported directly on a new device, with no need to bind the portal again; importing replaces the current binding on this device. the file is encrypted with the password you set, so keep it safe.</string>
@@ -788,7 +673,6 @@
     <string name="bus_refresh">Refresh</string>
     <string name="bus_close">Close</string>
     <string name="bus_connecting">Connecting to the vehicle platform…</string>
-    <string name="bus_connecting_short">Connecting…</string>
     <string name="bus_online_count">Online vehicles %1$d</string>
     <string name="bus_online_of_total">Online vehicles %1$d / %2$d</string>
     <string name="bus_updated_at">Updated at %1$s</string>
@@ -803,11 +687,11 @@
     <string name="bus_vehicle_heading_value">%1$s°</string>
     <string name="bus_unknown">Unknown</string>
     <string name="bus_load_failed">Failed to read bus data</string>
-    <string name="bus_init_failed">Failed to initialize the bus network module</string>
     <string name="bus_zoom_in">Zoom in</string>
     <string name="bus_zoom_out">Zoom out</string>
     <string name="bus_reset_view">Reset view</string>
     <string name="ui_style_label">Interface style</string>
     <string name="ui_style_miuix">Miuix</string>
     <string name="ui_style_material">Material</string>
+    <string name="label_unsupported_destination">This page is not available</string>
 </resources>
