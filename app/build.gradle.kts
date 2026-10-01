@@ -273,8 +273,21 @@ val cleanStaleComposeResourceDirs by tasks.registering {
         "intermediates/assets",
         "intermediates/compressed_assets",
     ).map { layout.buildDirectory.dir(it).get().asFile }
+    // 只有拷贝/合并阶段的目标目录是按「文件名」原样落地；compressed_assets 会额外加 .jar 后缀，
+    // 对它做文件名比对会把正常产物误判为残留，因此不参与文件级清理。
+    val filePruneRoots = listOf(
+        "generated/assets",
+        "intermediates/assets",
+    ).map { layout.buildDirectory.dir(it).get().asFile }
     val expectedPackage = composeResPackageName
+    val resourceSourceRoot = file("src/commonMain/composeResources")
     doLast {
+        // 源资源里仍存在的文件名（drawable/files 是按名拷贝的，删除源文件后旧产物不会被自动清掉）。
+        val liveSourceNames = if (resourceSourceRoot.isDirectory) {
+            resourceSourceRoot.walkTopDown().filter { it.isFile }.map { it.name }.toSet()
+        } else {
+            emptySet()
+        }
         scannedRoots.forEach { root ->
             if (!root.isDirectory) return@forEach
             root.walkTopDown()
@@ -287,6 +300,25 @@ val cleanStaleComposeResourceDirs by tasks.registering {
                 .forEach { stale ->
                     logger.lifecycle("Removing stale Compose Resources directory: ${stale.relativeTo(root)}")
                     stale.deleteRecursively()
+                }
+        }
+        // 正确包目录内也可能留着已从 src 删除的 drawable/files：拷贝任务是增量写入，不会删除历史文件。
+        if (liveSourceNames.isEmpty()) return@doLast
+        filePruneRoots.forEach { root ->
+            if (!root.isDirectory) return@forEach
+            root.walkTopDown()
+                .filter { it.isDirectory && it.name == expectedPackage }
+                .toList()
+                .forEach { pkg ->
+                    listOf("drawable", "files").forEach { section ->
+                        val dir = File(pkg, section)
+                        dir.listFiles()?.forEach { artifact ->
+                            if (artifact.isFile && artifact.name !in liveSourceNames) {
+                                logger.lifecycle("Removing stale Compose resource: ${artifact.relativeTo(root)}")
+                                artifact.delete()
+                            }
+                        }
+                    }
                 }
         }
     }
