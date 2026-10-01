@@ -29,6 +29,19 @@ import com.wild0408.nanxinshiguang.ui.miuix.portal.MiuixPortalAccountScreen
 import com.wild0408.nanxinshiguang.ui.portal.PortalBindScreen
 import com.wild0408.nanxinshiguang.ui.miuix.service.MiuixBusMapScreen
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import com.wild0408.nanxinshiguang.tool.AppLog
+import nanxinshiguang.generated.resources.Res
+import nanxinshiguang.generated.resources.label_unsupported_destination
+import org.jetbrains.compose.resources.stringResource
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.theme.MiuixTheme
+
+private const val TAG = "MiuixSecondaryScreenHost"
+
 @Composable
 internal fun MiuixSecondaryScreenHost(
     destination: Destination,
@@ -80,7 +93,19 @@ internal fun MiuixSecondaryScreenHost(
             copyFromId = destination.copyFromId,
             onBack = onBack,
         )
-        // Main destinations are consumed by MiuixMainShell and never reach this host.
-        else -> Unit
+        // 主页面（MainDestination）由 MiuixMainShell 消费，不会进入本宿主。
+        // 这里保留兜底，但不再静默：Material 侧的 when 没有 else、漏登记会编译失败，
+        // 而本宿主以前会渲染空白页，两侧保障强度不对等。现在记录日志并给出可见提示，
+        // 便于新增路由时第一时间发现漏登记。
+        else -> {
+            AppLog.e(TAG, "未注册的 Miuix 二级页面: ${destination::class.simpleName ?: "Unknown"}")
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    text = stringResource(Res.string.label_unsupported_destination),
+                    style = MiuixTheme.textStyles.body1,
+                    color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+                )
+            }
+        }
     }
 }

@@ -123,7 +123,7 @@ private fun MiuixLaborOverviewData(score: LaborScore) {
     }
     MiuixLaborValueGrid(laborOverviewFields(score))
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text("同步于 ${score.updatedAtText()}", Modifier.weight(1f), style = MiuixTheme.textStyles.footnote1, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
+        Text(stringResource(Res.string.labor_score_updated_format, score.updatedAtText()), Modifier.weight(1f), style = MiuixTheme.textStyles.footnote1, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
         Icon(vectorResource(Res.drawable.chevron_right_24px), contentDescription = null, tint = MiuixTheme.colorScheme.onSurfaceVariantSummary)
     }
 }

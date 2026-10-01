@@ -52,6 +52,8 @@ import nanxinshiguang.generated.resources.Res
 import nanxinshiguang.generated.resources.a11y_back
 import nanxinshiguang.generated.resources.arrow_back_24px
 import nanxinshiguang.generated.resources.portal_bind_title
+import org.jetbrains.compose.resources.StringResource
+import nanxinshiguang.generated.resources.portal_bind_success
 import nanxinshiguang.generated.resources.portal_retry
 import nanxinshiguang.generated.resources.portal_status_registering
 import nanxinshiguang.generated.resources.portal_status_verifying
@@ -184,7 +186,7 @@ private fun AndroidPortalBindScreen(
             // status panel would shrink the WebView and clip the dialog's top edge.
             if (error != null || status == PortalStatus.Navigating || status == PortalStatus.WaitingPage) {
                 Text(
-                    text = error ?: status.label,
+                    text = error ?: stringResource(status.labelRes),
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (error == null) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error,
@@ -296,12 +298,13 @@ private class PortalPasskeyBridge(private val onMessage: (String) -> Unit) {
     fun postMessage(message: String) = onMessage(message)
 }
 
-private enum class PortalStatus(val label: String) {
-    Navigating("正在跳转到通行密钥页…"),
-    WaitingPage("等待页面加载…"),
-    Verifying("请在页面中完成身份验证"),
-    Registering("正在注册通行密钥…"),
-    Success("绑定成功"),
+// 文案改为资源引用：原先硬编码中文，切英文/繁中时这一页的状态文字仍是简体。
+private enum class PortalStatus(val labelRes: StringResource) {
+    Navigating(Res.string.portal_status_navigating),
+    WaitingPage(Res.string.portal_status_waiting_page),
+    Verifying(Res.string.portal_status_verifying),
+    Registering(Res.string.portal_status_registering),
+    Success(Res.string.portal_bind_success),
 }
 
 private suspend fun handlePortalMessage(
