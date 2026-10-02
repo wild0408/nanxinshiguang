@@ -1,0 +1,4 @@
+Nanxin Shiguang 1.0.11 update.
+
+- The daily quote card now gives haptic feedback when tapped for another quote.
+- In the Miuix today schedule, finished classes are only dimmed now (no strikethrough).
