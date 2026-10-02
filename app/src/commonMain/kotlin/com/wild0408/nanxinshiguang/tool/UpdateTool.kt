@@ -76,6 +76,14 @@ class UpdateChecker(
         /** 这些包装异常本身不含信息，展示时跳过，往下找更具体的原因。 */
         private val GENERIC_EXCEPTION_NAMES = setOf("Exception", "IOException", "RuntimeException")
 
+        /**
+         * 通道级超时。此前设的 8s 在慢网络/代理下会误判失败（实测模拟器偶发瞬时卡顿即超时），
+         * 但也不能不设：网络被黑洞时界面会一直挂在"正在检查更新"。
+         */
+        private const val CONNECT_TIMEOUT_MS = 15_000L
+        private const val REQUEST_TIMEOUT_MS = 30_000L
+        private const val SOCKET_TIMEOUT_MS = 30_000L
+
         val defaultHttpClient by lazy {
             HttpClient {
                 install(ContentNegotiation) {
@@ -91,11 +99,12 @@ class UpdateChecker(
                     header(HttpHeaders.Accept, "application/vnd.github+json")
                 }
                 // 此前完全没有超时：网络不可达（例如 api.github.com 被阻断）时会长时间挂起，
-                // 用户只看到一直"正在检查更新"。这里给一个能快速失败的明确上限。
+                // 用户只看到一直"正在检查更新"。这里给一个明确的失败上限，但取值要容忍
+                // 慢网络与代理（8s 实测会误判，见 CONNECT_TIMEOUT_MS 的说明）。
                 install(HttpTimeout) {
-                    connectTimeoutMillis = 10_000
-                    requestTimeoutMillis = 15_000
-                    socketTimeoutMillis = 15_000
+                    connectTimeoutMillis = CONNECT_TIMEOUT_MS
+                    requestTimeoutMillis = REQUEST_TIMEOUT_MS
+                    socketTimeoutMillis = SOCKET_TIMEOUT_MS
                 }
             }
         }
@@ -165,7 +174,7 @@ class UpdateChecker(
     private suspend fun fetchViaApi(): ApiReleaseResponse {
         val response: HttpResponse = httpClient.get("https://api.github.com/repos/$GITHUB_REPO/releases/latest") {
             // 比客户端默认更短：api.github.com 不可达时要尽快让回退通道接手。
-            timeout { requestTimeoutMillis = 8_000; connectTimeoutMillis = 6_000 }
+            timeout { requestTimeoutMillis = REQUEST_TIMEOUT_MS; connectTimeoutMillis = CONNECT_TIMEOUT_MS }
         }
         if (!response.status.isSuccess()) {
             throw UpdateChannelException("api.github.com HTTP ${response.status.value}")
@@ -185,7 +194,7 @@ class UpdateChecker(
      */
     private suspend fun fetchViaWebFeed(): ApiReleaseResponse {
         val response = httpClient.get("https://github.com/$GITHUB_REPO/releases.atom") {
-            timeout { requestTimeoutMillis = 8_000; connectTimeoutMillis = 6_000 }
+            timeout { requestTimeoutMillis = REQUEST_TIMEOUT_MS; connectTimeoutMillis = CONNECT_TIMEOUT_MS }
         }
         if (!response.status.isSuccess()) {
             throw UpdateChannelException("github.com/releases.atom HTTP ${response.status.value}")
@@ -199,7 +208,7 @@ class UpdateChecker(
 
         val probe = httpClient.get(candidate) {
             header(HttpHeaders.Range, "bytes=0-0")
-            timeout { requestTimeoutMillis = 8_000; connectTimeoutMillis = 6_000 }
+            timeout { requestTimeoutMillis = REQUEST_TIMEOUT_MS; connectTimeoutMillis = CONNECT_TIMEOUT_MS }
         }
         if (probe.status.value !in 200..299) {
             throw UpdateChannelException("构造的下载地址不可用（HTTP ${probe.status.value}）")
