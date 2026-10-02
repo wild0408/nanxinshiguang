@@ -1,0 +1,8 @@
+Nanxin Shiguang 1.0.4 update.
+
+- Security: cleartext traffic is now denied by default and allowed only for the campus bus platform; backup and device transfer no longer include credential files encrypted with device-bound keys.
+- Fixes: grade parsing failures are no longer reported as "no grades"; portal bind status and labor-score timestamps now use localized resources.
+- Localization: filled the missing English and Traditional Chinese strings, aligned key counts across all four locales and removed English text from the default locale.
+- Cleanup: removed the retired school/adapter leftovers, ~460 lines of dead strings, a dozen dead symbols and 8 unused icons.
+- Size and performance: campus bus base map converted to WebP, launcher foreground resized, redundant R8 rules trimmed.
+- Stability: unified logging, deprecated Android API warnings cleared, adaptive launcher icon restored.
