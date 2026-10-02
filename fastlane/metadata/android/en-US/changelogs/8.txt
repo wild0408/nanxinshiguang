@@ -1,0 +1,6 @@
+Nanxin Shiguang 1.0.7 (users on 1.0.4-1.0.6 should upgrade).
+
+- Critical fix: all in-app HTTPS requests were failing. The network security configuration made Android reject Ktor's certificate validation, so portal, grades, electricity, labor score, campus bus data and "Check for updates" could not reach any server (browsers were unaffected, which is why web pages still worked).
+- The default "deny cleartext traffic" policy is preserved; the campus bus HTTP endpoints were verified to still work.
+- "Check for updates" now reports the concrete failure reason.
+- Added instrumented (on-device) test infrastructure with an update-check flow test.

@@ -9,7 +9,7 @@
 
 ## 项目状态
 
-- 当前版本为 **1.0.6（versionCode 7）**，仅支持 Android。
+- 当前版本为 **1.0.7（versionCode 8）**，仅支持 Android。
 - 课程表、课程管理、提醒、小组件和数据导入导出能力来自上游项目并持续维护。
 - 已加入 NUIST 教务导入、成绩中心、学业概览、统一门户绑定和宿舍电费查询等功能。
 - 已加入劳动积分查询：首次进入且没有本地缓存时获取，成功结果会加密保存；之后仅通过页面刷新按钮手动更新。
@@ -19,6 +19,12 @@
 - 成绩中心和劳动积分页面同时提供 Material 3 与 Miuix 两套界面，劳动积分详情按官方核算、实时活动和同步状态分组展示。
 - Release 由项目专用证书签名；GitHub Actions 提供手动触发的 Android 发布构建。
 
+### v1.0.7 发布内容
+
+- **关键修复**：`network_security_config.xml` 中的 `<domain-config>` 会让 Android 的 `RootTrustManager` 拒绝**不带主机名**的 `checkServerTrusted` 调用，而 Ktor CIO 正是这样校验证书，导致**应用内所有 HTTPS 请求自 1.0.4 起全部失败**（CertificateException：门户、成绩、电费、劳动积分、校园公交数据、检查更新）。现移除按域名配置，仅保留「默认禁止明文流量」；浏览器的下载不受影响，因此此前表现为「网页能开、应用连不上」。已在模拟器上验证。
+- 保留明文默认拒绝的同时，校园公交的明文接口仍正常（Ktor CIO 不受平台明文策略约束，实测两个接口均 200）。
+- 检查更新失败时的提示附带失败原因（异常类型），便于定位。
+- 新增仪器测试（androidTest）基础设施与「检查更新」真机链路用例，用于防止同类网络回归。
 ### v1.0.6 发布内容
 
 - 修复"检查更新"在部分网络下失败：原先只走 `api.github.com`（其匿名额度为**按出口 IP 共享的 60 次/小时**，校园网等共享出口很容易触顶，且国内网络下该域名常不可达）。现在**双通道并行**：`api.github.com` 提供更新日志与真实资产地址，同时用 `github.com` 的 releases 订阅源取版本号并按命名规则拼出对应 ABI 的直链，任一通道可用即可完成检查。
@@ -126,10 +132,10 @@ app/build/outputs/apk/debug/
 app/build/outputs/apk/release/
 ```
 
-选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.6 Release：
+选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.7 Release：
 
 ```powershell
-adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.6-arm64-v8a-release.apk
+adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.7-arm64-v8a-release.apk
 ```
 
 `-r` 仅适用于同包名且签名兼容的已安装版本。Debug 与 Release 使用不同证书，不能直接互相覆盖；如需切换签名，先评估和备份应用数据，**不要为了安装而直接卸载现有应用**。旧版拾光课程表与本项目的 applicationId 不同，可分别安装。
