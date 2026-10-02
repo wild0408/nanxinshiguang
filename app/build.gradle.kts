@@ -110,8 +110,8 @@ android {
         applicationId = "com.wild0408.nanxinshiguang"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 7
-        versionName = "1.0.6"
+        versionCode = 8
+        versionName = "1.0.7"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -229,6 +229,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.kotlin.test)
+
+    // 仪器测试（真实设备/模拟器上运行，验证网络与平台相关路径）
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.runner)
     debugImplementation(libs.compose.ui.tooling)
     add("kspAndroid", libs.androidx.room3.compiler)
 }

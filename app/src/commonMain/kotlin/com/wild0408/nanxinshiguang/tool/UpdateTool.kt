@@ -73,6 +73,9 @@ class UpdateChecker(
 
         private const val TAG = "UpdateChecker"
 
+        /** 这些包装异常本身不含信息，展示时跳过，往下找更具体的原因。 */
+        private val GENERIC_EXCEPTION_NAMES = setOf("Exception", "IOException", "RuntimeException")
+
         val defaultHttpClient by lazy {
             HttpClient {
                 install(ContentNegotiation) {
@@ -129,8 +132,33 @@ class UpdateChecker(
                 AppLog.e(TAG, "github.com 回退通道失败: ${error::class.simpleName}", error)
             }
 
-            UpdateStatus.Error("无法连接更新服务器，请检查网络后重试（也可到 GitHub Releases 页面手动下载）")
+            UpdateStatus.Error(
+                // 把失败原因一并显示：出现 TLS/证书类问题时，"无法连接服务器"这句话本身
+                // 完全无法定位（曾因 network_security_config 的 domain-config 触发
+                // CertificateException，而界面只提示无法连接）。细节仍在 logcat。
+                buildString {
+                    append("无法连接更新服务器")
+                    val detail = listOfNotNull(shortReason(viaApi), shortReason(viaWeb))
+                        .distinct()
+                        .joinToString("/")
+                    if (detail.isNotEmpty()) append("（").append(detail).append("）")
+                    append("，请检查网络后重试（也可到 GitHub Releases 页面手动下载）")
+                }
+            )
         }
+    }
+
+    /**
+     * 取失败原因的简短标识（异常类名或通道自身的说明），用于界面提示。
+     * 会沿 cause 链找第一个有信息量的类型，避免只显示外层包装异常。
+     */
+    private fun shortReason(result: Result<*>): String? {
+        val error = result.exceptionOrNull() ?: return null
+        if (error is UpdateChannelException) return error.message
+        return generateSequence(error as Throwable?) { it.cause }
+            .take(6)
+            .mapNotNull { it::class.simpleName }
+            .firstOrNull { it !in GENERIC_EXCEPTION_NAMES }
     }
 
     /** 主通道：api.github.com。非 2xx 或缺字段都视为该通道失败，交给回退通道处理。 */

@@ -42,6 +42,9 @@ aboutLibraries = "15.0.4"
 miuix = "0.9.4"
 
 
+# 仪器测试（androidTest）依赖
+androidx-test-ext-junit = "1.2.1"
+androidx-test-runner = "1.6.2"
 [libraries]
 # Compose Multiplatform 跨平台核心 UI 库
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
@@ -60,6 +63,8 @@ material-kolor = { module = "com.materialkolor:material-kolor", version.ref = "m
 
 # Kotlin & 通用测试
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
 # Android 平台专属基础库
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

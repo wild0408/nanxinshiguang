@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  默认禁止明文流量；校园公交平台（第三方车辆平台）仍只提供 HTTP，
-  因此只对这 2 个域名放行，其余全部强制 HTTPS。
+    只保留「默认禁止明文流量」这一条全局策略。
+
+    ⚠️ 不要在此文件里添加 <domain-config>！
+    Android 的 RootTrustManager 一旦发现存在按域名配置（ApplicationConfig.hasPerDomainConfigs()），
+    就会拒绝任何使用 **不带主机名** 的 checkServerTrusted(certs, authType) 重载的调用者：
+
+        java.security.cert.CertificateException: Domain specific configurations require that
+        hostname aware checkServerTrusted(X509Certificate[], String, String) is used
+
+    Ktor CIO 的 TLS 实现（io.ktor.network.tls.TLSClientHandshake）正是使用该重载，因此一旦加入
+    <domain-config>，应用内所有基于 Ktor 的 HTTPS 请求都会失败（门户、成绩、电费、劳动积分、
+    校园公交数据、检查更新），而浏览器 / OkHttp / HttpURLConnection 使用带主机名的重载不受影响——
+    这正是「浏览器能打开、应用却连不上」的典型现象。此坑在 1.0.4~1.0.6 实际踩过一次。
+
+    校园公交平台（http://www.ns-res.cn、http://47.96.16.23:8080）由 Ktor CIO 发起明文请求：
+    Android 的明文策略只由 HttpURLConnection / OkHttp / WebView 等库主动检查，原始 socket 客户端
+    不受其约束，因此保持默认拒绝明文也不会影响公交页面。
 -->
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
@@ -9,8 +24,4 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">ns-res.cn</domain>
-        <domain includeSubdomains="false">47.96.16.23</domain>
-    </domain-config>
 </network-security-config>
