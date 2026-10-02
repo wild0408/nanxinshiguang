@@ -282,6 +282,7 @@
     <string name="error_sync_calendar_failed">Sync failed. Please check calendar permissions.</string>
     <string name="title_more_options">More</string>
     <string name="a11y_app_icon">App icon</string>
+<string name="a11y_refresh_daily_quote">Refresh the daily quote</string>
     <string name="label_special_thanks">Special thanks</string>
     <string name="text_acknowledgment_body">Heartfelt thanks to every developer who contributed to this app and the academic system adapter repository. Your dedication drives continuous improvement!</string>
     <string name="item_github_repo">Project GitHub repository</string>

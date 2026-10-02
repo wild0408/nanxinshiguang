@@ -274,6 +274,7 @@
     <string name="error_sync_calendar_failed">同步失敗，請檢查行事曆權限</string>
     <string name="title_more_options">更多</string>
     <string name="a11y_app_icon">應用程式圖示</string>
+<string name="a11y_refresh_daily_quote">重新整理每日一言</string>
     <string name="label_special_thanks">特別鳴謝</string>
     <string name="text_acknowledgment_body">衷心感謝為本應用軟體和教務適配程式碼倉庫的開發和維護做出貢獻的每一位開發者。您的奉獻是應用程式持續更新和完善的動力！</string>
     <string name="item_github_repo">本專案GitHub倉庫</string>

@@ -402,6 +402,7 @@
     <string name="title_more_options">更多</string>
     <string name="item_developer_options">开发者选项</string>
     <string name="a11y_app_icon">应用图标</string>
+<string name="a11y_refresh_daily_quote">刷新每日一言</string>
     <string name="label_special_thanks">特别鸣谢</string>
     <string name="text_acknowledgment_body">衷心感谢为本应用软件和教务适配代码仓库的开发和维护做出贡献的每一位开发者。您的奉献是应用持续更新和完善的动力！</string>
     <string name="item_github_repo">本项目GitHub仓库</string>

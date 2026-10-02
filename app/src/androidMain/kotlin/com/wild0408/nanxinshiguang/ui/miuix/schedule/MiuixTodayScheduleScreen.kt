@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,8 @@ import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.SharedScrollBehavior
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.basic.rememberSharedScrollBehavior
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.chrome.HyperGlassTopBar
 import com.wild0408.nanxinshiguang.ui.miuix.hyper.utils.overScrollVertical
+import com.wild0408.nanxinshiguang.data.model.DailyQuote
+import com.wild0408.nanxinshiguang.ui.miuix.components.MiuixDailyQuoteCard
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.CourseDisplayModel
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayScheduleViewModel
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayStatus
@@ -71,6 +74,10 @@ internal fun MiuixTodayScheduleScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val gridStyle by viewModel.gridStyle.collectAsStateWithLifecycle()
+    val dailyQuote by viewModel.dailyQuote.collectAsStateWithLifecycle()
+
+    // 进入页面时取值：当天复用缓存，点击卡片可刷新一句
+    LaunchedEffect(Unit) { viewModel.loadDailyQuoteIfNeeded() }
     val dark = LocalIsDarkTheme.current
     val background = MiuixTheme.colorScheme.surface
     val hasWallpaper = !gridStyle.backgroundImagePath.isNullOrEmpty()
@@ -132,6 +139,8 @@ internal fun MiuixTodayScheduleScreen(
                         bottom = padding.calculateBottomPadding() + hostPadding.calculateBottomPadding() + 20.dp,
                     ),
                     scrollBehavior,
+                    dailyQuote,
+                    onRefreshQuote = viewModel::refreshDailyQuote,
                 )
             }
             }
@@ -146,6 +155,8 @@ private fun TodayBody(
     dark: Boolean,
     padding: PaddingValues,
     scrollBehavior: SharedScrollBehavior,
+    dailyQuote: DailyQuote?,
+    onRefreshQuote: () -> Unit,
 ) {
     val weekDays = stringArrayResource(Res.array.week_days_full_names)
     // 每分钟推进一次：页面停留期间课程下课后会自动切换为已结束样式
@@ -181,6 +192,10 @@ private fun TodayBody(
                 color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
                 modifier = Modifier.padding(top = 4.dp),
             )
+        }
+        // 每日一言：紧接日期标题、在课程卡片之前；拿不到内容时整卡不渲染
+        dailyQuote?.let { quote ->
+            item { MiuixDailyQuoteCard(quote = quote, onRefresh = onRefreshQuote) }
         }
         if (state.courses.isEmpty()) {
             item {

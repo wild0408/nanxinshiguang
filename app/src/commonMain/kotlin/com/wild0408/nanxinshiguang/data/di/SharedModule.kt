@@ -30,6 +30,11 @@ class SharedModule {
     fun provideBusRepository(): com.wild0408.nanxinshiguang.data.api.bus.BusRepository =
         com.wild0408.nanxinshiguang.data.api.bus.createBusRepository()
 
+    /** 每日一言接口（自带超时与 JSON 反序列化） */
+    @Single
+    fun provideDailyQuoteApi(): com.wild0408.nanxinshiguang.data.api.quote.DailyQuoteApi =
+        com.wild0408.nanxinshiguang.data.api.quote.createDailyQuoteApi()
+
     @Single
     fun providePortalSession(repository: PortalCredentialRepository): PortalSession =
         createPortalSession(repository)

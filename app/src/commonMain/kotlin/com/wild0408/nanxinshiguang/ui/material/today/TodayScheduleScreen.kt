@@ -37,6 +37,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +47,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wild0408.nanxinshiguang.Destination
+import com.wild0408.nanxinshiguang.data.model.DailyQuote
 import com.wild0408.nanxinshiguang.data.model.ScheduleGridStyle
+import com.wild0408.nanxinshiguang.ui.components.DailyQuoteCard
 import com.wild0408.nanxinshiguang.ui.theme.LocalIsDarkTheme
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -81,7 +84,11 @@ fun TodayScheduleScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val gridStyle by viewModel.gridStyle.collectAsState()
+    val dailyQuote by viewModel.dailyQuote.collectAsState()
     val isDark = LocalIsDarkTheme.current
+
+    // 进入页面时取值：当天复用缓存，点击卡片可刷新一句
+    LaunchedEffect(Unit) { viewModel.loadDailyQuoteIfNeeded() }
 
     Scaffold(
         topBar = {
@@ -105,7 +112,13 @@ fun TodayScheduleScreen(
             when (val state = uiState) {
                 is TodayUiState.Loading -> { /* 可放置圆圈加载 */ }
                 is TodayUiState.Success -> {
-                    TodayContent(state, gridStyle, isDark)
+                    TodayContent(
+                        state = state,
+                        gridStyle = gridStyle,
+                        isDark = isDark,
+                        dailyQuote = dailyQuote,
+                        onRefreshQuote = viewModel::refreshDailyQuote,
+                    )
                 }
             }
         }
@@ -117,6 +130,8 @@ fun TodayContent(
     state: TodayUiState.Success,
     gridStyle: ScheduleGridStyle,
     isDark: Boolean,
+    dailyQuote: DailyQuote?,
+    onRefreshQuote: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val currentTime = rememberCurrentTime()
@@ -189,17 +204,23 @@ fun TodayContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (state.courses.isEmpty()) {
-            EmptyStateView()
-        } else {
-            LazyColumn(
-                state = scrollState,
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(
-                    bottom = 88.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 16.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
+        // 统一放在同一个 LazyColumn 里：这样"每日一言"在今天没有课时也会出现，
+        // 并且始终跟随列表滚动，不会长期占据课程的可视区域。
+        LazyColumn(
+            state = scrollState,
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(
+                bottom = 88.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 16.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            // 每日一言：位于日期标题之后、课程卡片之前；拿不到内容时整卡不渲染
+            dailyQuote?.let { quote ->
+                item { DailyQuoteCard(quote = quote, onRefresh = onRefreshQuote) }
+            }
+            if (state.courses.isEmpty()) {
+                item { EmptyStateView(modifier = Modifier.fillParentMaxHeight(0.6f)) }
+            } else {
                 itemsIndexed(state.courses) { _, model ->
                     CourseTimelineItem(model, gridStyle, isDark, isFinished = model.isFinishedAt(currentTime))
                 }
@@ -323,8 +344,8 @@ fun CourseTimelineItem(
 }
 
 @Composable
-private fun EmptyStateView() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+private fun EmptyStateView(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Text(
             text = stringResource(Res.string.text_no_courses_today),
             style = MaterialTheme.typography.bodyLarge,

@@ -44,6 +44,17 @@ class DataStoreModule {
         )
     }
 
+    /** 每日一言缓存（非敏感内容，明文存储即可） */
+    @Single
+    @Named("DailyQuote")
+    fun provideDailyQuoteDataStore(
+        @Named("FilesDir") filesDir: Path
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.createWithPath(
+            produceFile = { filesDir / "datastore" / "daily_quote.preferences_pb" }
+        )
+    }
+
     @Single
     @Named("ApiConfig")
     fun provideApiConfigDataStore(

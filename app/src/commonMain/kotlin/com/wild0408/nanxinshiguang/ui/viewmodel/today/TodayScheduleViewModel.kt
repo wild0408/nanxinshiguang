@@ -6,19 +6,24 @@ import com.wild0408.nanxinshiguang.data.db.main.Course
 import com.wild0408.nanxinshiguang.data.db.main.CourseTableConfig
 import com.wild0408.nanxinshiguang.data.db.main.CourseWithWeeks
 import com.wild0408.nanxinshiguang.data.db.main.TimeSlot
+import com.wild0408.nanxinshiguang.data.model.DailyQuote
 import com.wild0408.nanxinshiguang.data.model.ScheduleGridStyle
 import com.wild0408.nanxinshiguang.data.repository.AppSettingsRepository
 import com.wild0408.nanxinshiguang.data.repository.CourseTableRepository
+import com.wild0408.nanxinshiguang.data.repository.DailyQuoteRepository
 import com.wild0408.nanxinshiguang.data.repository.StyleSettingsRepository
 import com.wild0408.nanxinshiguang.data.repository.TimeScheduleRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -32,7 +37,8 @@ class TodayScheduleViewModel(
     private val appSettingsRepository: AppSettingsRepository,
     private val courseTableRepository: CourseTableRepository,
     private val styleSettingsRepository: StyleSettingsRepository,
-    private val timeScheduleRepository: TimeScheduleRepository
+    private val timeScheduleRepository: TimeScheduleRepository,
+    private val dailyQuoteRepository: DailyQuoteRepository,
 ) : ViewModel() {
 
     companion object {
@@ -42,6 +48,24 @@ class TodayScheduleViewModel(
 
     val gridStyle: StateFlow<ScheduleGridStyle> = styleSettingsRepository.styleFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ScheduleGridStyle())
+
+    private val _dailyQuote = MutableStateFlow<DailyQuote?>(null)
+
+    /** 每日一言：首次进入取值（当天复用缓存），为空时不渲染卡片。 */
+    val dailyQuote: StateFlow<DailyQuote?> = _dailyQuote.asStateFlow()
+
+    private var dailyQuoteLoaded = false
+
+    fun loadDailyQuoteIfNeeded() {
+        if (dailyQuoteLoaded) return
+        dailyQuoteLoaded = true
+        viewModelScope.launch { _dailyQuote.value = dailyQuoteRepository.current() ?: _dailyQuote.value }
+    }
+
+    /** 点击卡片刷新一句；失败时保留当前内容。 */
+    fun refreshDailyQuote() {
+        viewModelScope.launch { _dailyQuote.value = dailyQuoteRepository.refresh() ?: _dailyQuote.value }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<TodayUiState> = appSettingsRepository.getAppSettings()
