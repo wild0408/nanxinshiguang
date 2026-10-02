@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,8 +39,14 @@ internal fun MiuixDailyQuoteCard(
     modifier: Modifier = Modifier,
 ) {
     val refreshLabel = stringResource(Res.string.a11y_refresh_daily_quote)
+    val hapticFeedback = LocalHapticFeedback.current
     Card(
-        onClick = onRefresh,
+        // 点击换一句时给一次触感确认（与工程内其它可点击组件的 Confirm 一致；
+        // Miuix 的 Sink 按压反馈本身不震动）
+        onClick = {
+            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+            onRefresh()
+        },
         pressFeedbackType = PressFeedbackType.Sink,
         // Card 内部不透传 clickable 的 onClickLabel，补一个语义动作让读屏能说明"点击可换一句"，
         // 同时不覆盖卡片自身的正文内容。

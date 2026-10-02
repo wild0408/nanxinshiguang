@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
@@ -225,9 +224,7 @@ internal fun MiuixTodayCourse(
     dark: Boolean,
     isFinished: Boolean,
 ) {
-    // 已结束的课程整体降低不透明度，并对时间与课名加删除线，
-    // 与 Material 版今日课表的处理保持一致（Miuix 的 Card 没有海拔参数，故只做淡化）。
-    val finishedDecoration = if (isFinished) TextDecoration.LineThrough else null
+    // 已结束的课程只做整体淡化（按需求不再加删除线；Miuix 的 Card 也没有海拔参数可降）。
     Row(
         modifier = Modifier.fillMaxWidth().alpha(if (isFinished) 0.5f else 1f),
         verticalAlignment = Alignment.Top,
@@ -236,7 +233,6 @@ internal fun MiuixTodayCourse(
             Text(
                 model.startTime ?: TIME_PLACEHOLDER,
                 style = MiuixTheme.textStyles.title3,
-                textDecoration = finishedDecoration,
             )
             Text(
                 model.endTime ?: TIME_PLACEHOLDER,
@@ -250,7 +246,6 @@ internal fun MiuixTodayCourse(
                 Text(
                     model.course.name,
                     style = MiuixTheme.textStyles.title3,
-                    textDecoration = finishedDecoration,
                 )
                 if (model.course.position.isNotBlank()) Text(stringResource(Res.string.course_position_prefix, model.course.position), style = MiuixTheme.textStyles.body2)
                 if (model.course.teacher.isNotBlank()) Text(stringResource(Res.string.course_teacher_prefix, model.course.teacher), style = MiuixTheme.textStyles.body2)

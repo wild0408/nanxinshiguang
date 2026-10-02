@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.wild0408.nanxinshiguang.data.model.DailyQuote
@@ -30,12 +32,17 @@ fun DailyQuoteCard(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val hapticFeedback = LocalHapticFeedback.current
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
                 onClickLabel = stringResource(Res.string.a11y_refresh_daily_quote),
-                onClick = onRefresh,
+                onClick = {
+                    // 与 Miuix 版保持一致的点击触感（工程内可点击组件统一用 Confirm）
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                    onRefresh()
+                },
             ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
