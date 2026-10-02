@@ -9,8 +9,9 @@
 # 保留 Koin 核心类及 DSL 相关
 -keep class org.koin.** { *; }
 
-# 保留 Koin Annotations 及其生成的模块 (KSP 路径)
--keep class org.koin.ksp.generated.** { *; }
+# 保留 Koin Annotations 及其生成的模块
+# 注：本项目使用 Koin 编译器插件（org.koin.plugin.module.dsl + @KoinApplication），
+# DI 代码生成在应用自身包内，`org.koin.ksp.generated` 包并不存在，故不再保留该包。
 -keep @org.koin.core.annotation.Module class * { *; }
 
 # 确保 Koin 能够调用被注解类的构造函数进行依赖注入
@@ -22,20 +23,13 @@
 }
 
 # 原生组件与 WorkManager
--keep public class * extends android.appwidget.AppWidgetProvider {
-    public void *(android.content.Context, android.content.Intent);
-    <init>();
-}
+# AppWidgetProvider 与 ListenableWorker 的 keep 规则已由库自带 consumer 规则覆盖：
+# AppWidgetProvider 由 Manifest 声明、AAPT2/R8 会自动保留；WorkManager 的 AAR 自带
+# `-keep class * extends androidx.work.ListenableWorker` 等规则。重复声明只会妨碍裁剪。
 -keep class com.wild0408.nanxinshiguang.widget.** { *; }
--keep class * extends androidx.work.ListenableWorker {
-    public <init>(android.content.Context, androidx.work.WorkerParameters);
-}
 
 # 网络库 (Ktor)
 -dontwarn io.ktor.**
-
-# 日志与极致优化
--keep class org.slf4j.impl.** { *; }
 
 # 移除 Android 系统调试日志 (v/d/i/w)
 -assumenosideeffects class android.util.Log {
@@ -46,9 +40,9 @@
 }
 
 # 数据解析 (Kotlinx Serialization & Wire Protobuf) ---
--keep class kotlin.Metadata { *; }
+# kotlin.Metadata 无需显式保留：上面 -keepattributes 已含 *Annotation*，
+# kotlin-stdlib 的 consumer 规则也会保留被 keep 类的注解属性。
 -keep @kotlinx.serialization.Serializable class * { ** Companion; }
--keepclassmembers class * { *** write$Self(...); <init>(int, ...); }
 -keep class **$$serializer { *; }
 
 -keep class * implements com.squareup.wire.Message {
@@ -63,8 +57,8 @@
 
 
 # 数据模型与数据库
+# androidx.sqlite 的 keep 已由 Room 的 consumer 规则覆盖，仅保留 dontwarn 以免缺失类告警。
 -dontwarn androidx.sqlite.**
--keep class androidx.sqlite.** { *; }
 -keep class com.wild0408.nanxinshiguang.data.db.** { *; }
 -keep class com.wild0408.nanxinshiguang.data.model.** { *; }
 -keep class com.wild0408.nanxinshiguang.ui.viewmodel.** { *; }
