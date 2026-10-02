@@ -39,6 +39,25 @@ CHROME_CANDIDATES = [
 LEGACY = {"mdpi": 48, "hdpi": 72, "xhdpi": 96, "xxhdpi": 144, "xxxhdpi": 192}
 ADAPTIVE = {"mdpi": 108, "hdpi": 162, "xhdpi": 216, "xxhdpi": 324, "xxxhdpi": 432}
 
+# 自适应图标的图层是 108x108dp，但系统只保证中间 72dp 可见（关键内容应落在约 66dp 的安全区内）。
+# 设计稿是完整 512 画布（背景+卡片+轨迹几乎铺满），若 1:1 铺进图层，卡片会撑满遮罩并被裁掉四角。
+# 因此前景层与主题图标层按该系数围绕画布中心缩放，背景层仍保持全出血（它要铺满遮罩）。
+# 取值依据：设计稿里轨迹环最外沿距中心约 0.43*512；按"轨迹环落在 72dp 可见半径的 90% 处"取
+# 0.43 * 108 * s <= 0.9 * 36 -> s <= 0.70。这样卡片约占图层 47%（约为遮罩宽度的 70%，
+# 与同门应用 拾光课程表 的比例接近），同时给遮罩比 72dp 更大的 OEM 启动器（如 HyperOS）留出余量。
+FOREGROUND_SCALE = 0.70
+
+
+def _scaled(inner: str, scale: float) -> str:
+    """把图层内容围绕画布中心缩放。"""
+    if scale == 1.0:
+        return inner
+    return (
+        f'<g transform="translate(256 256) scale({scale}) translate(-256 -256)">'
+        f"{inner}</g>"
+    )
+
+
 
 def find_chrome() -> str:
     for path in CHROME_CANDIDATES:
@@ -125,10 +144,10 @@ def main() -> None:
         render(chrome, inner_bg, size, "bg").convert("RGB").save(
             os.path.join(RES, f"mipmap-{d}", "ic_launcher_background.webp"), "WEBP", quality=92, method=6
         )
-        render(chrome, inner_fg, size, "fg").convert("RGBA").save(
+        render(chrome, _scaled(inner_fg, FOREGROUND_SCALE), size, "fg").convert("RGBA").save(
             os.path.join(RES, f"mipmap-{d}", "ic_launcher_foreground.webp"), "WEBP", quality=92, method=6
         )
-        render(chrome, inner_mono, size, "mono").convert("RGBA").save(
+        render(chrome, _scaled(inner_mono, FOREGROUND_SCALE), size, "mono").convert("RGBA").save(
             os.path.join(RES, f"mipmap-{d}", "ic_launcher_monochrome.webp"), "WEBP", quality=92, method=6
         )
     # 应用内用图
@@ -139,18 +158,21 @@ def main() -> None:
     # 预览：旧式 / 圆形遮罩 / 圆角方形遮罩 / 关于页组合
     size = 432
     bg = render(chrome, inner_bg, size, "bg").convert("RGB")
-    fg = render(chrome, inner_fg, size, "fg").convert("RGBA")
+    fg = render(chrome, _scaled(inner_fg, FOREGROUND_SCALE), size, "fg").convert("RGBA")
     full = render(chrome, inner_full, size, "full").convert("RGBA")
 
     def masked(shape: str) -> Image.Image:
+        # 真实启动器只显示图层中心的 72/108 区域，因此遮罩按该比例绘制，预览才与设备一致。
         canvas = bg.convert("RGBA")
         canvas.alpha_composite(fg)
+        inset = int(size * (1 - 72 / 108) / 2)
+        box = (inset, inset, size - 1 - inset, size - 1 - inset)
         mask = Image.new("L", (size, size), 0)
         d = ImageDraw.Draw(mask)
         if shape == "circle":
-            d.ellipse((0, 0, size - 1, size - 1), fill=255)
+            d.ellipse(box, fill=255)
         else:
-            d.rounded_rectangle((0, 0, size - 1, size - 1), radius=int(size * 0.22), fill=255)
+            d.rounded_rectangle(box, radius=int((size - 2 * inset) * 0.24), fill=255)
         out = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         out.paste(canvas, (0, 0), mask)
         return out
@@ -168,7 +190,7 @@ def main() -> None:
         sheet.alpha_composite(img, (20 + i * (size + 33), 30))
     sheet.convert("RGB").save(os.path.join(DOCS, "icon-preview.png"), "PNG")
 
-    mono = render(chrome, inner_mono, size, "mono").convert("RGBA")
+    mono = render(chrome, _scaled(inner_mono, FOREGROUND_SCALE), size, "mono").convert("RGBA")
     tinted = Image.new("RGBA", mono.size, (0, 0, 0, 0))
     tinted.paste(Image.new("RGBA", mono.size, (0x33, 0x5A, 0x8C, 255)), (0, 0), mono.split()[3])
     disk = Image.new("RGBA", mono.size, (0, 0, 0, 0))
