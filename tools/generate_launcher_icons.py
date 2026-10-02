@@ -155,6 +155,11 @@ def main() -> None:
         os.path.join(COMPOSE, "ic_launcher_foreground.png"), "PNG", optimize=True
     )
 
+    # 文档用 512 全图（README 等处展示）
+    render(chrome, inner_full, 512, "doc").convert("RGBA").save(
+        os.path.join(DOCS, "icon.png"), "PNG", optimize=True
+    )
+
     # 预览：旧式 / 圆形遮罩 / 圆角方形遮罩 / 关于页组合
     size = 432
     bg = render(chrome, inner_bg, size, "bg").convert("RGB")

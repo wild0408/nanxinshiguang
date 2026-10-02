@@ -1,162 +1,130 @@
 # 南信拾光
 
-面向南京信息工程大学（NUIST）的课程表与校园信息工具。
-本项目基于[拾光课程表](https://github.com/ShiGuangSchedule/shiguangschedule)进行二次开发，针对 NUIST 教务系统和统一门户进行了深度的功能适配与架构重构。
+<img src="docs/images/icon.png" width="88" align="right" alt="南信拾光图标">
+
+面向**南京信息工程大学（NUIST）**的课程表与校园信息工具，仅支持 Android。
+
+本项目基于[拾光课程表](https://github.com/ShiGuangSchedule/shiguangschedule)二次开发，在保留其课程表能力的基础上，针对 NUIST 教务系统与统一门户做了深度适配，并按双 UI 体系重构了视图层。
 
 > 本项目为社区维护的非官方项目，与南京信息工程大学及其官方信息系统没有隶属或授权关系。
 
----
-
-## 项目状态
-
-- 当前版本为 **1.0.8（versionCode 9）**，仅支持 Android。
-- 课程表、课程管理、提醒、小组件和数据导入导出能力来自上游项目并持续维护。
-- 已加入 NUIST 教务导入、成绩中心、学业概览、统一门户绑定和宿舍电费查询等功能。
-- 已加入劳动积分查询：首次进入且没有本地缓存时获取，成功结果会加密保存；之后仅通过页面刷新按钮手动更新。
-- 已加入校园公交实时地图：内置校园底图、站点和车辆标记，支持 Material 与 Miuix 两套服务页入口。
-- 统一门户支持密钥导出/导入：导出为口令加密文件，换设备后可直接导入复用通行密钥，无需重新绑定。
-- 成绩、学业概览、劳动积分和电费功能依赖学校服务器、登录状态及接口可用性；学校服务不可用时，相关功能可能无法加载。
-- 成绩中心和劳动积分页面同时提供 Material 3 与 Miuix 两套界面，劳动积分详情按官方核算、实时活动和同步状态分组展示。
-- Release 由项目专用证书签名；GitHub Actions 提供手动触发的 Android 发布构建。
-
-### v1.0.8 发布内容
-
-- 修正桌面图标缩放：自适应图标只有中间 72dp 可见，此前把设计稿按 1:1 铺进图层，导致卡片撑满遮罩、四角被裁；现按 0.70 围绕中心缩放前景层（背景仍全出血），比例与同门应用接近。
-- 生成器同时修正了预览图的遮罩绘制方式（此前按整幅画布绘制，与真机不符，掩盖了缩放问题）。
-### v1.0.7 发布内容
-
-- **关键修复**：`network_security_config.xml` 中的 `<domain-config>` 会让 Android 的 `RootTrustManager` 拒绝**不带主机名**的 `checkServerTrusted` 调用，而 Ktor CIO 正是这样校验证书，导致**应用内所有 HTTPS 请求自 1.0.4 起全部失败**（CertificateException：门户、成绩、电费、劳动积分、校园公交数据、检查更新）。现移除按域名配置，仅保留「默认禁止明文流量」；浏览器的下载不受影响，因此此前表现为「网页能开、应用连不上」。已在模拟器上验证。
-- 保留明文默认拒绝的同时，校园公交的明文接口仍正常（Ktor CIO 不受平台明文策略约束，实测两个接口均 200）。
-- 检查更新失败时的提示附带失败原因（异常类型），便于定位。
-- 新增仪器测试（androidTest）基础设施与「检查更新」真机链路用例，用于防止同类网络回归。
-### v1.0.6 发布内容
-
-- 修复"检查更新"在部分网络下失败：原先只走 `api.github.com`（其匿名额度为**按出口 IP 共享的 60 次/小时**，校园网等共享出口很容易触顶，且国内网络下该域名常不可达）。现在**双通道并行**：`api.github.com` 提供更新日志与真实资产地址，同时用 `github.com` 的 releases 订阅源取版本号并按命名规则拼出对应 ABI 的直链，任一通道可用即可完成检查。
-- 检查更新的失败提示补充了"也可到 GitHub Releases 页面手动下载"。
-
-### v1.0.5 发布内容
-
-- 全新应用图标：青绿到天蓝的渐变底 + 白色课表卡与环绕时间轨迹，自适应图标拆分为独立背景层与前景层，并新增 Android 13+ 主题图标（monochrome）层。
-- 修复检查更新：原先任何失败都提示"远程数据异常"，且没有超时与日志；现在按 HTTP 状态区分提示（接口受限/未找到/其它），失败时记录异常类型，并新增 10s 连接 / 15s 请求超时。
-- 测试：补充版本比较与更新接口契约测试（43 → 47 项）。
-
-### v1.0.4 发布内容
-
-- 安全：默认禁止明文流量，仅对校园公交平台的两个域名放行；云备份与换机迁移不再备份设备专属密钥加密的凭据文件。
-- 修复：成绩解析失败不再伪装成"暂无成绩"；门户绑定状态与劳动积分同步时间改用多语言资源（此前切英文/繁中仍显示简体）。
-- 国际化：补齐英文与繁体缺口（各 182/186 条），四个语言文件键数对齐，默认语言不再混入英文。
-- 清理：移除已停止使用的学校/适配器体系残留、约 460 行死文案、10 余处死代码与 8 个未引用图标。
-- 体积与性能：公交底图改用 WebP、导航前景图按使用尺寸缩小；精简 R8 规则中已由库自带 consumer 规则覆盖的条目。
-- 稳定性：新增统一日志出口（不再裸 printStackTrace），清理过期 Android API 告警，修正应用图标在 API 26+ 的方形显示。
+[![最新版本](https://img.shields.io/github/v/release/wild0408/nanxinshiguang?label=release&color=3ddc84)](https://github.com/wild0408/nanxinshiguang/releases)
+[![许可证](https://img.shields.io/github/license/wild0408/nanxinshiguang)](LICENSE)
+![平台](https://img.shields.io/badge/platform-Android%208.0%2B-3ddc84)
 
 ---
 
-## 项目结构
+## 简介
 
-- `app/`：唯一 Android 应用模块。
-- `app/src/main/`：`AndroidManifest.xml`、Android 原生资源与 assets。
-- `app/src/commonMain/`：跨平台核心业务逻辑、Proto 协议定义、`ui/viewmodel` 共享 ViewModel/UiState 以及 `ui/material` 基础 UI 界面。
-- `app/src/androidMain/`：Android 平台专属实现、系统组件集成（桌面小组件、通知 Worker、精确闹钟）与 `ui/miuix` / HyperOS 视觉组件。
-- `app/src/commonTest/`：业务逻辑单元测试。
-- `app/schemas/`：Room 数据库 schema 迁移文件。
-- `docs/images/`：项目文档展示素材。
-- `fastlane/metadata/`：Android 发布商店元数据。
-- `gradle/`：Gradle Wrapper 与版本目录 (`libs.versions.toml`)。
+- **课程表**：周课表与今日课表、多课表与作息方案、课程增删改与配色、课程提醒、桌面小组件。
+- **NUIST 教务与服务**：教务系统导入课程与成绩、成绩中心、学业概览、统一门户绑定、劳动积分、宿舍电费与趋势、校园公交实时地图。
+- **两套界面风格**：Material 3 与 Miuix（HyperOS 风格）可切换，共用同一份 ViewModel 与业务逻辑。
+- **本地优先**：课表、成绩、电费与设置主要保存在本机；门户通行密钥可导出为口令加密文件，换机后直接导入复用。
+- **开源**：Apache License 2.0，来源与修改声明见 [`NOTICE`](NOTICE)。
 
-项目架构已全面对齐 **双 UI 体系与 ViewModel 域结构**：
-- 视图层：Material 3 视图包 `ui/material/<domain>` 与 MIUIX 视图包 `ui/miuix/<domain>`。
-- 业务层：统一收拢至 `ui/viewmodel/<domain>` 领域子包。
-
-本项目仓库：[wild0408/nanxinshiguang](https://github.com/wild0408/nanxinshiguang)。
+当前版本 **1.0.8（versionCode 9）**，要求 Android 8.0（API 26）及以上，提供 `arm64-v8a`、`armeabi-v7a`、`x86_64` 三个 ABI 的独立 APK。
 
 ---
 
-## 主要功能
+## 功能
 
 ### 课程表
 
-- 今日课表与周课表展示
-- 多课表与作息方案管理
+- 今日课表与周课表展示，多课表与作息方案管理
 - 课程增删改、周次调整与课程颜色自定义
 - 深色模式、配色主题与课表布局个性化
 - 课程提醒、勿扰模式与 Android 桌面小组件
 
 ### NUIST 教务适配
 
-- 通过 NUIST 教务系统 Web 导入课程数据
-- 支持当前学期课程数据处理
-- 支持 NUIST 成绩数据导入与本地持久化保存
-- 成绩中心默认显示当前学期，支持切换学期并查看课程成绩详情
+- 通过 NUIST 教务系统 Web 导入课程数据，支持当前学期课程处理
+- 支持 NUIST 成绩导入与本地持久化，成绩中心默认显示当前学期，可切换学期并查看课程成绩详情
 
 ### 学业与校园服务
 
 - 学业概览卡片：平均绩点、GPA、平均成绩等指标
-- 成绩查询详情页
 - 劳动积分总览与详情：总积分、理论劳动、生活劳动、服务劳动、专业劳动、竞赛积分及确认/归档状态
-- 劳动积分区分官方核算结果和活动页实时累计数据；实时数据可能早于官方核算，详情页会分别标注来源
-- 统一门户账号绑定
-- 宿舍电费查询与历史趋势图表
+- 劳动积分区分官方核算结果与活动页实时累计数据，实时数据可能早于官方核算，详情页分别标注来源
+- 统一门户账号绑定；宿舍电费查询与历史趋势图表
+- 校园公交：校园底图、站点与公交车辆实时位置，支持缩放拖拽与手动刷新（数据依赖校园公交平台接口）
 
-### 校园公交
+### 数据与备份
 
-- 在“服务”页进入校园公交地图，查看校园底图、站点和公交车辆实时位置。
-- 支持地图缩放拖拽、车辆状态显示和手动刷新；数据依赖校园公交平台接口。
+- JSON 课表导入导出、ICS 日历导出与系统日历同步、WebDAV 备份与恢复
+- 成绩写入本地 Room 数据库，重启后仍可查看；学业概览与劳动积分使用加密 DataStore 缓存
+- 查询失败时优先保留已有数据并在页面内提示；未绑定账号、暂无数据与服务异常分别提供对应入口
 
-### 数据能力
+### 界面风格
 
-- JSON 课表导入与导出
-- ICS 日历导出与系统日历同步
-- WebDAV 备份与恢复
-- 本地数据库与设置持久化
+- **Material 3**：`ui/material/<domain>`
+- **Miuix（HyperOS 风格）**：`ui/miuix/<domain>`，使用 Miuix 组件与主题
 
-### 数据获取与缓存
-
-- 成绩数据写入本地 Room 数据库，应用重启后仍可查看；成绩详情页通过顶栏刷新按钮手动同步。
-- 学业概览和劳动积分使用加密 DataStore 缓存，已有缓存时进入页面不会自动重复请求。
-- 劳动积分首次查询成功后（包括平台返回暂无记录的空结果）会保存当前账号的状态；切换账号或解绑后不会复用其他账号的数据。
-- 查询失败时优先保留已有数据，并在页面内显示错误提示；未绑定账号、暂无数据和服务异常分别提供对应操作入口。
+两套界面共享 `ui/viewmodel/<domain>` 下的同一套状态与逻辑，切换风格不影响数据。
 
 ---
 
-## 构建与安装
+## 界面素材
 
-需要 JDK 21 和 Android SDK。可使用 Android Studio，或在命令行运行 Gradle Wrapper。
+<p>
+  <img src="docs/images/icon.png" width="96" alt="应用图标">
+  &nbsp;&nbsp;
+  <img src="docs/images/icon-preview.png" width="420" alt="图标在遮罩下的效果">
+</p>
 
-调试构建与单元测试：
+<p>
+  <img src="docs/images/all_widget.png" width="240" alt="课表小组件形态">
+  <br>
+  <sub>小组件形态示意（素材取自上游项目）</sub>
+</p>
+
+图标设计稿为 [`docs/images/icon.svg`](docs/images/icon.svg)，全套启动图标（旧式方形、自适应背景/前景、Android 13+ 主题图标）由 [`tools/generate_launcher_icons.py`](tools/generate_launcher_icons.py) 一键生成。
+
+---
+
+## 下载与安装
+
+前往 [Releases](https://github.com/wild0408/nanxinshiguang/releases) 下载与设备 ABI 对应的 APK（无法确定时优先选 `arm64-v8a`）。
 
 ```powershell
-./gradlew.bat :app:assembleDebug --no-daemon --console=plain
-./gradlew.bat :app:testDebugUnitTest --no-daemon --console=plain
+adb install -r nanxinshiguang-v1.0.8-arm64-v8a-release.apk
 ```
 
-APK 按 `arm64-v8a`、`armeabi-v7a` 和 `x86_64` 分别生成，不提供通用 APK，输出目录为：
-
-```text
-app/build/outputs/apk/debug/
-app/build/outputs/apk/release/
-```
-
-选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.8 Release：
-
-```powershell
-adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.8-arm64-v8a-release.apk
-```
-
-`-r` 仅适用于同包名且签名兼容的已安装版本。Debug 与 Release 使用不同证书，不能直接互相覆盖；如需切换签名，先评估和备份应用数据，**不要为了安装而直接卸载现有应用**。旧版拾光课程表与本项目的 applicationId 不同，可分别安装。
-
-### Release 签名
-
-本项目使用 alias `nanxinshiguang` 的专用发布证书。证书 SHA-256 指纹为：
+- `-r` 仅适用于同包名且签名兼容的已安装版本。Debug 与 Release 使用不同证书，不能互相覆盖；如需切换签名，先评估并备份应用数据，**不要为了安装而直接卸载现有应用**。
+- 旧版拾光课程表与本项目的 applicationId 不同，可分别安装。
+- 本项目 Release 使用的证书 SHA-256 指纹：
 
 ```text
 C6:23:57:85:44:DF:D6:12:2E:8C:37:1E:D4:55:5A:CF:90:41:1A:FD:C0:4B:92:67:CC:D7:91:6B:76:3B:AA:3D
 ```
 
-本地 Release 构建需要在当前进程中提供以下环境变量，缺失时构建会失败：
+安装或分发前可用 Android SDK 的 `apksigner verify --print-certs` 核对指纹。
+
+---
+
+## 构建与测试
+
+需要 **JDK 21** 与 **Android SDK**（compileSdk 37 / minSdk 26）。可用 Android Studio，或直接使用 Gradle Wrapper。
+
+```powershell
+# 调试构建
+./gradlew.bat :app:assembleDebug --no-daemon --console=plain
+
+# 单元测试
+./gradlew.bat :app:testDebugUnitTest --no-daemon --console=plain
+
+# 仪器测试（需要已连接的设备或模拟器）
+./gradlew.bat :app:connectedDebugAndroidTest --no-daemon --console=plain
+```
+
+APK 按 ABI 分别输出到 `app/build/outputs/apk/debug/` 与 `app/build/outputs/apk/release/`，不提供通用 APK。
+
+### Release 签名
+
+本地 Release 构建需要在当前进程提供以下环境变量，缺失时签名配置不生效：
 
 | 环境变量 | 内容 |
 |---|---|
-| `NANXINSHIGUANG_KEYSTORE_FILE` | 本地密钥库文件的绝对路径 |
+| `NANXINSHIGUANG_KEYSTORE_FILE` | 密钥库文件的绝对路径 |
 | `NANXINSHIGUANG_KEYSTORE_PASSWORD` | 密钥库密码 |
 | `NANXINSHIGUANG_KEY_ALIAS` | `nanxinshiguang` |
 | `NANXINSHIGUANG_KEY_PASSWORD` | 私钥密码 |
@@ -165,11 +133,73 @@ C6:23:57:85:44:DF:D6:12:2E:8C:37:1E:D4:55:5A:CF:90:41:1A:FD:C0:4B:92:67:CC:D7:91
 ./gradlew.bat :app:assembleRelease --no-configuration-cache
 ```
 
-不要把密钥库、密码或带密码的 Gradle 参数写入仓库与构建日志。密码不要硬编码在脚本中；密钥库与可恢复的密码应分别离线备份。安装或分发前，使用 Android SDK 的 `apksigner verify --print-certs` 核对 APK 证书指纹。
+不要把密钥库、密码或带密码的 Gradle 参数写入仓库与构建日志，也不要硬编码在脚本中；密钥库与可恢复的密码应分别离线备份。
 
-### GitHub Actions
+---
 
-`Android CI Build` 工作流由 Actions 页面手动触发，使用 `Release-Signing` 环境中的 `KEYSTORE_BASE64`、`KEYSTORE_PASSWORD`、`KEY_ALIAS` 和 `KEY_PASSWORD` Secrets 构建 Release。构建成功后可从该次运行下载 `app-release-apk` 产物，包含三个 ABI 的 APK，保留 7 天。Fork 仓库不会继承这些 Secrets，需自行配置签名后才能运行发布构建。
+## 技术栈与架构
+
+| 方面 | 选型 |
+|---|---|
+| 语言与构建 | Kotlin 2.4.0、AGP 9.3.1、Gradle 版本目录（`gradle/libs.versions.toml`） |
+| UI | Compose Multiplatform 1.11.1、Compose Material 3、Miuix 0.9.4 |
+| 架构 | ViewModel + UiState，双 UI 层共用业务层 |
+| 依赖注入 | Koin 4.2.2（注解 + 编译器插件） |
+| 持久化 | Room 3、DataStore、`app/schemas/` 下的迁移文件 |
+| 网络与协议 | Ktor 3.5.2（CIO）、Wire 6.4.5、kotlinx.serialization |
+| 系统集成 | WorkManager、精确闹钟、桌面小组件、无障碍与通知 |
+
+工程为单模块多源集结构：
+
+- `app/src/main/`：`AndroidManifest.xml`、Android 原生资源与 assets
+- `app/src/commonMain/`：跨平台业务逻辑、Proto 协议、共享 ViewModel/UiState 与 Material 3 界面
+- `app/src/androidMain/`：平台实现、系统组件集成（小组件、通知 Worker、精确闹钟）与 Miuix/HyperOS 视觉组件
+- `app/src/commonTest/`、`app/src/androidUnitTest/`、`app/src/androidTest/`：单元测试与仪器测试
+- `app/schemas/`：Room schema 迁移文件
+- `tools/`：图标生成、更新日志生成等维护脚本
+- `docs/images/`：文档展示素材；`fastlane/metadata/`：发布元数据
+
+---
+
+## 发布与维护
+
+- **版本号**：`versionCode` 单调递增，`versionName` 采用 `主版本.次版本.修订号`，在 `app/build.gradle.kts` 中维护。
+- **发布日志**：每个版本在 `fastlane/metadata/android/<locale>/changelogs/<versionCode>.txt` 提供更新说明，同时在 GitHub Releases 填写发布说明。
+- **GitHub Actions**：
+  - `Android CI Build`（手动触发）：使用 `Release-Signing` 环境中的 `KEYSTORE_BASE64`、`KEYSTORE_PASSWORD`、`KEY_ALIAS`、`KEY_PASSWORD` Secrets 构建签名 Release，产物可下载。
+  - `需要审核的发布操作`（手动触发）：先展示发布参数供确认，再经 `Production-Release` 环境审批后发布到 GitHub Releases。
+  - `Check PR Source Branch`（PR 触发）：检查拉取请求的来源分支。
+  - Fork 仓库不会继承 Secrets 与环境审批配置，需自行配置后才能运行发布构建。
+- **更新日志**：`CHANGELOG.md` 由 [`tools/generate_changelog.py`](tools/generate_changelog.py) 从 GitHub Releases 汇总生成：
+  ```powershell
+  python tools/generate_changelog.py
+  ```
+
+---
+
+## 更新日志
+
+各版本变更见 [`CHANGELOG.md`](CHANGELOG.md)；完整发布说明与安装包见 [Releases](https://github.com/wild0408/nanxinshiguang/releases)。
+
+---
+
+## 隐私与安全
+
+- 账号凭据仅用于访问用户主动使用的学校服务。
+- 成绩、课表和电费数据主要保存在本地设备。
+- 请勿提交真实账号、密码、通行密钥、Cookie、Token 或个人成绩数据。
+- 使用学校统一门户和教务系统时，请遵守学校信息系统的使用规则。
+
+---
+
+## 参与开发
+
+欢迎提交 Issue、功能建议和代码改进。提交代码前请确认：
+
+1. 不包含真实账号、密码、Cookie、Token 或个人信息。
+2. 新增的第三方代码具有明确许可证，并保留必要的版权和归属信息。
+3. NUIST 接口相关改动经过脱敏，且不会绕过学校系统的安全校验。
+4. 提交前完成必要的构建和测试（含涉及网络与平台行为改动时的仪器测试）。
 
 ---
 
@@ -192,26 +222,6 @@ C6:23:57:85:44:DF:D6:12:2E:8C:37:1E:D4:55:5A:CF:90:41:1A:FD:C0:4B:92:67:CC:D7:91
 NUIST 学业概览、成绩明细、电费与劳动积分的请求协议参考了公开项目 [DuoHuo/nuist-sta-app](https://github.com/DuoHuo/nuist-sta-app)（核对至提交 `6e9f464`）。**该项目未声明任何开源许可证**，因此不得从其复制、翻译或改写源码；本项目仅基于可公开观察到的接口行为独立实现，后续如需引用其代码必须先解决许可问题。
 
 重新分发本项目或其衍生版本时，请保留 Apache-2.0 许可证、原作者版权和归属声明，一并附带 `NOTICE`，并在修改文件中说明修改内容。项目中使用的第三方依赖许可证可在应用内“开源许可证”页面查看，该页面由构建期生成的 AboutLibraries 元数据离线渲染。
-
----
-
-## 隐私与安全
-
-- 账号凭据仅用于访问用户主动使用的学校服务。
-- 成绩、课表和电费数据主要保存在本地设备。
-- 请勿提交真实账号、密码、通行密钥、Cookie、Token 或个人成绩数据。
-- 使用学校统一门户和教务系统时，请遵守学校信息系统的使用规则。
-
----
-
-## 参与开发
-
-欢迎提交 Issue、功能建议和代码改进。提交代码前请确认：
-
-1. 不包含真实账号、密码、Cookie、Token 或个人信息。
-2. 新增的第三方代码具有明确许可证，并保留必要的版权和归属信息。
-3. NUIST 接口相关改动经过脱敏，且不会绕过学校系统的安全校验。
-4. 提交前完成必要的构建和测试。
 
 ---
 
