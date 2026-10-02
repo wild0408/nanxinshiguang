@@ -86,7 +86,7 @@
 前往 [Releases](https://github.com/wild0408/nanxinshiguang/releases) 下载与设备 ABI 对应的 APK（无法确定时优先选 `arm64-v8a`）。
 
 ```powershell
-adb install -r nanxinshiguang-v1.0.9-arm64-v8a-release.apk
+adb install -r nanxinshiguang-v1.0.10-arm64-v8a-release.apk
 ```
 
 - `-r` 仅适用于同包名且签名兼容的已安装版本。Debug 与 Release 使用不同证书，不能互相覆盖；如需切换签名，先评估并备份应用数据，**不要为了安装而直接卸载现有应用**。

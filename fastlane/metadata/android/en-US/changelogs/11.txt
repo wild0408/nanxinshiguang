@@ -1,0 +1,5 @@
+Nanxin Shiguang 1.0.10 update.
+
+- Added a "daily quote" card to the today schedule: placed under the date header and above the course list, with up to two lines plus attribution, and tap to get another one. It also shows when there are no classes today.
+- Quotes are cached per day; when offline or the service is unavailable the previous quote is kept instead of showing an empty card.
+
