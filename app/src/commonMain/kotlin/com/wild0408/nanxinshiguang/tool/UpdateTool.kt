@@ -5,13 +5,17 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
@@ -99,53 +103,130 @@ class UpdateChecker(
             return@withContext UpdateStatus.NotSupported
         }
 
-        try {
-            val response: HttpResponse = httpClient.get("https://api.github.com/repos/$GITHUB_REPO/releases/latest")
+        // 两个通道并行发起：api.github.com 能带出更新日志与真实资产地址，但它的匿名额度是
+        // **按出口 IP 共享的 60 次/小时**（校园网这类共享网络极易触顶）；github.com 的
+        // releases.atom 不受该限制。并行可避免"主通道超时后才开始回退"的额外等待。
+        return@withContext coroutineScope {
+            val apiDeferred = async { runCatching { fetchViaApi() } }
+            val feedDeferred = async { runCatching { fetchViaWebFeed() } }
 
-            // 先判状态码：403/429 是接口访问受限（缺 User-Agent 或触发限流），404 是仓库/发布不存在，
-            // 这些都不该被笼统地报成"远程数据异常"。
-            if (!response.status.isSuccess()) {
-                AppLog.e(TAG, "检查更新失败：HTTP ${response.status.value}")
-                return@withContext when (response.status.value) {
-                    403, 429 -> UpdateStatus.Error("GitHub 接口访问受限（HTTP ${response.status.value}），请稍后重试")
-                    404 -> UpdateStatus.Error("未找到发布信息（HTTP 404）")
-                    else -> UpdateStatus.Error("检查更新失败：HTTP ${response.status.value}")
+            val viaApi = apiDeferred.await()
+            viaApi.getOrNull()?.let { release ->
+                if (release.tagName.isNotBlank()) {
+                    return@coroutineScope evaluate(release, currentVersionName)
                 }
             }
-
-            val release = response.body<ApiReleaseResponse>()
-
-            if (release.tagName.isBlank()) {
-                AppLog.e(TAG, "发布信息缺少 tag_name")
-                return@withContext UpdateStatus.Error("发布信息不完整，请稍后重试")
+            viaApi.exceptionOrNull()?.let { error ->
+                AppLog.e(TAG, "api.github.com 通道失败: ${error::class.simpleName}", error)
             }
 
-            val latestVersion = release.tagName.removePrefix("v").removePrefix("V").trim()
-            val currentVersion = currentVersionName.removePrefix("v").removePrefix("V").trim()
-
-            if (!isNewerVersion(latestVersion, currentVersion)) {
-                return@withContext UpdateStatus.Latest(currentVersionName)
+            val viaWeb = feedDeferred.await()
+            viaWeb.getOrNull()?.let { release ->
+                AppLog.d(TAG, "已通过 github.com 回退通道取得最新版本 ${release.tagName}")
+                return@coroutineScope evaluate(release, currentVersionName)
+            }
+            viaWeb.exceptionOrNull()?.let { error ->
+                AppLog.e(TAG, "github.com 回退通道失败: ${error::class.simpleName}", error)
             }
 
-            val downloadUrl = PlatformUpdateStrategy.parseTargetUrl(release)
+            UpdateStatus.Error("无法连接更新服务器，请检查网络后重试（也可到 GitHub Releases 页面手动下载）")
+        }
+    }
 
-            val (targetUrl, isDirectDownload) = if (!downloadUrl.isNullOrEmpty()) {
-                Pair(downloadUrl, true)
-            } else {
-                val fallbackTagUrl = "https://github.com/$GITHUB_REPO/releases/tag/${release.tagName}"
-                Pair(fallbackTagUrl, false)
-            }
+    /** 主通道：api.github.com。非 2xx 或缺字段都视为该通道失败，交给回退通道处理。 */
+    private suspend fun fetchViaApi(): ApiReleaseResponse {
+        val response: HttpResponse = httpClient.get("https://api.github.com/repos/$GITHUB_REPO/releases/latest") {
+            // 比客户端默认更短：api.github.com 不可达时要尽快让回退通道接手。
+            timeout { requestTimeoutMillis = 8_000; connectTimeoutMillis = 6_000 }
+        }
+        if (!response.status.isSuccess()) {
+            throw UpdateChannelException("api.github.com HTTP ${response.status.value}")
+        }
+        val release = response.body<ApiReleaseResponse>()
+        if (release.tagName.isBlank()) {
+            throw UpdateChannelException("api.github.com 返回缺少 tag_name")
+        }
+        return release
+    }
 
+    /**
+     * 回退通道：只依赖 github.com。
+     * 读取 `releases.atom` 订阅源（纯 github.com 域名，无需 API 鉴权），取其中最新的
+     * `/releases/tag/<tag>`；再按 `nanxinshiguang-v<version>-<abi>-release.apk` 的命名规则
+     * 拼出当前设备 ABI 的直链，并做一次 Range 探测确认资产真实存在，避免把用户送到 404。
+     */
+    private suspend fun fetchViaWebFeed(): ApiReleaseResponse {
+        val response = httpClient.get("https://github.com/$GITHUB_REPO/releases.atom") {
+            timeout { requestTimeoutMillis = 8_000; connectTimeoutMillis = 6_000 }
+        }
+        if (!response.status.isSuccess()) {
+            throw UpdateChannelException("github.com/releases.atom HTTP ${response.status.value}")
+        }
+        val tag = parseTagFromAtomFeed(response.bodyAsText())
+            ?: throw UpdateChannelException("订阅源中未找到 release tag")
+
+        val assets = buildReleaseAssetUrls(tag)
+        val candidate = PlatformUpdateStrategy.parseTargetUrl(ApiReleaseResponse(tagName = tag, assets = assets))
+            ?: throw UpdateChannelException("无法为当前设备 ABI 构造下载地址")
+
+        val probe = httpClient.get(candidate) {
+            header(HttpHeaders.Range, "bytes=0-0")
+            timeout { requestTimeoutMillis = 8_000; connectTimeoutMillis = 6_000 }
+        }
+        if (probe.status.value !in 200..299) {
+            throw UpdateChannelException("构造的下载地址不可用（HTTP ${probe.status.value}）")
+        }
+        return ApiReleaseResponse(tagName = tag, assets = assets)
+    }
+
+    /** 比较版本并组装结果；两个通道拿到数据后走同一套判断。 */
+    private fun evaluate(release: ApiReleaseResponse, currentVersionName: String): UpdateStatus {
+        val latestVersion = release.tagName.removePrefix("v").removePrefix("V").trim()
+        val currentVersion = currentVersionName.removePrefix("v").removePrefix("V").trim()
+        if (!isNewerVersion(latestVersion, currentVersion)) {
+            return UpdateStatus.Latest(currentVersionName)
+        }
+        val directUrl = PlatformUpdateStrategy.parseTargetUrl(release)
+        // 回退通道（releases.atom）拿不到更新日志，给一句说明总比空白框好。
+        val changelog = release.body.ifBlank { "（未能获取更新说明，可在发布页面查看）" }
+        return if (!directUrl.isNullOrEmpty()) {
             UpdateStatus.Found(
                 versionName = release.tagName,
-                changelog = release.body,
-                targetUrl = targetUrl,
-                isDirectDownload = isDirectDownload
+                changelog = changelog,
+                targetUrl = directUrl,
+                isDirectDownload = true,
             )
+        } else {
+            UpdateStatus.Found(
+                versionName = release.tagName,
+                changelog = changelog,
+                targetUrl = "https://github.com/$GITHUB_REPO/releases/tag/${release.tagName}",
+                isDirectDownload = false,
+            )
+        }
+    }
 
-        } catch (e: Exception) {
-            AppLog.e(TAG, "检查更新失败: ${e::class.simpleName}", e)
-            UpdateStatus.Error("检查更新失败，请检查网络后重试")
+    /**
+     * 从 GitHub 的 `releases.atom` 订阅源里取出最新 release 的 tag。
+     * 订阅源按时间倒序，第一条 `/releases/tag/<tag>` 即最新版本。
+     */
+    internal fun parseTagFromAtomFeed(feed: String): String? {
+        val match = Regex("""/releases/tag/([^"'<>\s]+)""").find(feed) ?: return null
+        return match.groupValues[1].trim().takeIf { it.isNotBlank() }
+    }
+
+    /**
+     * 按发布资产命名规则（`nanxinshiguang-v<version>-<abi>-release.apk`）构造各 ABI 的直链。
+     * 回退通道拿不到 API 的 assets 列表，只能靠约定拼出来，因此调用方还要探测一次真实存在性。
+     */
+    internal fun buildReleaseAssetUrls(tag: String): List<ApiAsset> {
+        val version = tag.removePrefix("v").removePrefix("V").trim()
+        return listOf("arm64-v8a", "armeabi-v7a", "x86_64").map { abi ->
+            val fileName = "nanxinshiguang-v$version-$abi-release.apk"
+            ApiAsset(
+                name = fileName,
+                downloadUrl = "https://github.com/$GITHUB_REPO/releases/download/$tag/$fileName",
+            )
         }
     }
 
@@ -171,3 +252,6 @@ class UpdateChecker(
         PlatformUpdateStrategy.openUrl(targetUrl)
     }
 }
+
+/** 单个更新通道不可用；用于触发通道回退，不直接暴露给界面。 */
+internal class UpdateChannelException(message: String) : Exception(message)
