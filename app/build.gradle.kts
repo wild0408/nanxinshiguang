@@ -233,6 +233,9 @@ dependencies {
     // 仪器测试（真实设备/模拟器上运行，验证网络与平台相关路径）
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.runner)
+    // Compose 界面截图验证（真实渲染 Miuix/Material 组件）
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)
     add("kspAndroid", libs.androidx.room3.compiler)
 }

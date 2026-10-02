@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,9 @@ import com.wild0408.nanxinshiguang.ui.viewmodel.today.CourseDisplayModel
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayScheduleViewModel
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayStatus
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.TIME_PLACEHOLDER
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.isFinishedAt
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.rememberCurrentTime
 import com.wild0408.nanxinshiguang.ui.theme.LocalIsDarkTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.resources.stringResource
@@ -143,6 +148,8 @@ private fun TodayBody(
     scrollBehavior: SharedScrollBehavior,
 ) {
     val weekDays = stringArrayResource(Res.array.week_days_full_names)
+    // 每分钟推进一次：页面停留期间课程下课后会自动切换为已结束样式
+    val now = rememberCurrentTime()
     val date = stringResource(
         Res.string.date_format_year_month_day,
         state.today.year.toString(),
@@ -188,22 +195,48 @@ private fun TodayBody(
                 }
             }
         } else {
-            items(state.courses) { course -> MiuixTodayCourse(course, gridStyle, dark) }
+            items(state.courses) { course ->
+                MiuixTodayCourse(course, gridStyle, dark, isFinished = course.isFinishedAt(now))
+            }
         }
     }
 }
 
+// internal（而非 private）以便仪器测试直接渲染并截图验证已结束样式
 @Composable
-private fun MiuixTodayCourse(model: CourseDisplayModel, gridStyle: ScheduleGridStyle, dark: Boolean) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
+internal fun MiuixTodayCourse(
+    model: CourseDisplayModel,
+    gridStyle: ScheduleGridStyle,
+    dark: Boolean,
+    isFinished: Boolean,
+) {
+    // 已结束的课程整体降低不透明度，并对时间与课名加删除线，
+    // 与 Material 版今日课表的处理保持一致（Miuix 的 Card 没有海拔参数，故只做淡化）。
+    val finishedDecoration = if (isFinished) TextDecoration.LineThrough else null
+    Row(
+        modifier = Modifier.fillMaxWidth().alpha(if (isFinished) 0.5f else 1f),
+        verticalAlignment = Alignment.Top,
+    ) {
         Column(Modifier.width(58.dp), horizontalAlignment = Alignment.End) {
-            Text(model.startTime ?: "--:--", style = MiuixTheme.textStyles.title3)
-            Text(model.endTime ?: "--:--", style = MiuixTheme.textStyles.footnote1, color = MiuixTheme.colorScheme.onSurfaceVariantActions)
+            Text(
+                model.startTime ?: TIME_PLACEHOLDER,
+                style = MiuixTheme.textStyles.title3,
+                textDecoration = finishedDecoration,
+            )
+            Text(
+                model.endTime ?: TIME_PLACEHOLDER,
+                style = MiuixTheme.textStyles.footnote1,
+                color = MiuixTheme.colorScheme.onSurfaceVariantActions,
+            )
         }
         Spacer(Modifier.width(12.dp))
         Card(Modifier.weight(1f)) {
             Column(Modifier.padding(14.dp)) {
-                Text(model.course.name, style = MiuixTheme.textStyles.title3)
+                Text(
+                    model.course.name,
+                    style = MiuixTheme.textStyles.title3,
+                    textDecoration = finishedDecoration,
+                )
                 if (model.course.position.isNotBlank()) Text(stringResource(Res.string.course_position_prefix, model.course.position), style = MiuixTheme.textStyles.body2)
                 if (model.course.teacher.isNotBlank()) Text(stringResource(Res.string.course_teacher_prefix, model.course.teacher), style = MiuixTheme.textStyles.body2)
             }

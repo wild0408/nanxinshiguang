@@ -45,6 +45,10 @@ miuix = "0.9.4"
 # 仪器测试（androidTest）依赖
 androidx-test-ext-junit = "1.2.1"
 androidx-test-runner = "1.6.2"
+# Compose 仪器测试（截图验证 Miuix/Material 界面）
+androidx-compose-ui-test-junit4 = "1.12.0"
+androidx-compose-ui-test-manifest = "1.12.0"
+
 [libraries]
 # Compose Multiplatform 跨平台核心 UI 库
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
@@ -65,6 +69,8 @@ material-kolor = { module = "com.materialkolor:material-kolor", version.ref = "m
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-compose-ui-test-junit4" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose-ui-test-manifest" }
 # Android 平台专属基础库
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

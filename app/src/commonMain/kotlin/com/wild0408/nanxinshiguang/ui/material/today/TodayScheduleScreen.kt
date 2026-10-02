@@ -2,6 +2,9 @@ package com.wild0408.nanxinshiguang.ui.material.today
 
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayScheduleViewModel
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayUiState
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.TIME_PLACEHOLDER
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.isFinishedAt
+import com.wild0408.nanxinshiguang.ui.viewmodel.today.rememberCurrentTime
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.TodayStatus
 import com.wild0408.nanxinshiguang.ui.viewmodel.today.CourseDisplayModel
 
@@ -47,12 +50,9 @@ import com.wild0408.nanxinshiguang.data.model.ScheduleGridStyle
 import com.wild0408.nanxinshiguang.ui.theme.LocalIsDarkTheme
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.number
-import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -68,10 +68,7 @@ import nanxinshiguang.generated.resources.title_semester_not_set
 import nanxinshiguang.generated.resources.title_today_schedule
 import nanxinshiguang.generated.resources.title_vacation_until_start
 import nanxinshiguang.generated.resources.week_days_full_names
-import kotlin.time.Clock
 
-private const val DEFAULT_TIME_ZERO = "00:00"
-private const val EMPTY_TIME_PLACEHOLDER = "--:--"
 private const val DEFAULT_DAYS_ZERO = "0"
 private const val DEFAULT_OVERDUE_DAYS = 1
 
@@ -122,16 +119,10 @@ fun TodayContent(
     isDark: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val currentTime = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time }
+    val currentTime = rememberCurrentTime()
 
     val targetScrollIndex = remember(state.courses, currentTime) {
-        val firstActiveIndex = state.courses.indexOfFirst { model ->
-            try {
-                LocalTime.parse(model.endTime ?: DEFAULT_TIME_ZERO) >= currentTime
-            } catch (e: Exception) {
-                true
-            }
-        }
+        val firstActiveIndex = state.courses.indexOfFirst { model -> !model.isFinishedAt(currentTime) }
 
         if (firstActiveIndex == -1) {
             (state.courses.size - 1).coerceAtLeast(0)
@@ -210,7 +201,7 @@ fun TodayContent(
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 itemsIndexed(state.courses) { _, model ->
-                    CourseTimelineItem(model, gridStyle, isDark)
+                    CourseTimelineItem(model, gridStyle, isDark, isFinished = model.isFinishedAt(currentTime))
                 }
                 item {
                     Spacer(modifier = Modifier.height(32.dp))
@@ -224,14 +215,9 @@ fun TodayContent(
 fun CourseTimelineItem(
     model: CourseDisplayModel,
     gridStyle: ScheduleGridStyle,
-    isDark: Boolean
+    isDark: Boolean,
+    isFinished: Boolean
 ) {
-    val currentTime = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time }
-    val isFinished = remember(model.endTime, currentTime) {
-        try {
-            LocalTime.parse(model.endTime ?: DEFAULT_TIME_ZERO) < currentTime
-        } catch (e: Exception) { false }
-    }
 
     val colorPair = gridStyle.courseColorMaps.getOrElse(model.course.colorInt) {
         ScheduleGridStyle.DEFAULT_COLOR_MAPS[0]
@@ -248,7 +234,7 @@ fun CourseTimelineItem(
             horizontalAlignment = Alignment.End
         ) {
             Text(
-                text = model.startTime ?: EMPTY_TIME_PLACEHOLDER,
+                text = model.startTime ?: TIME_PLACEHOLDER,
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontSize = 17.sp,
                     textDecoration = if (isFinished) TextDecoration.LineThrough else null
@@ -257,7 +243,7 @@ fun CourseTimelineItem(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = model.endTime ?: EMPTY_TIME_PLACEHOLDER,
+                text = model.endTime ?: TIME_PLACEHOLDER,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.outline
             )
