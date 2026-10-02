@@ -9,7 +9,7 @@
 
 ## 项目状态
 
-- 当前版本为 **1.0.4（versionCode 5）**，仅支持 Android。
+- 当前版本为 **1.0.5（versionCode 6）**，仅支持 Android。
 - 课程表、课程管理、提醒、小组件和数据导入导出能力来自上游项目并持续维护。
 - 已加入 NUIST 教务导入、成绩中心、学业概览、统一门户绑定和宿舍电费查询等功能。
 - 已加入劳动积分查询：首次进入且没有本地缓存时获取，成功结果会加密保存；之后仅通过页面刷新按钮手动更新。
@@ -18,6 +18,12 @@
 - 成绩、学业概览、劳动积分和电费功能依赖学校服务器、登录状态及接口可用性；学校服务不可用时，相关功能可能无法加载。
 - 成绩中心和劳动积分页面同时提供 Material 3 与 Miuix 两套界面，劳动积分详情按官方核算、实时活动和同步状态分组展示。
 - Release 由项目专用证书签名；GitHub Actions 提供手动触发的 Android 发布构建。
+
+### v1.0.5 发布内容
+
+- 全新应用图标：青绿到天蓝的渐变底 + 白色课表卡与环绕时间轨迹，自适应图标拆分为独立背景层与前景层，并新增 Android 13+ 主题图标（monochrome）层。
+- 修复检查更新：原先任何失败都提示"远程数据异常"，且没有超时与日志；现在按 HTTP 状态区分提示（接口受限/未找到/其它），失败时记录异常类型，并新增 10s 连接 / 15s 请求超时。
+- 测试：补充版本比较与更新接口契约测试（43 → 47 项）。
 
 ### v1.0.4 发布内容
 
@@ -115,10 +121,10 @@ app/build/outputs/apk/debug/
 app/build/outputs/apk/release/
 ```
 
-选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.4 Release：
+选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.5 Release：
 
 ```powershell
-adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.4-arm64-v8a-release.apk
+adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.5-arm64-v8a-release.apk
 ```
 
 `-r` 仅适用于同包名且签名兼容的已安装版本。Debug 与 Release 使用不同证书，不能直接互相覆盖；如需切换签名，先评估和备份应用数据，**不要为了安装而直接卸载现有应用**。旧版拾光课程表与本项目的 applicationId 不同，可分别安装。

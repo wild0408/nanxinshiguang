@@ -1,0 +1,6 @@
+Nanxin Shiguang 1.0.5 update.
+
+- New app icon: teal-to-blue gradient with a white timetable card and orbiting time trail, plus a themed icon (monochrome) layer for Android 13+.
+- Fixed "Check for updates": every failure used to show the same generic message with no timeout and no logging; status codes now produce specific messages and failures are logged.
+- Added a 10s connect / 15s request timeout so an unreachable network no longer hangs.
+- Added version-comparison and update-endpoint tests (43 -> 47).
