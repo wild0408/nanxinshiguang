@@ -1,0 +1,6 @@
+Nanxin Shiguang 1.0.6 update.
+
+- Fixed "Check for updates" failing on some networks: the app now queries api.github.com and github.com in parallel and succeeds as long as either one works.
+- Why it failed: the anonymous api.github.com quota is shared per egress IP (60/hour), which shared campus networks easily exhaust, and the domain is often unreachable on some networks.
+- The failure message now also suggests downloading manually from the GitHub Releases page.
+- Added fallback-channel and download-URL tests (47 -> 53).
