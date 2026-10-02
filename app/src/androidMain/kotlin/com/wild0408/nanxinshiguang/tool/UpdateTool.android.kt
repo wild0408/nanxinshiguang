@@ -66,7 +66,7 @@ actual object PlatformUpdateStrategy : KoinComponent {
             }
             context.startActivity(intent)
         } catch (e: Exception) {
-            AppLog.e(TAG, "读取设备 ABI 失败", e)
+            AppLog.e(TAG, "打开更新链接失败", e)
         }
     }
 }

@@ -115,6 +115,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    testOptions {
+        unitTests {
+            // commonMain 里的日志出口 AppLog 最终调用 android.util.Log；不打开该开关时，
+            // 单测一旦走到日志分支就会抛 "Method not mocked"，把真实断言结果掩盖掉。
+            isReturnDefaultValues = true
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true

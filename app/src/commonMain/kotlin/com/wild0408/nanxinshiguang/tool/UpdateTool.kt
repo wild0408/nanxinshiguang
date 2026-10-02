@@ -2,8 +2,14 @@ package com.wild0408.nanxinshiguang.tool
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpHeaders
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -58,6 +64,11 @@ class UpdateChecker(
     companion object {
         private const val GITHUB_REPO = "wild0408/nanxinshiguang"
 
+        /** GitHub API 强制要求携带 User-Agent，缺失会直接返回 403。 */
+        private const val USER_AGENT = "nanxinshiguang-android"
+
+        private const val TAG = "UpdateChecker"
+
         val defaultHttpClient by lazy {
             HttpClient {
                 install(ContentNegotiation) {
@@ -65,6 +76,19 @@ class UpdateChecker(
                         ignoreUnknownKeys = true
                         coerceInputValues = true
                     })
+                }
+                // Ktor CIO 默认会带 User-Agent；这里显式声明，避免更换引擎后因缺头被 GitHub
+                // 以 403 "Request forbidden by administrative rules" 拒绝。
+                defaultRequest {
+                    header(HttpHeaders.UserAgent, USER_AGENT)
+                    header(HttpHeaders.Accept, "application/vnd.github+json")
+                }
+                // 此前完全没有超时：网络不可达（例如 api.github.com 被阻断）时会长时间挂起，
+                // 用户只看到一直"正在检查更新"。这里给一个能快速失败的明确上限。
+                install(HttpTimeout) {
+                    connectTimeoutMillis = 10_000
+                    requestTimeoutMillis = 15_000
+                    socketTimeoutMillis = 15_000
                 }
             }
         }
@@ -76,47 +100,60 @@ class UpdateChecker(
         }
 
         try {
-            val response = httpClient.get("https://api.github.com/repos/$GITHUB_REPO/releases/latest")
-                .body<ApiReleaseResponse>()
+            val response: HttpResponse = httpClient.get("https://api.github.com/repos/$GITHUB_REPO/releases/latest")
 
-            if (response.tagName.isBlank()) {
-                return@withContext UpdateStatus.Error("远程数据异常，请稍后重试")
+            // 先判状态码：403/429 是接口访问受限（缺 User-Agent 或触发限流），404 是仓库/发布不存在，
+            // 这些都不该被笼统地报成"远程数据异常"。
+            if (!response.status.isSuccess()) {
+                AppLog.e(TAG, "检查更新失败：HTTP ${response.status.value}")
+                return@withContext when (response.status.value) {
+                    403, 429 -> UpdateStatus.Error("GitHub 接口访问受限（HTTP ${response.status.value}），请稍后重试")
+                    404 -> UpdateStatus.Error("未找到发布信息（HTTP 404）")
+                    else -> UpdateStatus.Error("检查更新失败：HTTP ${response.status.value}")
+                }
             }
 
-            val latestVersion = response.tagName.removePrefix("v").removePrefix("V").trim()
+            val release = response.body<ApiReleaseResponse>()
+
+            if (release.tagName.isBlank()) {
+                AppLog.e(TAG, "发布信息缺少 tag_name")
+                return@withContext UpdateStatus.Error("发布信息不完整，请稍后重试")
+            }
+
+            val latestVersion = release.tagName.removePrefix("v").removePrefix("V").trim()
             val currentVersion = currentVersionName.removePrefix("v").removePrefix("V").trim()
 
             if (!isNewerVersion(latestVersion, currentVersion)) {
                 return@withContext UpdateStatus.Latest(currentVersionName)
             }
 
-            val downloadUrl = PlatformUpdateStrategy.parseTargetUrl(response)
+            val downloadUrl = PlatformUpdateStrategy.parseTargetUrl(release)
 
             val (targetUrl, isDirectDownload) = if (!downloadUrl.isNullOrEmpty()) {
                 Pair(downloadUrl, true)
-            } else if (response.tagName.isNotEmpty()) {
-                val fallbackTagUrl = "https://github.com/$GITHUB_REPO/releases/tag/${response.tagName}"
-                Pair(fallbackTagUrl, false)
             } else {
-                return@withContext UpdateStatus.Error("远程数据异常，请稍后重试")
+                val fallbackTagUrl = "https://github.com/$GITHUB_REPO/releases/tag/${release.tagName}"
+                Pair(fallbackTagUrl, false)
             }
 
             UpdateStatus.Found(
-                versionName = response.tagName,
-                changelog = response.body,
+                versionName = release.tagName,
+                changelog = release.body,
                 targetUrl = targetUrl,
                 isDirectDownload = isDirectDownload
             )
 
-        } catch (_: Exception) {
-            UpdateStatus.Error("远程数据异常，请稍后重试")
+        } catch (e: Exception) {
+            AppLog.e(TAG, "检查更新失败: ${e::class.simpleName}", e)
+            UpdateStatus.Error("检查更新失败，请检查网络后重试")
         }
     }
 
     /**
-     * 比较版本号：判断 latest 是否大于 current
+     * 比较版本号：判断 latest 是否大于 current。
+     * 标为 internal 以便单元测试覆盖分段比较的边界。
      */
-    private fun isNewerVersion(latest: String, current: String): Boolean {
+    internal fun isNewerVersion(latest: String, current: String): Boolean {
         val latestParts = latest.split('.', '-').mapNotNull { it.toIntOrNull() }
         val currentParts = current.split('.', '-').mapNotNull { it.toIntOrNull() }
 
