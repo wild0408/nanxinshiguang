@@ -1,0 +1,4 @@
+Nanxin Shiguang 1.0.8 update.
+
+- Fixed the launcher icon being too large and clipped: adaptive icon layers only guarantee the central 72dp to be visible, and the design was placed 1:1 into the layer, so the timetable card filled the mask and had its corners cut. The foreground layer is now scaled around the center to match typical icon proportions.
+- The gradient background stays full-bleed; the themed icon (Android 13+) is scaled the same way.

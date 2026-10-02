@@ -9,7 +9,7 @@
 
 ## 项目状态
 
-- 当前版本为 **1.0.7（versionCode 8）**，仅支持 Android。
+- 当前版本为 **1.0.8（versionCode 9）**，仅支持 Android。
 - 课程表、课程管理、提醒、小组件和数据导入导出能力来自上游项目并持续维护。
 - 已加入 NUIST 教务导入、成绩中心、学业概览、统一门户绑定和宿舍电费查询等功能。
 - 已加入劳动积分查询：首次进入且没有本地缓存时获取，成功结果会加密保存；之后仅通过页面刷新按钮手动更新。
@@ -19,6 +19,10 @@
 - 成绩中心和劳动积分页面同时提供 Material 3 与 Miuix 两套界面，劳动积分详情按官方核算、实时活动和同步状态分组展示。
 - Release 由项目专用证书签名；GitHub Actions 提供手动触发的 Android 发布构建。
 
+### v1.0.8 发布内容
+
+- 修正桌面图标缩放：自适应图标只有中间 72dp 可见，此前把设计稿按 1:1 铺进图层，导致卡片撑满遮罩、四角被裁；现按 0.70 围绕中心缩放前景层（背景仍全出血），比例与同门应用接近。
+- 生成器同时修正了预览图的遮罩绘制方式（此前按整幅画布绘制，与真机不符，掩盖了缩放问题）。
 ### v1.0.7 发布内容
 
 - **关键修复**：`network_security_config.xml` 中的 `<domain-config>` 会让 Android 的 `RootTrustManager` 拒绝**不带主机名**的 `checkServerTrusted` 调用，而 Ktor CIO 正是这样校验证书，导致**应用内所有 HTTPS 请求自 1.0.4 起全部失败**（CertificateException：门户、成绩、电费、劳动积分、校园公交数据、检查更新）。现移除按域名配置，仅保留「默认禁止明文流量」；浏览器的下载不受影响，因此此前表现为「网页能开、应用连不上」。已在模拟器上验证。
@@ -132,10 +136,10 @@ app/build/outputs/apk/debug/
 app/build/outputs/apk/release/
 ```
 
-选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.7 Release：
+选择与设备 ABI 对应的 APK 安装。例如，在 arm64 设备上安装本项目签名的 1.0.8 Release：
 
 ```powershell
-adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.7-arm64-v8a-release.apk
+adb install -r app/build/outputs/apk/release/nanxinshiguang-v1.0.8-arm64-v8a-release.apk
 ```
 
 `-r` 仅适用于同包名且签名兼容的已安装版本。Debug 与 Release 使用不同证书，不能直接互相覆盖；如需切换签名，先评估和备份应用数据，**不要为了安装而直接卸载现有应用**。旧版拾光课程表与本项目的 applicationId 不同，可分别安装。
