@@ -1,0 +1,4 @@
+Nanxin Shiguang 1.0.9 update.
+
+- The Miuix today schedule now distinguishes finished classes: dimmed with a strikethrough on the time and course name, matching the Material UI.
+- The finished state refreshes every minute, so a class switches to the finished style while you are on the page.
